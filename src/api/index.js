@@ -51,7 +51,7 @@ http.interceptors.request.use(
       .catch(err => {
         // console.error(err);
       })
-    config.headers['Authorization'] = 'iNsight ' + Util.getToken() // 请求头带上token
+    config.headers['Authorization'] = 'iActivate ' + Util.getToken() // 请求头带上token
     return config
   },
   error => {

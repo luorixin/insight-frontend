@@ -1,0 +1,139 @@
+<template>
+  <div>
+    <p>{{ $t('funnels.selectEventTip') }}</p>
+    <el-button type="primary" icon="el-icon-plus" @click="handleAdd">{{
+      $t('funnels.addEvents')
+    }}</el-button>
+    <div class="main-table">
+      <el-table
+        :data="currentList"
+        border
+        class="table"
+        ref="table"
+        v-loading="loading"
+        header-row-class-name="main-table"
+      >
+        <el-table-column
+          prop="step"
+          :label="$t('funnels.eventTable.step')"
+          width="100"
+        ></el-table-column>
+        <el-table-column
+          prop="id"
+          :label="$t('event.id')"
+          width="100"
+        ></el-table-column>
+        <el-table-column
+          prop="eventName"
+          :label="$t('event.name')"
+          width="150"
+        ></el-table-column>
+        <el-table-column prop="urls" :label="$t('event.url')" width="180">
+          <template slot-scope="scope">
+            <el-link :href="scope.row.urls" target="_blank">{{
+              scope.row.urls
+            }}</el-link>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="trackingType"
+          :label="$t('event.trackingType')"
+          width="120"
+        >
+          <template slot-scope="scope">
+            <el-tag :type="scope.row.trackingType ? 'success' : 'danger'">
+              {{ scope.row.trackingType ? 'Insight' : 'Universal' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="updatedAt"
+          :label="$t('event.lastEvent')"
+          :formatter="dateFormater"
+          width="140"
+        >
+        </el-table-column>
+      </el-table>
+    </div>
+    <el-dialog
+      :visible.sync="modal"
+      custom-class="slide-box slide-box-small"
+      @open="addBodyClass"
+      :append-to-body="true"
+      :show-close="false"
+      top="0"
+    >
+      <choose-event
+        @getResult="handleSet"
+        :title="$t('funnels.selectEvents')"
+        :visible="modal"
+      >
+      </choose-event>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import Util from '@/utils'
+import moment from 'moment'
+import ChooseEvent from './ChooseEvent.vue'
+import {
+  SYNC_STATUS,
+  TRACKING_TYPE,
+  convertType,
+  PAGE_SIZES
+} from '@/utils/constant.js'
+export default {
+  name: 'eventDrag',
+  components: {
+    ChooseEvent
+  },
+  props: {
+    results: {
+      type: Array,
+      default: () => []
+    }
+  },
+  data() {
+    return {
+      currentList: this.results,
+      loading: false,
+      modal: false
+    }
+  },
+  methods: {
+    // row日期转换
+    dateFormater(row, column, cellValue, index) {
+      if (!cellValue) return null
+      return moment(cellValue).format('YYYY-MM-DD HH:mm:ss')
+    },
+    handleAdd() {
+      this.modal = true
+    },
+    handleSet(result) {
+      this.modal = false
+      if (result) {
+        this.currentList = result
+        this.currentList.forEach((item, index) => {
+          item.step = index + 1
+          if (index === this.currentList.length - 1) {
+            item.step += ' (Final)'
+          }
+        })
+      }
+    },
+    addBodyClass() {
+      document.getElementById('app').className = 'slide-body'
+    },
+    clearBodyClass() {
+      document.getElementById('app').className = ''
+    }
+  }
+}
+</script>
+
+<style scoped>
+.main-table {
+  margin-top: 20px;
+}
+</style>

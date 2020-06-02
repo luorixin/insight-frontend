@@ -113,6 +113,84 @@ export const CAMPAIGN_STATUS = [
   }
 ]
 
+export const NATURE_LIST = [
+  {
+    value: '1',
+    label: 'Home Page'
+  },
+  {
+    value: '2',
+    label: 'Submit Button'
+  },
+  {
+    value: '3',
+    label: 'Form PV'
+  },
+  {
+    value: '4',
+    label: 'Registration Steps'
+  },
+  {
+    value: '5',
+    label: 'Registration Thank You'
+  },
+  {
+    value: '6',
+    label: 'Registration Start'
+  },
+  {
+    value: '7',
+    label: 'Login Page'
+  },
+  {
+    value: '8',
+    label: 'Thank you Page'
+  },
+  {
+    value: '9',
+    label: 'Other PV'
+  },
+  {
+    value: '10',
+    label: 'Member Registration'
+  },
+  {
+    value: '11',
+    label: 'Member Reg Thank You'
+  },
+  {
+    value: '12',
+    label: 'Product Page'
+  },
+  {
+    value: '13',
+    label: 'Shopping Cart'
+  },
+  {
+    value: '14',
+    label: 'Order Information'
+  },
+  {
+    value: '15',
+    label: 'Order Confirmation'
+  },
+  {
+    value: '16',
+    label: 'Order Thank You'
+  }
+]
+
+export const DEDUPLICATION_LIST = [
+  {
+    value: '-2',
+    label: '1-per-visitor conversion'
+  },
+  {
+    value: '-1',
+    label: 'Browser session'
+  }
+]
+
 export const convertType = (value, typeArr, defaultNotFound) => {
   defaultNotFound = defaultNotFound ? defaultNotFound : { text: '无匹配类型' }
   let types = typeArr.filter(item => {

@@ -52,6 +52,72 @@ export const constantRoutes = [
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
+  {
+    path: '/setup',
+    component: Home,
+    icon: 'fa fa-edit',
+    meta: { title: 'menu.setup' },
+    children: [
+      {
+        path: 'event',
+        name: 'eventList',
+        component: () => import('@/views/event/List.vue'),
+        meta: { title: 'menu.eventSetup' }
+      },
+      {
+        path: 'goal',
+        name: 'goalList',
+        component: () => import('@/views/goal/List.vue'),
+        meta: { title: 'menu.goalSetup' }
+      },
+      {
+        path: 'funnel',
+        name: 'funnelList',
+        component: () => import('@/views/funnel/List.vue'),
+        meta: { title: 'menu.funnelSetup' }
+      }
+    ]
+  },
+  {
+    path: '/analysis',
+    component: Home,
+    icon: 'fa fa-tasks',
+    meta: { title: 'menu.dashboard' },
+    children: [
+      {
+        path: 'summary',
+        name: 'propertySummary',
+        component: () => import('@/views/summary/Property.vue'),
+        meta: { title: 'menu.propertySummary' }
+      },
+      {
+        path: 'channel',
+        name: 'channelAnalysis',
+        component: () => import('@/views/channelAnalysis/Channel.vue'),
+        meta: { title: 'menu.channelAnalysis' }
+      },
+      {
+        path: 'funnel',
+        name: 'funnelAnalysis',
+        component: () => import('@/views/funnelAnalysis/Funnel.vue'),
+        meta: { title: 'menu.funnelAnalysis' }
+      }
+    ]
+  },
+  {
+    path: '/reports',
+    component: Home,
+    icon: 'fa fa-bar-chart',
+    meta: { title: 'menu.reports' },
+    children: [
+      {
+        path: 'event',
+        name: 'eventReports',
+        component: () => import('@/views/reports/Events.vue'),
+        meta: { title: 'menu.eventReports' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', meta: { title: '404', notInMenu: true } }
 ]
 
