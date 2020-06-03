@@ -65,6 +65,12 @@ export const appRouter = [
         meta: { title: 'menu.eventSetup' }
       },
       {
+        path: 'eventLog',
+        name: 'eventLog',
+        component: () => import('@/views/event/LogList.vue'),
+        meta: { title: 'menu.eventLog' }
+      },
+      {
         path: 'goal',
         name: 'goalList',
         component: () => import('@/views/goal/List.vue'),
@@ -104,20 +110,20 @@ export const appRouter = [
       }
     ]
   },
-  {
-    path: '/reports',
-    component: Home,
-    icon: 'fa fa-bar-chart',
-    meta: { title: 'menu.reports' },
-    children: [
-      {
-        path: 'event',
-        name: 'eventReports',
-        component: () => import('@/views/reports/Events.vue'),
-        meta: { title: 'menu.eventReports' }
-      }
-    ]
-  },
+  // {
+  //   path: '/reports',
+  //   component: Home,
+  //   icon: 'fa fa-bar-chart',
+  //   meta: { title: 'menu.reports' },
+  //   children: [
+  //     {
+  //       path: 'event',
+  //       name: 'eventReports',
+  //       component: () => import('@/views/reports/Events.vue'),
+  //       meta: { title: 'menu.eventReports' }
+  //     }
+  //   ]
+  // },
   { path: '*', redirect: '/404', meta: { title: '404', notInMenu: true } }
 ]
 

@@ -422,12 +422,57 @@ Util.formateDate = (date = new Date(), fmt = 'yyyy-MM-dd') => {
 /**
  * 获取最近x天的日期范围
  */
-Util.getLastXDays = (total = 0, fmt = 'yyyy-MM-dd') => {
-  const end = new Date()
-  const start = new Date()
-  start.setTime(start.getTime() - 3600 * 1000 * 24 * total)
-  end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
+Util.getLastXDays = (total = 0, fmt = 'yyyy-MM-dd', relative = 1) => {
+  let end = new Date()
+  let start = new Date()
+  console.log(total)
+  start.setTime(start.getTime() - 3600 * 1000 * 24 * (total+relative-1))
+  end.setTime(end.getTime() - 3600 * 1000 * 24 * relative)
   return [Util.formateDate(start, fmt), Util.formateDate(end, fmt)]
+}
+
+/**
+ * 获取最近x小时的时间范围
+ */
+Util.getLastXHours = (total, date = 0) => {
+  if (date === 0){
+    date = new Date()
+  }
+  const endHour = date.getHours()
+  const beginHour = date.getHours() - total
+  return [new Date(date.getFullYear(), date.getMonth() + 1, date.getDate(), beginHour, 0), new Date(date.getFullYear(), date.getMonth() + 1, date.getDate(), endHour, 0)]
+}
+
+/**
+ * 获取上x月的时间范围
+ */
+Util.getLastXMonths = (total = 1, fmt = 'yyyy-MM-dd') => {
+  const start = new Date()
+  let month = start.getMonth()
+  month--
+  let year = start.getFullYear()
+  if (month < 0) {
+    ;(month = 11), year--
+  }
+  start.setMonth(month - total + 1)
+  start.setYear(year)
+  start.setDate(1) //第一天
+  const end = new Date(start)
+  end.setMonth(month - total + 2)
+  end.setDate(0)
+  return [Util.formateDate(start, fmt), Util.formateDate(end, fmt)]
+}
+
+/**
+ * 获取上x周的时间范围
+ */
+Util.getLastXWeeks = (total = 1, fmt = 'yyyy-MM-dd') => {
+  let now = new Date();
+  let currentWeek = now.getDay();
+  if(currentWeek == 0){currentWeek = 7;}
+  let monday = now.getTime() - (currentWeek - 1 + 7 * total) * 24 * 60 * 60 * 1000;   //星期一
+  let sunday = now.getTime() + (7-currentWeek - 7 * total) * 24 * 60 * 60 * 1000;   //星期日
+  return [Util.formateDate(new Date(monday), fmt), Util.formateDate(new Date(sunday), fmt)]
 }
 
 export default Util

@@ -54,7 +54,10 @@ export default {
       'The system version is updated. Click to confirm the latest loading!',
     dateRangeBaiduErr: 'Date range must less than one year',
     yes: 'Yes',
-    no: 'No'
+    no: 'No',
+    download: 'Download',
+    vs: 'vs.',
+    prev: 'prev.'
   },
   login: {
     error: {
@@ -96,7 +99,8 @@ export default {
     channelAnalysis: 'Channel Analysis',
     funnelAnalysis: 'Funnel Analysis',
     reports: 'Reports',
-    eventReports: 'Event Reports'
+    eventReports: 'Event Reports',
+    eventLog: 'Event Log'
   },
   footer: {
     power: 'Powered by iClick. All Rights Reserved. ',
@@ -113,6 +117,7 @@ export default {
     yesterday: 'Yesterday',
     month: 'This Month',
     lastmonth: 'Last Month',
+    lastweek: 'Last Week',
     total: 'Total Time'
   },
   event: {
@@ -207,6 +212,47 @@ export default {
       goal: 'Goal'
     },
     selectEvents: 'Select Events'
+  },
+  eventLog: {
+    title: 'Event Log',
+    id: 'Event ID',
+    view: 'View',
+    time: 'Event Time',
+    name: 'Event Name',
+    from: 'From',
+    to: 'To',
+    url: 'URL',
+    visitorIp: 'Visitor IP'
+  },
+  property: {
+    title: 'Property Summary',
+    trafficSnapShot: 'Traffic SnapShot',
+    industry: 'Industry',
+    product: 'Product',
+    goal: 'Goal',
+    nature: 'Nature',
+    uniqueVisit: 'Unique Visits',
+    uniqueVisitors: 'Unique Visitors',
+    frequencyVisit: 'Frequency of Visit',
+    avgPageView: 'Average Page Views',
+    newVisitors: 'New Visitors',
+    repeatVisitors: 'Repeat Visitors',
+    bounceRate: 'Bounce Rate',
+    avgTimeSpan: 'Average Time Span',
+    performanceSnap: 'Performance SnapShot',
+    uniqueConv: 'Unique Conversions',
+    outOfConv: 'out of conversions',
+    uniqueCustomers: 'Unique Customers',
+    lastMileRatio: 'Last Mile Ratio',
+    search: 'Search',
+    nonSearch: 'Non-Search',
+    timeToConvert: 'Time-to-Convert',
+    fullPath: 'Full-path',
+    lastMile: 'Last-mile',
+    days: 'days',
+    audienceSnap: 'Audience SnapShot',
+    regions: 'Regions',
+    timeDist: 'Time Distribution'
   },
   errorInfo: {
     emptyInput: 'Please enter something!'

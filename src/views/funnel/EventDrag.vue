@@ -8,16 +8,26 @@
       <el-table
         :data="currentList"
         border
-        class="table"
+        class="table dropTable"
         ref="table"
         v-loading="loading"
         header-row-class-name="main-table"
+        row-key="id"
       >
         <el-table-column
           prop="step"
           :label="$t('funnels.eventTable.step')"
-          width="100"
-        ></el-table-column>
+          width="80"
+        >
+          <template slot-scope="scope">
+            <div>
+              {{ scope.$index + 1 }}
+              <span v-show="scope.$index === currentList.length - 1">
+                (final)</span
+              >
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="id"
           :label="$t('event.id')"
@@ -50,7 +60,7 @@
           prop="updatedAt"
           :label="$t('event.lastEvent')"
           :formatter="dateFormater"
-          width="140"
+          width="150"
         >
         </el-table-column>
       </el-table>
@@ -76,6 +86,7 @@
 <script>
 import Util from '@/utils'
 import moment from 'moment'
+import Sortable from 'sortablejs'
 import ChooseEvent from './ChooseEvent.vue'
 import {
   SYNC_STATUS,
@@ -97,11 +108,33 @@ export default {
   data() {
     return {
       currentList: this.results,
+      sortedResult: this.results,
       loading: false,
       modal: false
     }
   },
+  mounted() {
+    // 阻止默认行为
+    document.body.ondrop = function(event) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    this.rowDrop()
+  },
   methods: {
+    //行拖拽
+    rowDrop() {
+      const tbody = document.querySelector(
+        '.dropTable .el-table__body-wrapper tbody'
+      )
+      const _this = this
+      Sortable.create(tbody, {
+        onEnd({ newIndex, oldIndex }) {
+          const currRow = _this.currentList.splice(oldIndex, 1)[0]
+          _this.currentList.splice(newIndex, 0, currRow)
+        }
+      })
+    },
     // row日期转换
     dateFormater(row, column, cellValue, index) {
       if (!cellValue) return null
@@ -114,12 +147,15 @@ export default {
       this.modal = false
       if (result) {
         this.currentList = result
-        this.currentList.forEach((item, index) => {
-          item.step = index + 1
-          if (index === this.currentList.length - 1) {
-            item.step += ' (Final)'
-          }
-        })
+        // this.currentList.forEach((item, index) => {
+        //   item.step = index + 1
+        //   if (index === this.currentList.length - 1) {
+        //     item.step += ' (Final)'
+        //   }
+        // })
+        // this.$nextTick(() => {
+        //   this.rowDrop()
+        // })
       }
     },
     addBodyClass() {

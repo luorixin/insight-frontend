@@ -53,7 +53,10 @@ export default {
     needUpdate: '系统版本有更新，点击确认加载最新！',
     dateRangeBaiduErr: '日期范围最大不超过365天',
     yes: 'Yes',
-    no: 'No'
+    no: 'No',
+    download: 'Download',
+    vs: 'vs.',
+    prev: 'prev.'
   },
   login: {
     error: {
@@ -94,7 +97,8 @@ export default {
     channelAnalysis: 'Channel Analysis',
     funnelAnalysis: 'Funnel Analysis',
     reports: 'Reports',
-    eventReports: 'Event Reports'
+    eventReports: 'Event Reports',
+    eventLog: 'Event Log'
   },
   footer: {
     power: '由爱点击提供技术支持。版权所有。',
@@ -111,6 +115,7 @@ export default {
     yesterday: '昨天',
     month: '本月',
     lastmonth: '上个月',
+    lastweek: '上周',
     total: '全部时间'
   },
   event: {
@@ -205,6 +210,47 @@ export default {
       goal: 'Goal'
     },
     selectEvents: 'Select Events'
+  },
+  eventLog: {
+    title: 'Event Log',
+    id: 'Event ID',
+    view: 'View',
+    time: 'Event Time',
+    name: 'Event Name',
+    from: 'From',
+    to: 'To',
+    url: 'URL',
+    visitorIp: 'Visitor IP'
+  },
+  property: {
+    title: 'Property Summary',
+    trafficSnapShot: 'Traffic SnapShot',
+    industry: 'Industry',
+    product: 'Product',
+    goal: 'Goal',
+    nature: 'Nature',
+    uniqueVisit: 'Unique Visits',
+    uniqueVisitors: 'Unique Visitors',
+    frequencyVisit: 'Frequency of Visit',
+    avgPageView: 'Average Page Views',
+    newVisitors: 'New Visitors',
+    repeatVisitors: 'Repeat Visitors',
+    bounceRate: 'Bounce Rate',
+    avgTimeSpan: 'Average Time Span',
+    performanceSnap: 'Performance SnapShot',
+    uniqueConv: 'Unique Conversions',
+    outOfConv: 'out of conversions',
+    uniqueCustomers: 'Unique Customers',
+    lastMileRatio: 'Last Mile Ratio',
+    search: 'Search',
+    nonSearch: 'Non-Search',
+    timeToConvert: 'Time-to-Convert',
+    fullPath: 'Full-path',
+    lastMile: 'Last-mile',
+    days: 'days',
+    audienceSnap: 'Audience SnapShot',
+    regions: 'Regions',
+    timeDist: 'Time Distribution'
   },
   errorInfo: {
     emptyInput: '请输入一些东西'
