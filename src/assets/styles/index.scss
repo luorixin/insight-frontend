@@ -17,11 +17,19 @@
 }
 
 .mr10{
-  margin-top: 10px;
+  margin-top: 10px!important;
+}
+
+.mr15{
+  margin-top: 15px!important;
 }
 
 .mr20{
-  margin-top: 20px;
+  margin-top: 20px!important;
+}
+
+.mr-10{
+  margin-top: -10px!important;
 }
 
 hr{
@@ -125,6 +133,14 @@ hr{
 }
 .status_paused{
   color: #EF4136!important;
+}
+
+.reddot{
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  background: #ef4136;
+  border-radius: 8px;
 }
 
 /**************************** ************** slide content ************************************/
@@ -282,7 +298,9 @@ $slideWidthSmall: 720px;
   margin: 15px -20px 0 -20px;
   padding: 0 20px;
 }
-
+.tooltip-content{
+  width: 200px;
+}
 .plan-reports-con{
   position: relative;
   .plan-reports-title{
@@ -290,7 +308,7 @@ $slideWidthSmall: 720px;
     line-height: 30px;
     margin: 10px 0;
     font-weight: bold;
-    font-size: 12px;;
+    font-size: 12px;
   }
   .plan-reports-result{
     display: flex;
@@ -300,6 +318,7 @@ $slideWidthSmall: 720px;
       padding: 20px;
       height: 200px;
       flex: 1;
+      position: relative;
       background: #fff;
       margin: 0 7.5px;
       &:first-child{
@@ -312,7 +331,7 @@ $slideWidthSmall: 720px;
         font-weight: bold;
         font-size: 13px;
         text-align: center;
-        height: 42px;
+        height: 32px;
         .plan-reports-result-inner__subtitle{
           text-align: center;
           font-size: 12px;
@@ -333,6 +352,152 @@ $slideWidthSmall: 720px;
         font-weight: bold;
         color: #333;
         margin-top: 5px;
+      }
+      .plan-reports-result-inner__opt{
+        display: flex;
+        &>div{
+          margin-right: 15px;
+        }
+      }
+      .plan-reports-result-inner__tablelike{
+        .tablelike_title{
+          font-size: 10px;
+          line-height: 30px;
+          color: #999;
+          display: flex;
+          div{
+            flex: 1;
+          }
+        }
+        .tablelike_tr{
+          border-bottom: 1px solid #dfdfdf;
+          display: flex;
+          &:last-child{
+            border-bottom: none;
+          }
+          .tablelike_td{
+            display: flex;
+            flex: 1;
+            align-items: center;
+            padding: 5px 0;
+            .mainTitle{
+              font-size: 14px;
+              color: #ef4136;
+              font-weight: bold;
+            }
+            p{
+              line-height: 20px;
+            }
+            .el-progress{
+              width: calc(100% - 10px);
+            }
+          }
+        }
+      }
+      .report-result-inner__rank{
+        display: flex;
+        justify-content: center;
+        ul{
+          li{
+            line-height: 30px;
+            padding: 5px 0;
+            .rank_ico{
+              height: 20px;
+              width: 20px;
+              display:inline-block;
+              text-align: center;
+              border-radius: 20px;
+              line-height: 20px;
+              background: #999;
+              color: #fff;
+              margin-right: 10px;
+            }
+            &:first-child{
+              .rank_ico{
+                background: #ef4136;
+              }
+            }
+            &:nth-child(2){
+              .rank_ico{
+                background: #F97373;
+              }
+            }
+            &:nth-child(3){
+              .rank_ico{
+                background: #F7A09A;
+              }
+            }
+          }
+        }
+      }
+      .plan-reports-result-inner__breakdown{
+        width: 761px;
+        display: flex;
+        margin: 0 auto;
+        height: 40px;
+        line-height: 40px;
+        .breakdown_detail{
+          display: flex;
+          width: 380px;
+          justify-content: space-between;
+          div:last-child{
+            font-size: 20px;
+            font-weight: bold;
+            color: #ef4136;
+          }
+          &:last-child{
+            div{
+              color: #4484CF;
+            }
+          }
+        }
+        .breakdown_line{
+          width: 1px;
+          height: 40px;
+          background: #dfdfdf;
+          margin: 0 20px;
+        }
+      }
+    }
+    .plan-reports-result-split__column{
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      .plan-reports-result-inner{
+        margin: 7.5px;
+        .plan-reports-result-inner_title{
+          height: 15px;
+        }
+        &:first-child{
+          margin-top: 0;
+        }
+        &:last-child{
+          margin-bottom: 0;
+        }
+      }
+    }
+    .plan-reports-result-split__row{
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      .split-row__detail{
+        flex: 1;
+      }
+      .split-row__line{
+        width: 1px;
+        height: 250px;
+        background: #dfdfdf;
+      }
+      &.split-row-middle{
+        .split-row__detail{
+          padding: 20px;
+          flex: unset;
+        }
+      }
+      .split-row__detail-vs{
+        align-self: flex-start;
+        line-height: 40px;
+        font-weight: bold;
       }
     }
     .report-flex-row{
@@ -356,6 +521,30 @@ $slideWidthSmall: 720px;
         }
       }
     }
+    .report-flex-middle{
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      &>label{
+        font-size: 36px;
+        font-weight: bold;
+        color: #ef4136;
+        text-align: right;
+      }
+      .report-flex-middle__detail{
+        flex: 1;
+      }
+      .report-flex-middle__line{
+        width: 1px;
+        height: 60px;
+        background: #dfdfdf;
+        margin: 0 20px;
+      }
+      .report-flex-column{
+        text-align: left;
+      }
+    }
     .report-convert{
       display: flex;
       flex-direction: column;
@@ -377,6 +566,10 @@ $slideWidthSmall: 720px;
         }
       }
     }
+  }
+  .reddot{
+    margin-top: 12px;
+    margin-left: 5px;
   }
 }
 .plan-growth{

@@ -74,16 +74,16 @@ export default {
   computed: {
     currentTitle() {
       let current = this.rangeArr.find(item => item.id === this.initDate)
-      return (
-        current.titleCur.join('~') +
-        ' ' +
-        this.$t('common.vs') +
-        ' ' +
-        current.titlePrev.join('~') +
-        ' (' +
-        this.$t('common.prev') +
-        ')'
-      )
+      let prev = this.needVs
+        ? ' ' +
+          this.$t('common.vs') +
+          ' ' +
+          current.titlePrev.join('~') +
+          ' (' +
+          this.$t('common.prev') +
+          ')'
+        : ''
+      return current.titleCur.join('~') + prev
     }
   },
   methods: {
@@ -148,15 +148,16 @@ export default {
         Util.formateDate(new Date())
       ])
       let dateTitlePrev = Util.getLastXDays(diff, 'yyyy-MM-dd', diff2Cur)
-      this.dateRangeTitle =
-        dateTitleCur.join('~') +
-        ' ' +
-        this.$t('common.vs') +
-        ' ' +
-        dateTitlePrev.join('~') +
-        ' (' +
-        this.$t('common.prev') +
-        ')'
+      let prev = this.needVs
+        ? ' ' +
+          this.$t('common.vs') +
+          ' ' +
+          dateTitlePrev.join('~') +
+          ' (' +
+          this.$t('common.prev') +
+          ')'
+        : ''
+      this.dateRangeTitle = dateTitleCur.join('~') + prev
     },
     justifyDate(val) {
       let diff = Util.sumTotalDays(val)
@@ -174,5 +175,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  & > label {
+    font-weight: bold;
+  }
 }
 </style>

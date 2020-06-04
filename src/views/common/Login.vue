@@ -234,6 +234,7 @@ export default {
           font-weight: bold;
           p {
             line-height: 1.5;
+            font-size: 100%;
           }
         }
         .login-title__info-detail {
