@@ -1,6 +1,7 @@
 module.exports = {
   publicPath: './',
   productionSourceMap: false,
+  transpileDependencies: ['vue-echarts', 'resize-detector'],
   devServer: {
     host: '0.0.0.0',
     disableHostCheck: true,

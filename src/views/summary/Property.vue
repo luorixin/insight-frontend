@@ -183,7 +183,12 @@
                       <label> {{ $t('common.vs') }} 1372 </label>
                     </div>
                     <div class="report-result-inner__graph">
-                      <div id="unique_visits_map"></div>
+                      <div id="unique_visits_map">
+                        <line-chart
+                          :datas="uniqueVisits"
+                          :color="uniqueVisitsColor"
+                        ></line-chart>
+                      </div>
                     </div>
                   </div>
                   <div class="split-row__line"></div>
@@ -207,7 +212,12 @@
                       <label> {{ $t('common.vs') }} 1372 </label>
                     </div>
                     <div class="report-result-inner__graph">
-                      <div id="unique_visitors_map"></div>
+                      <div id="unique_visitors_map">
+                        <line-chart
+                          :datas="uniqueVisitors"
+                          :color="uniqueVisitorsColor"
+                        ></line-chart>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -279,7 +289,9 @@
                 </div>
                 <div class="plan-reports-result-split__row split-row-middle">
                   <div class="split-row__detail">
-                    <p class="plan-reports-result-inner_text">3123</p>
+                    <p class="plan-reports-result-inner_text">
+                      3123
+                    </p>
                     <div class="report-flex-column mr10">
                       <div class="plan-growth">
                         <i class="fa fa-caret-up"></i>
@@ -293,7 +305,12 @@
                   </div>
                   <!-- repeat visitors -->
                   <div class="split-row__detail">
-                    <p class="plan-reports-result-inner_text">60.18</p>
+                    <p
+                      class="plan-reports-result-inner_text"
+                      style="color:#4484CF;"
+                    >
+                      60.18
+                    </p>
                     <div class="report-flex-column mr10">
                       <div class="plan-growth">
                         <i class="fa fa-caret-up"></i>
@@ -303,8 +320,16 @@
                     </div>
                   </div>
                 </div>
-                <div class="report-result-inner__graph">
-                  <div id="new_visits_repeat_map"></div>
+                <div
+                  class="report-result-inner__graph"
+                  style="margin-top: -15px"
+                >
+                  <div id="new_repeat_visits_map">
+                    <line-chart
+                      :datas="newrepeqtVisitors"
+                      :color="newrepeqtVisitorsColor"
+                    ></line-chart>
+                  </div>
                 </div>
               </div>
               <div class="plan-reports-result-split__column">
@@ -373,17 +398,25 @@
 <script>
 import DateSelectorForReport from '@/components/dateSelectorForReport/Index.vue'
 import GoalSelector from '@/components/selector/GoalSelector'
+import LineChart from '@/components/charts/LineChart'
 export default {
   name: 'propertySummary',
   components: {
     DateSelectorForReport,
-    GoalSelector
+    GoalSelector,
+    LineChart
   },
   data() {
     return {
       loading: false,
       activeName: 'summary',
-      goalId: -1
+      goalId: -1,
+      uniqueVisits: [],
+      uniqueVisitsColor: ['#ccc'],
+      uniqueVisitors: [],
+      uniqueVisitorsColor: ['#ccc'],
+      newrepeqtVisitors: [],
+      newrepeqtVisitorsColor: ['#ccc', '#4484CF']
     }
   },
   created() {
@@ -392,6 +425,42 @@ export default {
   methods: {
     initData() {
       this.loading = false
+      this.uniqueVisits = [
+        [
+          { date: '2019-05-05', value: 5049 },
+          { date: '2019-05-06', value: 13778 },
+          { date: '2019-05-07', value: 8295 },
+          { date: '2019-05-08', value: 5345 },
+          { date: '2019-05-09', value: 4487 },
+          { date: '2019-05-10', value: 5838 },
+          { date: '2019-05-11', value: 3928 },
+          { date: '2019-05-12', value: 6123 },
+          { date: '2019-05-13', value: 9054 },
+          { date: '2019-05-14', value: 80103 },
+          { date: '2019-05-15', value: 6416 },
+          { date: '2019-05-16', value: 9852 },
+          { date: '2019-05-17', value: 13021 },
+          { date: '2019-05-18', value: 3876 },
+          { date: '2019-05-19', value: 3502 },
+          { date: '2019-05-20', value: 3820 },
+          { date: '2019-05-21', value: 5644 },
+          { date: '2019-05-22', value: 4788 },
+          { date: '2019-05-23', value: 7635 },
+          { date: '2019-05-24', value: 10084 },
+          { date: '2019-05-25', value: 5194 },
+          { date: '2019-05-26', value: 4938 },
+          { date: '2019-05-27', value: 4900 },
+          { date: '2019-05-28', value: 5336 },
+          { date: '2019-05-29', value: 2800 },
+          { date: '2019-05-30', value: 494 },
+          { date: '2019-05-31', value: 234 },
+          { date: '2019-06-01', value: 215 },
+          { date: '2019-06-02', value: 267 },
+          { date: '2019-06-03', value: 19188 }
+        ]
+      ]
+      this.uniqueVisitors = this.uniqueVisits
+      this.newrepeqtVisitors = [this.uniqueVisits[0], this.uniqueVisitors[0]]
     },
     getGoalId(result) {
       this.formInline.goalId = result ? result.id : -1

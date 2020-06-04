@@ -458,6 +458,15 @@ $slideWidthSmall: 720px;
           margin: 0 20px;
         }
       }
+      .report-result-inner__graph{
+        width: 100%;
+        height: 100px;
+        margin-top: 20px;
+        &>div{
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
     .plan-reports-result-split__column{
       display: flex;
@@ -486,6 +495,7 @@ $slideWidthSmall: 720px;
       .split-row__line{
         width: 1px;
         height: 250px;
+        margin: 0 20px;
         background: #dfdfdf;
       }
       &.split-row-middle{

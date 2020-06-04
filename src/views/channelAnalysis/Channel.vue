@@ -80,7 +80,11 @@
                   <goal-selector @getResult="getGoalId" :defaultValue="goalId">
                   </goal-selector>
                 </div>
-                <noresult-report></noresult-report>
+                <div class="report-result-inner__graph" style="height: 335px;">
+                  <div id="traffic_trend_map">
+                    <line-trend-chart :datas="trafficTrend"></line-trend-chart>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="plan-reports-result mr15">
@@ -98,6 +102,7 @@
                     <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
+                <noresult-report></noresult-report>
               </div>
               <div class="plan-reports-result-inner" style="height: 650px;">
                 <!-- Top Conversion -->
@@ -163,12 +168,14 @@
 import DateSelectorForReport from '@/components/dateSelectorForReport/Index.vue'
 import GoalSelector from '@/components/selector/GoalSelector'
 import NoresultReport from '@/components/report/Noresult.vue'
+import LineTrendChart from '@/components/charts/LineTrendChart'
 export default {
   name: 'channelAnalysis',
   components: {
     DateSelectorForReport,
     GoalSelector,
-    NoresultReport
+    NoresultReport,
+    LineTrendChart
   },
   data() {
     return {
@@ -176,11 +183,48 @@ export default {
       activeName: 'summary',
       goalId: -1,
       breakdownOpt: 'channel',
-      trafficTrendOpt: 'channel'
+      trafficTrendOpt: 'channel',
+      trafficTrend: [],
+      trafficTrendColor: []
     }
   },
   created() {
     this.initData()
+    let example = [
+      [
+        { date: '2019-05-05', value: 5049 },
+        { date: '2019-05-06', value: 13778 },
+        { date: '2019-05-07', value: 8295 },
+        { date: '2019-05-08', value: 5345 },
+        { date: '2019-05-09', value: 4487 },
+        { date: '2019-05-10', value: 5838 },
+        { date: '2019-05-11', value: 3928 },
+        { date: '2019-05-12', value: 6123 },
+        { date: '2019-05-13', value: 9054 },
+        { date: '2019-05-14', value: 80103 },
+        { date: '2019-05-15', value: 6416 },
+        { date: '2019-05-16', value: 9852 },
+        { date: '2019-05-17', value: 13021 },
+        { date: '2019-05-18', value: 3876 },
+        { date: '2019-05-19', value: 3502 },
+        { date: '2019-05-20', value: 3820 },
+        { date: '2019-05-21', value: 5644 },
+        { date: '2019-05-22', value: 4788 },
+        { date: '2019-05-23', value: 7635 },
+        { date: '2019-05-24', value: 10084 },
+        { date: '2019-05-25', value: 5194 },
+        { date: '2019-05-26', value: 4938 },
+        { date: '2019-05-27', value: 4900 },
+        { date: '2019-05-28', value: 5336 },
+        { date: '2019-05-29', value: 2800 },
+        { date: '2019-05-30', value: 494 },
+        { date: '2019-05-31', value: 234 },
+        { date: '2019-06-01', value: 215 },
+        { date: '2019-06-02', value: 267 },
+        { date: '2019-06-03', value: 19188 }
+      ]
+    ]
+    this.trafficTrend = [example[0], example[0]]
   },
   methods: {
     initData() {

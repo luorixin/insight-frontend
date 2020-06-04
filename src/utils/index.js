@@ -425,7 +425,6 @@ Util.formateDate = (date = new Date(), fmt = 'yyyy-MM-dd') => {
 Util.getLastXDays = (total = 0, fmt = 'yyyy-MM-dd', relative = 1) => {
   let end = new Date()
   let start = new Date()
-  console.log(total)
   start.setTime(start.getTime() - 3600 * 1000 * 24 * (total+relative-1))
   end.setTime(end.getTime() - 3600 * 1000 * 24 * relative)
   return [Util.formateDate(start, fmt), Util.formateDate(end, fmt)]
