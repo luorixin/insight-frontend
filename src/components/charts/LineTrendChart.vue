@@ -1,6 +1,6 @@
 <template>
   <div class="chartGraph">
-    <v-chart :options="options" />
+    <v-chart :options="options" :autoresize="true" />
   </div>
 </template>
 
@@ -62,6 +62,7 @@ export default {
       })
       series.push({
         data: seriesData,
+        name: 'series' + index,
         symbol: 'circle',
         symbolSize: '6',
         type: 'line',
@@ -138,7 +139,10 @@ export default {
           itemHeight: 8,
           itemGap: 20,
           data: legends,
-          bottom: 0
+          bottom: 0,
+          selected: {
+            series1: false
+          }
         },
         grid: {
           left: '0',

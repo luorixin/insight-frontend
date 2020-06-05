@@ -1,10 +1,13 @@
 <template>
   <div class="chartGraph">
-    <v-chart :options="options" />
+    <v-chart :options="options" :autoresize="true" />
   </div>
 </template>
 
 <script>
+/**
+ * 先一图一组件后面在优化提取
+ */
 import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/tooltip'
@@ -56,6 +59,7 @@ export default {
         data: seriesData,
         symbol: 'circle',
         symbolSize: '6',
+        showSymbol: false,
         type: 'line',
         areaStyle: {
           normal: {

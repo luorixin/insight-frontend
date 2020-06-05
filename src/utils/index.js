@@ -380,6 +380,25 @@ Util.formatNum = (str, len) => {
   return str
 }
 
+Util.getKWMformat = ($num) => {
+  let isNegative = false;
+  if($num<0){
+    isNegative = true; 
+    $num = 0-$num;
+  }
+  if ($num >= 1000000){
+    $num = Math.round($num / 1000000 * 100) / 100;
+    $num = Util.formatNum($num) +' M';
+  } else if($num >= 1000) {
+    $num = Math.round($num / 1000 * 100) / 100 
+    $num = Util.formatNum($num)+ ' K';
+  }
+  if(isNegative){
+    $num = '-'+$num;
+  }
+  return $num;
+},
+
 Util.sumTotalDays = dates => {
   if (!dates || dates.length < 2) return
   function convertDate(date) {
