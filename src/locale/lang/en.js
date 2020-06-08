@@ -31,7 +31,7 @@ export default {
     overseas: 'Overseas',
     china: 'China',
     save: 'Save',
-    'save&generate': 'Save & Generate',
+    'save&Generate': 'Save & Generate',
     cancel: 'Cancel',
     confirm: 'Confirm',
     start: 'Start Date',
@@ -56,9 +56,11 @@ export default {
     yes: 'Yes',
     no: 'No',
     download: 'Download',
+    export: 'Export',
     vs: 'vs.',
     prev: 'prev.',
-    noResultDetail: '(There is no result.)'
+    noResultDetail: '(There is no result.)',
+    customise: 'Customise'
   },
   login: {
     error: {
@@ -101,7 +103,8 @@ export default {
     funnelAnalysis: 'Funnel Analysis',
     reports: 'Reports',
     eventReports: 'Event Reports',
-    eventLog: 'Event Log'
+    eventLog: 'Event Log',
+    downloadReports: 'Download Reports'
   },
   footer: {
     power: 'Powered by iClick. All Rights Reserved. ',
@@ -156,7 +159,7 @@ export default {
       addMore: 'Add one more event',
       note: 'NOTE',
       noteDetail:
-        'Used for counting number of this event.Please notify your client to replace the default sample value inside the generated insight tag with their actual parameter values for correct tracking.'
+        'Used for counting number of this event.Please notify your client to replace the default sample value inside the Generated insight tag with their actual parameter values for correct tracking.'
     },
     universalTable: {
       filterTypeKeyword: 'Specify keywords appeared in the URL',
@@ -313,6 +316,25 @@ export default {
     avgPageView: 'Average Page View',
     avgTimeSpan: 'Average Time Span',
     allFunnels: 'All Funnels'
+  },
+  scheduleReport: {
+    create: 'Scheduled Report',
+    period: 'Period',
+    total: 'Total',
+    days: 'day(s)',
+    exclude: 'Exclude',
+    to: 'To',
+    emailNotify: 'Email Notification',
+    reportName: 'Report Name',
+    generate: 'Generate',
+    cancel: 'Cancel'
+  },
+  downloadReport: {
+    title: 'Download Reports',
+    name: 'Report Name',
+    genTime: 'Generated Time',
+    status: 'Status',
+    action: 'Action'
   },
   errorInfo: {
     emptyInput: 'Please enter something!'

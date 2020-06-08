@@ -241,6 +241,9 @@ export default {
           margin-top: 10px;
           font-size: 20px;
           line-height: 1.5;
+          p {
+            font-size: 100%;
+          }
         }
       }
     }

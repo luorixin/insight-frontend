@@ -7,18 +7,21 @@
             <img src="../../assets/img/iclick.png" alt="logo" />
           </router-link>
         </div>
-        <div class="header-search">
+        <div class="header-search" v-if="!isExport">
           <header-search></header-search>
         </div>
-        <div class="header-menu">
+        <div class="header-menu" v-if="!isExport">
           <ul class="menu-list">
             <li class="active">
               <router-link to="/">{{ $t('logo') }}</router-link>
             </li>
           </ul>
         </div>
+        <div class="header-title" v-if="isExport">{{ exportTitle }}</div>
         <div class="header-info">
+          <div class="header-info_date" v-if="isExport">{{ exportDate }}</div>
           <div
+            v-if="!isExport"
             class="header-info__con"
             @click="showInfoCon"
             v-clickoutside="handleClose"
@@ -50,6 +53,7 @@
 import HeaderSearch from '@/components/common/HeaderSearch.vue'
 import Clickoutside from '@/utils/clickoutside'
 import { mapState, mapActions } from 'vuex'
+import Util from '@/utils'
 export default {
   name: 'MyHeader',
   components: {
@@ -58,9 +62,20 @@ export default {
   directives: {
     Clickoutside
   },
+  props: {
+    isExport: {
+      type: Boolean,
+      default: false
+    },
+    exportTitle: {
+      type: String,
+      default: 'Symphony-iNsight'
+    }
+  },
   data() {
     return {
-      infoShow: false
+      infoShow: false,
+      exportDate: Util.formateDate(new Date(), 'yyyy-MM-dd hh:mm:ss')
     }
   },
   computed: {
@@ -210,6 +225,19 @@ export default {
             }
           }
         }
+        .header-info_date {
+          height: 60px;
+          line-height: 60px;
+          font-size: 12px;
+          margin-right: 20px;
+        }
+      }
+      .header-title {
+        height: 60px;
+        line-height: 60px;
+        font-weight: bold;
+        font-size: 15px;
+        margin-left: 20px;
       }
     }
   }

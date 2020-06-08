@@ -8,6 +8,7 @@ import axios from 'axios'
 import './assets/styles/index.scss'
 import './directives'
 import * as filters from './filters'
+import html2pdf from '@/lib/html2pdf.js'
 
 Vue.config.productionTip = false
 
@@ -15,6 +16,8 @@ Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value),
   size: 'small'
 })
+
+Vue.use(html2pdf)
 
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

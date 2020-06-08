@@ -3,7 +3,11 @@
     <label v-show="!needSelf">{{ currentTitle }}</label>
     <label v-show="needSelf">{{ dateRangeTitle }}</label>
     <div v-show="!needSelf">
-      <el-radio-group v-model="initDate" size="mini">
+      <el-radio-group
+        v-model="initDate"
+        size="mini"
+        :class="{ hasCustomise: needCustom }"
+      >
         <el-radio-button
           v-for="item in rangeArr"
           :label="item.id"
@@ -12,6 +16,9 @@
           {{ item.name }}
         </el-radio-button>
       </el-radio-group>
+      <div v-if="needCustom" class="customise" @click="showCustomise">
+        <span>{{ $t('common.customise') }}</span>
+      </div>
     </div>
     <div v-show="needSelf">
       <el-date-picker
@@ -28,6 +35,22 @@
       >
       </el-date-picker>
     </div>
+    <el-dialog
+      :visible.sync="modal"
+      custom-class="slide-box"
+      @open="addBodyClass"
+      @closed="clearBodyClass"
+      :show-close="false"
+      top="0"
+    >
+      <schedule-modal
+        @getResult="handleSet"
+        :title="optTitle"
+        :reportTitle="reportTitle"
+        :visible="modal"
+      >
+      </schedule-modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -35,8 +58,12 @@
 import Util from '@/utils'
 import moment from 'moment'
 import pickerOptionReport from '@/mixins/pickerOptionReport'
+import ScheduleModal from './ScheduleModal'
 export default {
   name: 'dateSelectorForReport',
+  components: {
+    ScheduleModal
+  },
   mixins: [pickerOptionReport],
   props: {
     dataRanges: {
@@ -51,15 +78,25 @@ export default {
       type: Boolean,
       default: false
     },
+    needCustom: {
+      type: Boolean,
+      default: true
+    },
     needVs: {
       type: Boolean,
       default: true
+    },
+    reportTitle: {
+      type: String,
+      default: 'SummaryAnalysis'
     }
   },
   data() {
     return {
       title: '',
       titleMap: {},
+      optTitle: '',
+      modal: false,
       loading: false,
       initDate: this.initChoose,
       rangeArr: [],
@@ -165,6 +202,22 @@ export default {
         this.formInline.dateRangeArr = Util.getLastXDays(100)
         this.$message.error(this.$t('common.dateRangeBaiduErr'))
       }
+    },
+    showCustomise() {
+      this.optTitle = this.$t('scheduleReport.create')
+      this.modal = true
+    },
+    handleSet(result) {
+      this.modal = false
+      if (result) {
+        // 跳转
+      }
+    },
+    addBodyClass() {
+      document.getElementById('app').className = 'slide-body'
+    },
+    clearBodyClass() {
+      document.getElementById('app').className = ''
     }
   }
 }
@@ -177,6 +230,45 @@ export default {
   align-items: baseline;
   & > label {
     font-weight: bold;
+  }
+}
+.hasCustomise {
+  ::v-deep .el-radio-button {
+    &:last-child {
+      span {
+        border-radius: 0 !important;
+      }
+    }
+  }
+}
+.customise {
+  position: relative;
+  display: inline-block;
+  outline: none;
+  span {
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    vertical-align: middle;
+    background: #ffffff;
+    border: 1px solid #dcdfe6;
+    font-weight: 500;
+    border-left: 0;
+    color: #606266;
+    -webkit-appearance: none;
+    text-align: center;
+    box-sizing: border-box;
+    outline: none;
+    margin: 0;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    padding: 7px 15px;
+    font-size: 12px !important;
+    border-radius: 0 4px 4px 0;
+    &:hover {
+      color: #ef4136;
+    }
   }
 }
 </style>

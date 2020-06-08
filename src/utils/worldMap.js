@@ -182,5 +182,6 @@ export default {
   ZA: 'South Africa',
   ZM: 'Zambia',
   ZR: 'Zaire',
-  ZW: 'Zimbabwe'
+  ZW: 'Zimbabwe',
+  DOM: 'Dominican Republic'
 }

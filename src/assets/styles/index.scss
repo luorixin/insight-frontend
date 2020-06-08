@@ -16,6 +16,10 @@
   }
 }
 
+.hide {
+  display:none;
+}
+
 .mr10{
   margin-top: 10px!important;
 }
@@ -30,6 +34,14 @@
 
 .mr-10{
   margin-top: -10px!important;
+}
+
+.ml10{
+  margin-left: 10px!important;
+}
+
+.ml20{
+  margin-left: 20px!important;
 }
 
 hr{
@@ -75,6 +87,7 @@ hr{
 
 .mainWrapper{
   margin-right: 20px;
+  position: relative;
 }
 
 .main-table{
@@ -262,37 +275,45 @@ $slideWidthSmall: 720px;
 /**************************** ************** report ************************************/
 .report-pane{
   margin-bottom: 40px;
-  .el-tabs__nav{
-    border: none!important;
-  }
-  .el-tabs__item{
-    height: 30px;
-    line-height: 30px;
-    font-size: 12px;
-    border: none!important;
-    padding: 0 6px 0 0!important;
-    div{
-      border: 1px solid #dfdfdf;
-      padding: 0 10px 0 10px;
-      background:#e8ebec;
-      font-weight: bold;
-      color: #333;
-    }
-    &.is-active{
-      div{
-        border-bottom: none;
-        background: #fff;
-      }
-    }
-  }
-  .el-tabs__header{
+  & > .el-tabs__header{
     margin-left: -20px;
     margin-right: -20px;
     padding-left: 20px;
+    .el-tabs__nav{
+      border: none!important;
+    }
+    .el-tabs__item{
+      height: 30px;
+      line-height: 30px;
+      font-size: 12px;
+      border: none!important;
+      padding: 0 6px 0 0!important;
+      div{
+        border: 1px solid #dfdfdf;
+        padding: 0 10px 0 10px;
+        background:#e8ebec;
+        font-weight: bold;
+        color: #333;
+      }
+      &.is-active{
+        div{
+          border-bottom: none;
+          background: #fff;
+        }
+      }
+    }
   }
-  .el-tabs__content{
+  & > .el-tabs__content{
     overflow: initial;
   }
+}
+.report-opt{
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  right: 0;
+  top: 30px;
+  z-index: 999;
 }
 .reporthr{
   margin: 15px -20px 0 -20px;

@@ -7,6 +7,14 @@
         </div>
       </div>
     </div>
+    <div class="report-opt">
+      <el-button
+        icon="fa fa-download"
+        @click="handleDownload"
+        :disabled="isDownload || loading"
+        >{{ $t('common.export') }}</el-button
+      >
+    </div>
     <el-tabs
       v-model="activeName"
       type="card"
@@ -15,7 +23,7 @@
     >
       <el-tab-pane name="summary">
         <div slot="label">{{ $t('property.title') }}</div>
-        <div>
+        <div id="summary">
           <date-selector-for-report></date-selector-for-report>
           <hr class="reporthr" />
           <!-- performance snapshot -->
@@ -162,8 +170,6 @@
             <p class="plan-reports-title">
               {{ $t('property.trafficSnapShot') }}
             </p>
-            <goal-selector @getResult="getGoalId" :defaultValue="goalId">
-            </goal-selector>
             <div class="plan-reports-result mr20">
               <div
                 class="plan-reports-result-inner"
@@ -415,7 +421,7 @@
       </el-tab-pane>
       <el-tab-pane name="audience">
         <div slot="label">{{ $t('audience.analysis') }}</div>
-        <div>
+        <div id="audience">
           <date-selector-for-report :needVs="false"></date-selector-for-report>
           <hr class="reporthr" />
           <div class="plan-reports-con mr20">
@@ -445,6 +451,21 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+    <div id="export">
+      <!-- 为生成导出做的准备 -->
+      <!-- Title 标题信息-->
+      <div class="hide" style="position:absolute;z-index:0;opacity:0">
+        <div class="clearfix h30"></div>
+        <div id="title_pdf">
+          <my-header :isExport="true"></my-header>
+        </div>
+      </div>
+      <!-- report报表信息-->
+      <div class="hide" style="position:absolute;z-index:0;opacity:0;">
+        <div class="clearfix h30"></div>
+        <div id="reports_pdf"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -454,6 +475,9 @@ import GoalSelector from '@/components/selector/GoalSelector'
 import LineChart from '@/components/charts/LineChart'
 import BarChart from '@/components/charts/BarChart'
 import RegionWorldChart from '@/components/charts/RegionWorldChart'
+import MyHeader from '@/components/common/Header'
+import Util from '@/utils'
+import exportUtil from '@/utils/exportUtil'
 export default {
   name: 'propertySummary',
   components: {
@@ -461,11 +485,13 @@ export default {
     GoalSelector,
     LineChart,
     BarChart,
-    RegionWorldChart
+    RegionWorldChart,
+    MyHeader
   },
   data() {
     return {
       loading: false,
+      isDownload: false,
       activeName: 'summary',
       currentName: 'summary',
       goalId: -1,
@@ -655,6 +681,19 @@ export default {
           ]
         }
       }
+    },
+    handleDownload() {
+      this.isDownload = true
+      let current = Util.formateDate(new Date(), 'yyyyMMddhhmm')
+
+      exportUtil.initDom(this.activeName)
+
+      exportUtil.fixCanvas(this.activeName)
+
+      this.getPdf('#reports_pdf', `PropertySummaryAnalysis_${current}`, () => {
+        this.isDownload = false
+        document.getElementById('reports_pdf').parentNode.style.display = 'none'
+      })
     }
   }
 }

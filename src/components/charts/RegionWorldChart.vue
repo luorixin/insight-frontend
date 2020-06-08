@@ -1,11 +1,18 @@
 <template>
   <div class="chartGraph">
-    <v-chart :options="options" :autoresize="true" style="width:600px" />
+    <v-chart
+      :options="options"
+      ref="worldChart"
+      :autoresize="true"
+      style="width:600px"
+    />
     <div class="regionDetail">
       <div
         class="regionDetail_info"
         v-for="(item, index) in currentRegions"
         :key="'region_' + item.name"
+        @mouseover="showChartTip(item.name)"
+        @mouseout="hideChartTip(item.name)"
       >
         <div class="regionDetail_info-label">
           {{ index + 1 + (page - 1) * 10 }}. {{ item.name }}
@@ -306,6 +313,36 @@ export default {
           this.currentRegions = all.splice(start, this.pageSize)
         }
       }
+    },
+    showChartTip(name) {
+      this.$refs.worldChart.dispatchAction({
+        type: 'hideTip',
+        seriesIndex: '0'
+      })
+      this.$refs.worldChart.dispatchAction({
+        type: 'downplay',
+        seriesIndex: '0'
+      })
+      this.$refs.worldChart.dispatchAction({
+        type: 'showTip',
+        seriesIndex: '0',
+        name: name
+      })
+      this.$refs.worldChart.dispatchAction({
+        type: 'highlight',
+        seriesIndex: '0',
+        name: name
+      })
+    },
+    hideChartTip(name) {
+      this.$refs.worldChart.dispatchAction({
+        type: 'hideTip',
+        seriesIndex: '0'
+      })
+      this.$refs.worldChart.dispatchAction({
+        type: 'downplay',
+        seriesIndex: '0'
+      })
     }
   }
 }
@@ -330,6 +367,9 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      &:hover {
+        background: #ddd;
+      }
       .regionDetail_info-label {
         width: 140px;
         white-space: nowrap;

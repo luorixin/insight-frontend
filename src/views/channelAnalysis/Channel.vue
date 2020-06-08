@@ -7,16 +7,27 @@
         </div>
       </div>
     </div>
+    <div class="report-opt">
+      <el-button
+        icon="fa fa-download"
+        @click="handleDownload"
+        :disabled="isDownload || loading"
+        >{{ $t('common.export') }}</el-button
+      >
+    </div>
     <el-tabs
       v-model="activeName"
       type="card"
       class="report-pane"
       @tab-click="changeTab"
     >
-      <el-tab-pane name="summary">
+      <el-tab-pane name="channel">
         <div slot="label">{{ $t('channel.title') }}</div>
-        <div>
-          <date-selector-for-report :needVs="false"></date-selector-for-report>
+        <div id="channel">
+          <date-selector-for-report
+            :needVs="false"
+            reportTitle="ChannelAnalysis"
+          ></date-selector-for-report>
           <hr class="reporthr" />
           <!-- traffic snapshot -->
           <div class="plan-reports-con mr20">
@@ -35,11 +46,36 @@
                     <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
-                <div class="report-result-inner__graph" style="height: 405px;">
+                <div class="plan-reports-result-inner__opt">
+                  <el-radio-group v-model="trafficTrendOpt" size="small">
+                    <el-radio-button label="channel">
+                      {{ $t('channel.channel') }}
+                    </el-radio-button>
+                    <el-radio-button label="device">
+                      {{ $t('channel.device') }}
+                    </el-radio-button>
+                  </el-radio-group>
+                  <goal-selector @getResult="getGoalId" :defaultValue="goalId">
+                  </goal-selector>
+                </div>
+                <div class="plan-reports-result-inner__opt mr10">
+                  <goal-selector
+                    style="margin-left: 161px;"
+                    @getResult="getGoalId"
+                    :defaultValue="goalId"
+                  >
+                  </goal-selector>
+                  <span style="margin-right: 15px;line-height: 30px;">{{
+                    $t('common.vs')
+                  }}</span>
+                  <goal-selector @getResult="getGoalId" :defaultValue="goalId">
+                  </goal-selector>
+                </div>
+                <div class="report-result-inner__graph" style="height: 335px;">
                   <div id="traffic_breakdown_map">
                     <bar-multi-axis-chart
                       :datas="trafficBreakdown"
-                      :height="405"
+                      :height="335"
                       :color="trafficBreakdownColor"
                     ></bar-multi-axis-chart>
                   </div>
@@ -129,10 +165,14 @@
                     <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
-                <p>
+                <!-- <p>
                   {{ $t('channel.goal') }}:
                   <b style="font-weight: bold;">Booking</b>
-                </p>
+                </p> -->
+                <div class="plan-reports-result-inner__opt mr10">
+                  <goal-selector @getResult="getGoalId" :defaultValue="goalId">
+                  </goal-selector>
+                </div>
                 <div class="plan-reports-result-inner__tablelike mr10">
                   <div class="tablelike_title">
                     <div style="text-align: center;">
@@ -169,8 +209,11 @@
       </el-tab-pane>
       <el-tab-pane name="audience">
         <div slot="label">{{ $t('audience.analysis') }}</div>
-        <div>
-          <date-selector-for-report :needVs="false"></date-selector-for-report>
+        <div id="audience">
+          <date-selector-for-report
+            :needVs="false"
+            reportTitle="ChannelAnalysis"
+          ></date-selector-for-report>
           <hr class="reporthr" />
           <div class="plan-reports-con mr20">
             <div class="plan-reports-result">
@@ -199,6 +242,21 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+    <div id="export">
+      <!-- 为生成导出做的准备 -->
+      <!-- Title 标题信息-->
+      <div class="hide" style="position:absolute;z-index:0;opacity:0">
+        <div class="clearfix h30"></div>
+        <div id="title_pdf">
+          <my-header :isExport="true"></my-header>
+        </div>
+      </div>
+      <!-- report报表信息-->
+      <div class="hide" style="position:absolute;z-index:0;opacity:0;">
+        <div class="clearfix h30"></div>
+        <div id="reports_pdf"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -209,6 +267,9 @@ import NoresultReport from '@/components/report/Noresult.vue'
 import LineTrendChart from '@/components/charts/LineTrendChart'
 import BarMultiAxisChart from '@/components/charts/BarMultiAxisChart'
 import RegionWorldChart from '@/components/charts/RegionWorldChart'
+import MyHeader from '@/components/common/Header'
+import Util from '@/utils'
+import exportUtil from '@/utils/exportUtil'
 export default {
   name: 'channelAnalysis',
   components: {
@@ -217,13 +278,15 @@ export default {
     NoresultReport,
     LineTrendChart,
     BarMultiAxisChart,
-    RegionWorldChart
+    RegionWorldChart,
+    MyHeader
   },
   data() {
     return {
       loading: false,
-      activeName: 'summary',
-      currentName: 'summary',
+      isDownload: false,
+      activeName: 'channel',
+      currentName: 'channel',
       goalId: -1,
       breakdownOpt: 'channel',
       trafficTrendOpt: 'channel',
@@ -398,6 +461,19 @@ export default {
           ]
         }
       }
+    },
+    handleDownload() {
+      this.isDownload = true
+      let current = Util.formateDate(new Date(), 'yyyyMMddhhmm')
+
+      exportUtil.initDom(this.activeName)
+
+      exportUtil.fixCanvas(this.activeName)
+
+      this.getPdf('#reports_pdf', `ChannelAnalysis_${current}`, () => {
+        this.isDownload = false
+        document.getElementById('reports_pdf').parentNode.style.display = 'none'
+      })
     }
   }
 }

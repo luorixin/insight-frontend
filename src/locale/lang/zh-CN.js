@@ -52,12 +52,14 @@ export default {
     subTotel: '合计',
     needUpdate: '系统版本有更新，点击确认加载最新！',
     dateRangeBaiduErr: '日期范围最大不超过365天',
-    yes: 'Yes',
-    no: 'No',
-    download: 'Download',
+    yes: '是',
+    no: '否',
+    download: '下载',
+    export: '导出',
     vs: 'vs.',
     prev: 'prev.',
-    noResultDetail: '(There is no result.)'
+    noResultDetail: '( 没有结果 )',
+    customise: '定制化'
   },
   login: {
     error: {
@@ -99,7 +101,8 @@ export default {
     funnelAnalysis: 'Funnel Analysis',
     reports: 'Reports',
     eventReports: 'Event Reports',
-    eventLog: 'Event Log'
+    eventLog: 'Event Log',
+    downloadReports: 'Download Reports'
   },
   footer: {
     power: '由爱点击提供技术支持。版权所有。',
@@ -311,6 +314,25 @@ export default {
     avgPageView: 'Average Page View',
     avgTimeSpan: 'Average Time Span',
     allFunnels: 'All Funnels'
+  },
+  scheduleReport: {
+    create: 'Scheduled Report',
+    period: 'Period',
+    total: 'Total',
+    days: 'day(s)',
+    exclude: 'Exclude',
+    to: 'To',
+    emailNotify: 'Email Notification',
+    reportName: 'Report Name',
+    generate: 'Generate',
+    cancel: 'Cancel'
+  },
+  downloadReport: {
+    title: 'Download Reports',
+    name: 'Report Name',
+    genTime: 'Generated Time',
+    status: 'Status',
+    action: 'Action'
   },
   errorInfo: {
     emptyInput: '请输入一些东西'
