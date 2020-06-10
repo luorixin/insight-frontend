@@ -1,6 +1,6 @@
 export default {
   test: '测试',
-  logo: 'iNsight',
+  logo: 'iNsights',
   language: '简体中文',
   common: {
     noResult: '没有结果',
@@ -72,7 +72,7 @@ export default {
       notInService: '服务器正在维护，请稍等！',
       dataError: '系统数据错误, 请联系运营人员'
     },
-    slogan: 'iNsight',
+    slogan: 'iNsights',
     slogan1: 'CHINA PROGRAMMATIC',
     slogan2: 'PREMIUM MOBILE INVENTORY',
     slogan3: 'ADVANCED TARGETING',
@@ -106,7 +106,7 @@ export default {
   },
   footer: {
     power: '由爱点击提供技术支持。版权所有。',
-    icp: 'ICP 14026918 iNsight',
+    icp: 'ICP 14026918 iNsights',
     browsers:
       '(建议采用浏览器: Internet Explorer 9.0+, Chrome 8.0+, Firefox 3.5+, Safari 1.0+)',
     policy: '隐私声明'

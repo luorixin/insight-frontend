@@ -1,6 +1,6 @@
 export default {
   test: 'test',
-  logo: 'iNsight',
+  logo: 'iNsights',
   language: 'English',
   common: {
     noResult: 'No Result',
@@ -74,7 +74,7 @@ export default {
       notInService: 'Server is under maintenance, please wait!',
       dataError: 'System data error, please contact the operator!'
     },
-    slogan: 'iNsight',
+    slogan: 'iNsights',
     slogan1: 'CHINA PROGRAMMATIC',
     slogan2: 'PREMIUM MOBILE INVENTORY',
     slogan3: 'ADVANCED TARGETING',
@@ -108,7 +108,7 @@ export default {
   },
   footer: {
     power: 'Powered by iClick. All Rights Reserved. ',
-    icp: 'ICP 14026918 iNsight',
+    icp: 'ICP 14026918 iNsights',
     browsers:
       '(Suggested browsers: Internet Explorer 9.0+, Chrome 8.0+, Firefox 3.5+, Safari 1.0+)',
     policy: 'Privacy Policy'

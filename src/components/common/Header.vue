@@ -69,7 +69,7 @@ export default {
     },
     exportTitle: {
       type: String,
-      default: 'Symphony-iNsight'
+      default: 'Symphony-iNsights'
     }
   },
   data() {

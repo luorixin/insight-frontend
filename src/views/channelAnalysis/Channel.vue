@@ -47,7 +47,7 @@
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">
-                  <el-radio-group v-model="trafficTrendOpt" size="small">
+                  <el-radio-group v-model="breakdownOpt" size="small">
                     <el-radio-button label="channel">
                       {{ $t('channel.channel') }}
                     </el-radio-button>
@@ -57,25 +57,17 @@
                   </el-radio-group>
                   <goal-selector @getResult="getGoalId" :defaultValue="goalId">
                   </goal-selector>
-                </div>
-                <div class="plan-reports-result-inner__opt mr10">
-                  <goal-selector
-                    style="margin-left: 161px;"
-                    @getResult="getGoalId"
-                    :defaultValue="goalId"
-                  >
-                  </goal-selector>
                   <span style="margin-right: 15px;line-height: 30px;">{{
                     $t('common.vs')
                   }}</span>
                   <goal-selector @getResult="getGoalId" :defaultValue="goalId">
                   </goal-selector>
                 </div>
-                <div class="report-result-inner__graph" style="height: 335px;">
+                <div class="report-result-inner__graph" style="height: 375px;">
                   <div id="traffic_breakdown_map">
                     <bar-multi-axis-chart
                       :datas="trafficBreakdown"
-                      :height="335"
+                      :height="375"
                       :color="trafficBreakdownColor"
                     ></bar-multi-axis-chart>
                   </div>
@@ -92,10 +84,10 @@
                     <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
-                <div class="report-flex-middle">
+                <!-- <div class="report-flex-middle">
                   <goal-selector @getResult="getGoalId" :defaultValue="goalId">
                   </goal-selector>
-                </div>
+                </div> -->
                 <div class="report-result-inner__rank">
                   <ul>
                     <li v-for="item in 10" :key="'rank_' + item">
