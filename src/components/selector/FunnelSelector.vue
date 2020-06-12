@@ -4,6 +4,7 @@
       v-model="result"
       @change="handleChange"
       filterable
+      class="handle-select"
       :class="{ pd30: needdot }"
       :placeholder="placeholder"
       :disabled="disabled"
@@ -110,7 +111,7 @@ export default {
 
 <style scoped lang="scss">
 .handle-select {
-  width: 120px;
+  width: 189px;
 }
 
 .handle-input {

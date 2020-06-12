@@ -235,7 +235,10 @@
                   </div>
                 </div>
               </div>
-              <div class="plan-reports-result-split__column">
+              <div
+                class="plan-reports-result-split__column"
+                style="height: 290px;"
+              >
                 <div class="plan-reports-result-inner">
                   <!-- frequency visits -->
                   <div class="plan-reports-result-inner_title">
@@ -345,7 +348,10 @@
                   </div>
                 </div>
               </div>
-              <div class="plan-reports-result-split__column">
+              <div
+                class="plan-reports-result-split__column"
+                style="height: 290px;"
+              >
                 <div class="plan-reports-result-inner">
                   <!-- frequency visits -->
                   <div class="plan-reports-result-inner_title">

@@ -74,9 +74,9 @@
                 </div>
                 <div class="report-flex-middle">
                   <el-input
-                    style="width: 175px;"
+                    style="width: 189px;"
                     :disabled="true"
-                    :value="$t('funnelAnalysis.allFunnels')"
+                    :value="$t('funnelAnalysis.allGoals')"
                   >
                     <i slot="prefix" class="reddot"></i>
                   </el-input>

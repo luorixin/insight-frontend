@@ -315,7 +315,8 @@ export default {
     frequencyVisit: 'Frequency of Visits',
     avgPageView: 'Average Page View',
     avgTimeSpan: 'Average Time Span',
-    allFunnels: 'All Funnels'
+    allFunnels: 'All Funnels',
+    allGoals: 'All Goals'
   },
   scheduleReport: {
     create: 'Scheduled Report',

@@ -273,6 +273,9 @@ export default {
         font-size: 24px;
         height: 66px;
         line-height: 50px;
+        span {
+          font-size: 24px;
+        }
       }
       .login-footer {
         font-size: 12px;

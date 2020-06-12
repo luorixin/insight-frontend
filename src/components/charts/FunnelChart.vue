@@ -1,17 +1,44 @@
 <template>
   <div class="chartGraph">
-    <v-chart :options="options" style="width:350px" :autoresize="true" />
+    <div class="funnelLegend funnelEntrance">
+      <div class="funnelLegend-detail">
+        <div class="funnelLegend-detail_exit">
+          <span class="fa fa-caret-right"></span>
+          <p>Entrance</p>
+          <div class="exit_con">
+            <div><span>signin.html</span><span>687 (11.11%)</span></div>
+            <div><span>store.html</span><span>354 (11.11%)</span></div>
+            <div><span>basket.html</span><span>267 (11.11%)</span></div>
+          </div>
+        </div>
+        <div class="funnelLegend-detail_line"></div>
+      </div>
+    </div>
+    <v-chart
+      :options="options"
+      style="width:250px;z-index:999;"
+      :autoresize="true"
+    />
     <div class="funnelLegend">
       <div
         class="funnelLegend-detail"
-        v-for="item in datas"
+        v-for="(item, i) in datas"
         :key="'funnelChart_' + item.name"
       >
         <div class="funnelLegend-detail_line"></div>
-        <div class="funnelLegend-detail_con">
+        <!-- <div class="funnelLegend-detail_con">
           <p>{{ item.name }}</p>
+
           <p>{{ item.value | toThousandFilter }}</p>
           <p>( {{ getPer(item.value) }}%)</p>
+        </div> -->
+        <div
+          class="funnelLegend-detail_process"
+          :style="{ left: processLeft(i) }"
+          v-if="i > 0"
+        >
+          <p>proceed to {{ item.name }}</p>
+          <p>{{ item.value | toThousandFilter }} ({{ getPer(item.value) }}%)</p>
         </div>
         <div class="funnelLegend-detail_exit" v-if="item.Exit">
           <span class="fa fa-caret-right"></span>
@@ -22,7 +49,7 @@
               :key="'exit_' + index"
             >
               <span>{{ key }}</span>
-              <span>{{ exits }}</span>
+              <span>{{ exits }} ( 11.11% )</span>
             </div>
           </div>
         </div>
@@ -102,6 +129,7 @@ export default {
           backgroundColor: '#f2f2f2',
           borderColor: '#dfdfdf',
           borderWidth: 1,
+          show: false,
           textStyle: {
             color: '#333',
             fontFamily: 'Open Sans'
@@ -154,12 +182,16 @@ export default {
             sort: 'descending',
             gap: 2,
             label: {
-              normal: {
-                show: false,
-                position: 'right'
-              },
-              emphasis: {
-                show: false
+              show: true,
+              position: 'inside',
+              fontFamily: 'Open Sans',
+              formatter: ['{a|{b}}', '{c}'].join('\n'),
+              rich: {
+                a: {
+                  lineHeight: 30,
+                  color: '#fff',
+                  fontWeight: 'bold'
+                }
               }
             },
             itemStyle: {
@@ -180,6 +212,9 @@ export default {
       return this.total == 0
         ? 0
         : parseFloat(((value * 100) / this.total).toFixed(2))
+    },
+    processLeft(index) {
+      return (-(250 / (this.datas.length + 1)) / 2) * index + 10 + 'px'
     }
   }
 }
@@ -194,7 +229,7 @@ export default {
 .chartGraph {
   display: flex;
   justify-content: center;
-  width: 700px;
+  width: 1018px;
   margin: auto;
 }
 .funnelLegend {
@@ -206,9 +241,12 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
+    position: relative;
+    z-index: 99;
     .funnelLegend-detail_line {
       height: 1px;
-      width: 50px;
+      width: 280px;
+      margin-left: -125px;
       background: #dfdfdf;
     }
     .funnelLegend-detail_con {
@@ -224,12 +262,13 @@ export default {
       }
     }
     .funnelLegend-detail_exit {
-      width: 145px;
-      align-self: flex-end;
+      width: 160px;
+      // align-self: flex-end;
       border: 1px solid #dfdfdf;
       padding: 10px;
       background: #fff;
       position: relative;
+      opacity: 0.99;
       .fa {
         position: absolute;
         left: 0;
@@ -244,8 +283,32 @@ export default {
           display: flex;
           justify-content: space-between;
           line-height: 20px;
+          span {
+            font-size: 10px;
+            color: #151515;
+          }
         }
       }
+    }
+    .funnelLegend-detail_process {
+      position: absolute;
+      top: -10px;
+      p {
+        line-height: 17px;
+        &:first-child {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+.funnelEntrance {
+  position: relative;
+  .funnelLegend-detail {
+    &:first-child {
+      position: absolute;
+      top: -50px;
+      right: 0;
     }
   }
 }

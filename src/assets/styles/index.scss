@@ -473,7 +473,7 @@ $slideWidthSmall: 720px;
           }
         }
         .breakdown_line{
-          width: 1px;
+          width: 1.04px;
           height: 40px;
           background: #dfdfdf;
           margin: 0 20px;
@@ -494,7 +494,7 @@ $slideWidthSmall: 720px;
       flex-direction: column;
       flex: 1;
       .plan-reports-result-inner{
-        margin: 7.5px;
+        margin: 7.5px 0 7.5px 7.5px;
         .plan-reports-result-inner_title{
           height: 15px;
         }
