@@ -8,7 +8,7 @@ Util.title = title => {
   window.document.title = title
 }
 
-const TokenKey = 'Iactivate-Token'
+const TokenKey = 'iNsight-Token'
 
 Util.getToken = () => {
   return Cookies.get(TokenKey)

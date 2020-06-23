@@ -18,8 +18,8 @@
             }}<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown" style="width: 140px;">
-            <el-dropdown-item command="active">Active</el-dropdown-item>
-            <el-dropdown-item command="pause">Pause</el-dropdown-item>
+            <el-dropdown-item command="live">Active</el-dropdown-item>
+            <el-dropdown-item command="paused">Pause</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-input
@@ -168,6 +168,7 @@ export default {
       loading: false,
       subLoading: false,
       tipVisible: false,
+      changeStatus: null,
       allList: [],
       currentList: [],
       formInline: {
@@ -190,27 +191,17 @@ export default {
   },
   methods: {
     getDataList() {
-      // this.loading = true
-      // goalsApi
-      //   .list(this.formInline.search)
-      //   .then(data => {
-      //     this.allList = data.concat()
-      //     this.currentList = this.allList.slice(0, this.formInline.pageSize)
-      //     this.totalCount = this.allList.length
-      //   })
-      //   .finally(() => {
-      //     this.loading = false
-      //   })
-      this.allList = [
-        {
-          id: 1,
-          name: 'test',
-          status: false,
-          modifyDate: '2020-02-02'
-        }
-      ]
-      this.currentList = this.allList.slice(0, this.formInline.pageSize)
-      this.totalCount = this.allList.length
+      this.loading = true
+      goalsApi
+        .list(this.formInline.search)
+        .then(data => {
+          this.allList = data.concat()
+          this.currentList = this.allList.slice(0, this.formInline.pageSize)
+          this.totalCount = this.allList.length
+        })
+        .finally(() => {
+          this.loading = false
+        })
     },
     makeDebounce() {
       this.debounceSearch = Util.debounce(search => {
@@ -295,29 +286,32 @@ export default {
       if (this.multipleSelection.length === 0) {
         this.$message.error(this.$t('common.selOption'))
       } else {
+        this.changeStatus = status
         this.tipVisible = true
       }
     },
     doChange() {
       this.subLoading = true
-      console.log(this.multipleSelection)
+      let goalIds = this.multipleSelection.map(item => item.id)
       let params = {
-        eventId: this.row.eventId,
-        statusType: this.row.status ? 'paused' : 'live'
+        goalIds: goalIds,
+        batchType: this.changeStatus
       }
       goalsApi
-        .changStatus(params)
+        .batchUpdate(params)
         .then(data => {
           this.allList.forEach(item => {
-            if (item.eventId === this.row.eventId) {
-              item.status = !item.status
-            }
+            goalIds.forEach(eventId => {
+              if (item.id == eventId) {
+                item.status = !item.status
+              }
+            })
           })
-          this.currentList.forEach(item => {
-            if (item.eventId === this.row.eventId) {
-              item.status = !this.row.status
-            }
-          })
+          // this.currentList.forEach(item => {
+          //   if (item.eventId === this.row.eventId) {
+          //     item.status = !this.row.status
+          //   }
+          // })
           this.tipVisible = false
           this.$message.success(this.$t('common.optSuccess'))
         })

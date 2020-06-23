@@ -22,7 +22,7 @@
             ></span>
             <label
               :style="scope.$index > 0 ? '' : 'width: 100%;text-align: right;'"
-              >#{{ scope.row.id }}</label
+              >#{{ scope.row.index }}</label
             >
           </div>
         </template>
@@ -33,6 +33,7 @@
             <el-input
               v-model="scope.row.name"
               :disabled="scope.$index === 0"
+              @change="changeName(scope.row)"
               class="handleSelect"
               :placeholder="$t('event.insightTagTable.fillName')"
             ></el-input>
@@ -52,7 +53,7 @@
             class="handleSelect"
           >
             <el-option
-              v-for="item in typeList"
+              v-for="item in tagTypes"
               v-show="showRevenue(item.id, scope.row)"
               :key="item.id"
               :label="item.name"
@@ -63,11 +64,12 @@
           <el-select
             v-model="scope.row.currency"
             v-show="scope.row.currency != null"
+            @change="changeCurrency(scope.row)"
             class="handleSelect"
             style="margin-top: 10px;"
           >
             <el-option
-              v-for="item in currecnyList"
+              v-for="item in currencys"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -113,19 +115,10 @@ export default {
     results: {
       type: Array,
       default: () => []
-    }
-  },
-  data() {
-    return {
-      datas: [
-        {
-          id: 1,
-          name: 'Counter',
-          type: 'counter',
-          currency: null
-        }
-      ],
-      currecnyList: [
+    },
+    currencyList: {
+      type: Array,
+      default: () => [
         {
           id: 'HKD',
           name: 'HKD'
@@ -138,8 +131,11 @@ export default {
           id: 'USD',
           name: 'USD'
         }
-      ],
-      typeList: [
+      ]
+    },
+    tagTypeList: {
+      type: Array,
+      default: () => [
         {
           id: 'counter',
           name: 'Counter',
@@ -168,7 +164,42 @@ export default {
             '*Used for storing monetary value; *Only one parameter can be defined as this type. It is generally referred to sales amount or membership fee. Rules：Greater than or equal to 0',
           sample: '199.99'
         }
-      ],
+      ]
+    }
+  },
+  watch: {
+    currencyList: {
+      handler(newName, oldName) {
+        this.currencys = newName.concat()
+      },
+      immediate: true
+    },
+    tagTypeList: {
+      handler(newName, oldName) {
+        this.tagTypes = newName.concat()
+      },
+      immediate: true
+    },
+    results: {
+      handler(newName, oldName) {
+        if (newName.length === 0) {
+          newName.push({
+            index: 1,
+            name: 'Counter',
+            currency: null,
+            type: 'counter'
+          })
+        }
+        this.datas = newName.concat()
+      },
+      immediate: true
+    }
+  },
+  data() {
+    return {
+      datas: this.results,
+      currencys: this.currencyList,
+      tagTypes: this.tagTypeList,
       loading: false
     }
   },
@@ -179,9 +210,16 @@ export default {
       } else {
         row.currency = null
       }
+      this.$emit('getResult', this.datas)
+    },
+    changeCurrency(row) {
+      this.$emit('getResult', this.datas)
+    },
+    changeName(row) {
+      this.$emit('getResult', this.datas)
     },
     convertType(type, returnKey) {
-      let find = this.typeList.find(item => item.id === type)
+      let find = this.tagTypes.find(item => item.id === type)
       if (find) {
         return find[returnKey]
       }
@@ -198,15 +236,18 @@ export default {
     },
     handleMinus(index) {
       this.datas.splice(index, 1)
+      this.datas.forEach((item, index) => (item.index = index + 1))
+      this.$emit('getResult', this.datas)
     },
     handleAdd() {
       if (this.datas.length < 10) {
         this.datas.push({
-          id: this.datas.length + 1,
+          index: this.datas.length + 1,
           name: null,
           currency: null,
           type: 'counter'
         })
+        this.$emit('getResult', this.datas)
       }
     }
   }

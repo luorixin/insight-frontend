@@ -28,6 +28,14 @@ export default {
       default: false
     }
   },
+  watch: {
+    choose: {
+      handler(newData, oldData) {
+        this.selected = newData
+      },
+      immediate: true
+    }
+  },
   data() {
     return {
       selected: this.choose

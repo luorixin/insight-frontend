@@ -51,7 +51,7 @@ http.interceptors.request.use(
       .catch(err => {
         // console.error(err);
       })
-    config.headers['Authorization'] = 'iActivate ' + Util.getToken() // 请求头带上token
+    config.headers['Authorization'] = 'iNsight ' + Util.getToken() // 请求头带上token
     return config
   },
   error => {
@@ -68,7 +68,7 @@ http.interceptors.response.use(
     const httpCode = response.status
     // console.log(response)
     if (httpCode === 200) {
-      if (!res.code || res.code === '0000') {
+      if (!res.code || res.code === 200) {
         return Promise.resolve(res.data || res)
       } else {
         Util.showMsg(

@@ -44,9 +44,9 @@
               >
                 <el-option
                   v-for="item in events"
-                  :key="item.eventId"
+                  :key="item.id"
                   :label="item.eventName"
-                  :value="item.eventId"
+                  :value="item.id"
                 >
                 </el-option>
               </el-select>
@@ -140,32 +140,31 @@ export default {
   },
   methods: {
     getDataList() {
-      // this.loading = true
-      // if (this.goalId) {
-      //   goalsApi
-      //     .update(this.goalId)
-      //     .then(data => {
-      //       this.events = data.eventList.concat()
-      //       this.ruleForm = Object.assign({}, data.data)
-      //       this.ruleForm.eventId += ''
-      //       this.ruleForm.status += ''
-      //     })
-      //     .finally(() => {
-      //       this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
-      //       this.loading = false
-      //     })
-      // } else {
-      //   goalsApi
-      //     .create()
-      //     .then(data => {
-      //       this.events = data.concat()
-      //       this.ruleForm = Object.assign({}, this.baseData)
-      //     })
-      //     .finally(() => {
-      //       this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
-      //       this.loading = false
-      //     })
-      // }
+      this.loading = true
+      if (this.goalId) {
+        goalsApi
+          .toUpdate(this.goalId)
+          .then(data => {
+            this.events = data.eventList.concat()
+            this.ruleForm = Object.assign({}, data.data)
+            this.ruleForm.status += ''
+          })
+          .finally(() => {
+            this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
+            this.loading = false
+          })
+      } else {
+        goalsApi
+          .toCreate()
+          .then(data => {
+            this.events = data.concat()
+            this.ruleForm = Object.assign({}, this.baseData)
+          })
+          .finally(() => {
+            this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
+            this.loading = false
+          })
+      }
     },
     closeModal() {
       this.$emit('getResult', false)
@@ -176,9 +175,9 @@ export default {
           this.loading = true
           let promise = null
           if (this.goalId) {
-            promise = goalsApi.doUpdate(this.ruleForm)
+            promise = goalsApi.update(this.ruleForm)
           } else {
-            promise = goalsApi.doCreate(this.ruleForm)
+            promise = goalsApi.create(this.ruleForm)
           }
           promise
             .then(data => {

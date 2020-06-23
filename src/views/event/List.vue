@@ -18,8 +18,8 @@
             }}<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown" style="width: 140px;">
-            <el-dropdown-item command="active">Active</el-dropdown-item>
-            <el-dropdown-item command="pause">Pause</el-dropdown-item>
+            <el-dropdown-item command="live">Active</el-dropdown-item>
+            <el-dropdown-item command="paused">Pause</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-input
@@ -69,8 +69,10 @@
             width="120"
           >
             <template slot-scope="scope">
-              <el-tag :type="scope.row.trackingType ? 'success' : 'danger'">
-                {{ scope.row.trackingType ? 'Insight' : 'Universal' }}
+              <el-tag
+                :type="scope.row.tackingType === 1 ? 'success' : 'danger'"
+              >
+                {{ scope.row.tackingType === 1 ? 'Universal' : 'Insight' }}
               </el-tag>
             </template>
           </el-table-column>
@@ -219,6 +221,7 @@ export default {
       loading: false,
       subLoading: false,
       tipVisible: false,
+      changeStatus: null,
       allList: [],
       currentList: [],
       formInline: {
@@ -241,31 +244,17 @@ export default {
   },
   methods: {
     getDataList() {
-      // this.loading = true
-      // eventsApi
-      //   .list(this.formInline.search)
-      //   .then(data => {
-      //     this.allList = data.concat()
-      //     this.currentList = this.allList.slice(0, this.formInline.pageSize)
-      //     this.totalCount = this.allList.length
-      //   })
-      //   .finally(() => {
-      //     this.loading = false
-      //   })
-      this.allList = [
-        {
-          id: 1,
-          eventName: 'test',
-          urls: 'http://www.baidu.com',
-          tackingType: 0,
-          isGoal: false,
-          isFunnel: true,
-          status: false,
-          updatedAt: '2020-02-02'
-        }
-      ]
-      this.currentList = this.allList.slice(0, this.formInline.pageSize)
-      this.totalCount = this.allList.length
+      this.loading = true
+      eventsApi
+        .list(this.formInline.search)
+        .then(data => {
+          this.allList = data.concat()
+          this.currentList = this.allList.slice(0, this.formInline.pageSize)
+          this.totalCount = this.allList.length
+        })
+        .finally(() => {
+          this.loading = false
+        })
     },
     makeDebounce() {
       this.debounceSearch = Util.debounce(search => {
@@ -349,34 +338,42 @@ export default {
       if (this.multipleSelection.length === 0) {
         this.$message.error(this.$t('common.selOption'))
       } else {
+        this.changeStatus = status
         this.tipVisible = true
       }
     },
     doChange() {
       this.subLoading = true
-      console.log(this.multipleSelection)
+      let eventIds = this.multipleSelection.map(item => item.id)
       let params = {
-        eventId: this.row.eventId,
-        statusType: this.row.status ? 'paused' : 'live'
+        eventIds: eventIds,
+        batchType: this.changeStatus
       }
       eventsApi
-        .changStatus(params)
+        .batchUpdate(params)
         .then(data => {
           this.allList.forEach(item => {
-            if (item.eventId === this.row.eventId) {
-              item.status = !item.status
-            }
+            eventIds.forEach(eventId => {
+              if (item.id == eventId) {
+                item.status = !item.status
+              }
+            })
           })
-          this.currentList.forEach(item => {
-            if (item.eventId === this.row.eventId) {
-              item.status = !this.row.status
-            }
-          })
+          // 对象数组浅拷贝所以无需在遍历
+          // 深拷贝JSON.parse(JSON.stringify(allList))
+          // this.currentList.forEach(item => {
+          //   eventIds.forEach(eventId => {
+          //     if (item.id == eventId) {
+          //       item.status = !item.status
+          //     }
+          //   })
+          // })
           this.tipVisible = false
           this.$message.success(this.$t('common.optSuccess'))
         })
         .finally(() => {
           this.subLoading = false
+          this.tipVisible = false
         })
     }
   }

@@ -58,7 +58,7 @@ export default {
         .login({ username: username.trim(), password: password })
         .then(response => {
           commit('setToken', response.token)
-          commit('setUserDetail', response.userName)
+          commit('setUserDetail', username.trim())
           Util.setToken(response.token)
           resolve()
         })

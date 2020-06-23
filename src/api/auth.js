@@ -9,10 +9,10 @@ export const login = params =>
   $http({
     url: $http.adornUrl(baseUrl + '/login'),
     method: 'post',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-    },
-    data: $http.adornData(params, true, 'form')
+    // headers: {
+    //   'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+    // },
+    data: $http.adornData(params) //, true, 'form')
   })
 
 /**
@@ -30,7 +30,7 @@ export const logout = () =>
  */
 export const getRight = () =>
   $http({
-    url: $http.adornUrl(baseUrl + '/getRight'),
+    url: $http.adornUrl(baseUrl + '/ajax/getHeader'),
     method: 'get',
     params: $http.adornParams({})
   })
@@ -38,11 +38,11 @@ export const getRight = () =>
 /**
  * 变更客户
  */
-export const changeRight = adverId =>
+export const changeRight = clientId =>
   $http({
-    url: $http.adornUrl(baseUrl + '/changeRight'),
+    url: $http.adornUrl(baseUrl + '/ajax/changeClient'),
     method: 'get',
     params: $http.adornParams({
-      adverId: adverId
+      clientId: clientId
     })
   })

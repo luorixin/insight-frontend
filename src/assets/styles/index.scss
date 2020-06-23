@@ -16,6 +16,20 @@
   }
 }
 
+.el-table {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: rgba(31,45,61,.2);
+    border-radius: 3px
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(31,45,61,.3)
+  }
+}
+
 .hide {
   display:none;
 }

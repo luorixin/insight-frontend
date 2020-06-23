@@ -3,14 +3,14 @@
     <div class="search-title" v-clickoutside="handleClose">
       <div @click="handleShow">
         <label
-          :title="$t('header.agency') + ': ' + currentAgency.agencyName"
+          :title="$t('header.agency') + ': ' + currentAgent.agentName"
           class="title-label"
         >
-          {{ $t('header.agency') }}: {{ currentAgency.agencyName }}
+          {{ $t('header.agency') }}: {{ currentAgent.agentName }}
         </label>
         <label class="title-label_sub"
           >{{ $t('header.advertiser') }}:
-          {{ currentAdvertiser.advertiserName }}</label
+          {{ currentAdvertiser.clientName }}</label
         >
         <i class="fa fa-caret-down"></i>
       </div>
@@ -32,15 +32,18 @@
             <div class="search-content__recent">
               <label>{{ $t('header.recent') }}</label>
               <ul v-show="recentAdvertisers && recentAdvertisers.length > 0">
-                <li v-for="(item, key) in recentAdvertisers" :key="item + key">
+                <li
+                  v-for="(item, key) in recentAdvertisers"
+                  :key="'recent_' + item + key"
+                >
                   <a href="javascript:;" @click="changeRight(item)">
                     <el-tooltip
                       placement="top"
-                      :disabled="item.advertiserName.length < 30"
-                      :content="item.advertiserName"
+                      :disabled="item.clientName.length < 30"
+                      :content="item.clientName"
                       effect="light"
                     >
-                      <span>{{ item.advertiserName }}</span>
+                      <span>{{ item.clientName }}</span>
                     </el-tooltip>
                   </a>
                 </li>
@@ -55,8 +58,11 @@
             </div>
             <div class="search-content__result">
               <label>{{ $t('header.allClients') }}</label>
-              <ul v-show="agencys && agencys.length > 0">
-                <li v-for="(item, key) in agencys" :key="item.agencyId + key">
+              <ul v-show="agents && agents.length > 0">
+                <li
+                  v-for="(item, key) in agents"
+                  :key="'all_' + item.agentId + key"
+                >
                   <a href="javascript:;" @click="showChild(item)">
                     <i
                       class="fa"
@@ -66,35 +72,35 @@
                     ></i>
                     <el-tooltip
                       placement="top"
-                      :disabled="item.agencyName.length < 30"
-                      :content="item.agencyName"
+                      :disabled="item.agentName.length < 30"
+                      :content="item.agentName"
                       effect="light"
                     >
-                      <span>{{ item.agencyName }}</span>
+                      <span>{{ item.agentName }}</span>
                     </el-tooltip>
-                    <span class="result-tag">{{ item.agencyId }}</span>
+                    <span class="result-tag">{{ item.agentId }}</span>
                   </a>
                   <ul class="result-tree" v-show="item.showChild">
                     <li
-                      v-for="(adv, key) in item.advertisers"
-                      :key="adv.advertiserId + key"
+                      v-for="(adv, key) in item.clients"
+                      :key="'child_' + adv.clientId + key"
                     >
                       <a href="javascript:;" @click="changeRight(adv)">
                         <el-tooltip
                           placement="top"
-                          :disabled="adv.advertiserName.length < 30"
-                          :content="adv.advertiserName"
+                          :disabled="adv.clientName.length < 30"
+                          :content="adv.clientName"
                           effect="light"
                         >
-                          <span>{{ adv.advertiserName }}</span>
+                          <span>{{ adv.clientName }}</span>
                         </el-tooltip>
-                        <span class="result-tag">{{ adv.advertiserId }}</span>
+                        <span class="result-tag">{{ adv.clientId }}</span>
                       </a>
                     </li>
                   </ul>
                 </li>
               </ul>
-              <label v-show="!agencys || agencys.length === 0" class="noresult">
+              <label v-show="!agents || agents.length === 0" class="noresult">
                 {{ $t('common.noResult') }}
               </label>
             </div>
@@ -116,16 +122,16 @@ export default {
   },
   data() {
     return {
-      agencys: [],
-      allAgencys: [],
+      agents: [],
+      allAgents: [],
       recentAdvertisers: [],
       currentAdvertiser: {
-        advertiserName: null,
-        advertiserId: null
+        clientName: null,
+        clientId: null
       },
-      currentAgency: {
-        agencyName: null,
-        agencyId: null
+      currentAgent: {
+        agentName: null,
+        agentId: null
       },
       search: '',
       showSearch: false,
@@ -143,14 +149,15 @@ export default {
       authApi
         .getRight()
         .then(data => {
-          this.agencys = data.agencys.concat()
-          this.recentAdvertisers = data.recentAdvertisers.concat()
-          this.currentAdvertiser = data.currentAdvertiser
-          this.currentAgency = data.currentAgency
-          this.agencys.forEach(item => {
+          const userHeader = data.userHeader
+          this.agents = userHeader.totalAgents.concat()
+          this.recentAdvertisers = userHeader.recentClients
+          this.currentAdvertiser = userHeader.currentClient
+          this.currentAgent = userHeader.currentAgent
+          this.agents.forEach(item => {
             this.$set(item, 'showChild', false)
           })
-          this.allAgencys = this.agencys.concat()
+          this.allAgents = this.agents.concat()
         })
         .finally(() => {
           this.loading = false
@@ -173,17 +180,17 @@ export default {
         if (search !== '') {
           // let reg = new RegExp(search,'gi');
           search = search.toLowerCase()
-          this.agencys = this.allAgencys.filter(item => {
-            // if(reg.test(item.agencyName)){
+          this.agents = this.allAgents.filter(item => {
+            // if(reg.test(item.agentName)){
             //   reg.lastIndex=0;
-            if (item.agencyName.toLowerCase().includes(search)) {
+            if (item.agentName.toLowerCase().includes(search)) {
               return true
             } else {
-              if (item.advertisers && item.advertisers.length > 0) {
-                let adv = item.advertisers.find(el => {
-                  // if(reg.test(el.advertiserName)){
+              if (item.clients && item.clients.length > 0) {
+                let adv = item.clients.find(el => {
+                  // if(reg.test(el.clientName)){
                   //   reg.lastIndex=0;
-                  if (el.advertiserName.toLowerCase().includes(search)) {
+                  if (el.clientName.toLowerCase().includes(search)) {
                     return true
                   }
                 })
@@ -194,11 +201,11 @@ export default {
             }
             return false
           })
-          this.agencys.forEach(item => {
-            if (!item.agencyName.toLowerCase().includes(search)) {
-              if (item.advertisers && item.advertisers.length > 0) {
-                item.advertisers = item.advertisers.filter(el => {
-                  if (el.advertiserName.toLowerCase().includes(search)) {
+          this.agents.forEach(item => {
+            if (!item.agentName.toLowerCase().includes(search)) {
+              if (item.clients && item.clients.length > 0) {
+                item.clients = item.clients.filter(el => {
+                  if (el.clientName.toLowerCase().includes(search)) {
                     return true
                   }
                 })
@@ -206,14 +213,14 @@ export default {
             }
           })
         } else {
-          this.agencys = this.allAgencys.concat()
+          this.agents = this.allAgents.concat()
         }
       }, 300)
     },
     changeRight(adv) {
       this.loading = true
       authApi
-        .changeRight(adv.advertiserId)
+        .changeRight(adv.clientId)
         .then(data => {
           if (data) {
             // this.$router.replace({name: this.$store.state.common.currentMenu})
