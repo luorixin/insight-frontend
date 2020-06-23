@@ -88,7 +88,7 @@
               </div>
               <div
                 class="fa-icon-box"
-                @click="handleHistory(scope.$index, scope.row)"
+                @click="goToLogList(scope.$index, scope.row)"
               >
                 <i class="fa fa-history"></i>
               </div>
@@ -281,6 +281,16 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
+    },
+    goToLogList(index, item) {
+      let params = {
+        eventId: item.eventId,
+        clientId: item.clientId
+      }
+      this.$router.push({
+        name: 'eventReports',
+        params: params
+      })
     },
     handleBatch(status) {
       if (this.multipleSelection.length === 0) {

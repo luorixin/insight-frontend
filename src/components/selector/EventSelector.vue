@@ -12,7 +12,7 @@
       v-for="item in dataList"
       :key="item.id"
       :value="item.id"
-      :label="item.name"
+      :label="item.eventName"
     ></el-option>
   </el-select>
 </template>

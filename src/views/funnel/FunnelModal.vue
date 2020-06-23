@@ -37,7 +37,8 @@
             </el-form-item>
             <el-form-item :label="$t('funnels.selectEvent')">
               <event-drag
-                :results="ruleForm.events"
+                v-if="!loading"
+                :results="ruleForm.steps"
                 @changeEvent="eventChange"
               ></event-drag>
             </el-form-item>
@@ -107,13 +108,12 @@ export default {
       ruleForm: {
         name: null,
         status: null,
-        events: []
+        steps: []
       },
       baseData: {
         name: null,
-        eventId: null,
         status: '1',
-        events: []
+        steps: []
       },
       rules: {
         name: [
@@ -129,32 +129,30 @@ export default {
   },
   methods: {
     getDataList() {
-      // this.loading = true
-      // if (this.funnelId) {
-      //   funnelsApi
-      //     .update(this.funnelId)
-      //     .then(data => {
-      //       this.events = data.eventList.concat()
-      //       this.ruleForm = Object.assign({}, data.data)
-      //       this.ruleForm.eventId += ''
-      //       this.ruleForm.status += ''
-      //     })
-      //     .finally(() => {
-      //       this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
-      //       this.loading = false
-      //     })
-      // } else {
-      //   funnelsApi
-      //     .create()
-      //     .then(data => {
-      //       this.events = data.concat()
-      //       this.ruleForm = Object.assign({}, this.baseData)
-      //     })
-      //     .finally(() => {
-      //       this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
-      //       this.loading = false
-      //     })
-      // }
+      this.loading = true
+      if (this.funnelId) {
+        funnelsApi
+          .toUpdate(this.funnelId)
+          .then(data => {
+            this.ruleForm = Object.assign({}, data.funnel)
+            this.ruleForm.status += ''
+            this.ruleForm.steps.forEach(item => (item.id = item.eventId))
+          })
+          .finally(() => {
+            this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
+            this.loading = false
+          })
+      } else {
+        funnelsApi
+          .toCreate()
+          .then(data => {
+            this.ruleForm = Object.assign({}, this.baseData)
+          })
+          .finally(() => {
+            this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
+            this.loading = false
+          })
+      }
     },
     closeModal() {
       this.$emit('getResult', false)
@@ -165,9 +163,9 @@ export default {
           this.loading = true
           let promise = null
           if (this.funnelId) {
-            promise = funnelsApi.doUpdate(this.ruleForm)
+            promise = funnelsApi.update(this.ruleForm)
           } else {
-            promise = funnelsApi.doCreate(this.ruleForm)
+            promise = funnelsApi.create(this.ruleForm)
           }
           promise
             .then(data => {
@@ -181,7 +179,16 @@ export default {
       })
     },
     eventChange(results) {
-      this.ruleForm.events = results
+      if (results && results.length > 0) {
+        this.ruleForm.steps = results.map((item, index) => {
+          return {
+            step: index + 1,
+            funnelId: this.funnelId,
+            eventId: item.id,
+            eventName: item.eventName
+          }
+        })
+      }
     }
   }
 }

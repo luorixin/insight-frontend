@@ -55,6 +55,7 @@ export const download = params =>
   $http({
     url: $http.adornUrl(baseUrl + '/download/' + params.id),
     method: 'get',
+    responseType: 'blob',
     params: $http.adornParams(params)
   })
 

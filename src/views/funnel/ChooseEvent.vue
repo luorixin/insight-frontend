@@ -6,6 +6,20 @@
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane :label="title" name="basic">
         <div class="slide-content" v-loading="loading">
+          <div class="main-tool">
+            <el-input
+              :placeholder="$t('common.search')"
+              v-model="formInline.search"
+              class="input-search"
+              @input="handleSearch"
+            >
+              <el-button
+                slot="append"
+                icon="el-icon-search"
+                @click="handleSearch(formInline.search)"
+              ></el-button>
+            </el-input>
+          </div>
           <div class="main-table">
             <el-table
               :data="currentList"
@@ -88,6 +102,7 @@
 
 <script>
 import Util from '@/utils'
+import * as eventsApi from '@/api/events'
 import ChooseTab from '@/components/chooseTab/Index.vue'
 import {
   SYNC_STATUS,
@@ -112,6 +127,24 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    }
+  },
+  watch: {
+    chooses: {
+      handler(newData, oldData) {
+        this.selecteds = newData
+      },
+      immediate: true
+    },
+    visible: {
+      handler(newData, oldData) {
+        if (newData) {
+          this.$nextTick(() => {
+            this.handleSelect()
+          })
+        }
+      },
+      immediate: true
     }
   },
   data() {
@@ -139,70 +172,18 @@ export default {
   },
   methods: {
     getDataList() {
-      this.allList = [
-        {
-          id: 1,
-          eventName: 'test',
-          urls: 'http://www.baidu.com',
-          trackingType: 0,
-          isGoal: false,
-          isFunnel: true,
-          status: false,
-          updatedAt: '2020-02-02'
-        },
-        {
-          id: 2,
-          eventName: 'test0',
-          urls: 'http://www.baidu.com',
-          trackingType: 0,
-          isGoal: false,
-          isFunnel: true,
-          status: false,
-          updatedAt: '2020-02-02'
-        },
-        {
-          id: 3,
-          eventName: 'test3',
-          urls: 'http://www.baidu.com',
-          trackingType: 1,
-          isGoal: false,
-          isFunnel: true,
-          status: false,
-          updatedAt: '2020-02-02'
-        },
-        {
-          id: 4,
-          eventName: 'test2',
-          urls: 'http://www.baidu.com',
-          trackingType: 0,
-          isGoal: true,
-          isFunnel: true,
-          status: false,
-          updatedAt: '2020-02-02'
-        },
-        {
-          id: 5,
-          eventName: 'test33',
-          urls: 'http://www.baidu.com',
-          trackingType: 0,
-          isGoal: true,
-          isFunnel: true,
-          status: false,
-          updatedAt: '2020-02-02'
-        },
-        {
-          id: 6,
-          eventName: 'test32',
-          urls: 'http://www.baidu.com',
-          trackingType: 0,
-          isGoal: false,
-          isFunnel: true,
-          status: false,
-          updatedAt: '2020-02-02'
-        }
-      ]
-      this.currentList = this.allList.slice(0, this.formInline.pageSize)
-      this.totalCount = this.allList.length
+      this.loading = true
+      eventsApi
+        .list(this.formInline.search)
+        .then(data => {
+          this.allList = data.concat()
+          this.currentList = this.allList.slice(0, this.formInline.pageSize)
+          this.totalCount = this.allList.length
+          this.handleSearch()
+        })
+        .finally(() => {
+          this.loading = false
+        })
     },
     closeModal() {
       this.$emit('getResult', false)
@@ -216,7 +197,7 @@ export default {
         if (search) {
           let reg = new RegExp(search, 'gi')
           this.currentList = this.allList.filter(item => {
-            if (reg.test(item.eventId) || reg.test(item.eventName)) {
+            if (reg.test(item.id) || reg.test(item.eventName)) {
               reg.lastIndex = 0
               return true
             }
@@ -260,6 +241,11 @@ export default {
         this.selecteds = this.selecteds.concat(this.currentSelects)
       }
     },
+    handleSearch(val) {
+      this.formInline.page = 1
+      this.isChangePage = true
+      this.debounceSearch(val)
+    },
     handleSelect() {
       this.selecteds.forEach(item => {
         this.currentList.forEach(cur => {
@@ -278,6 +264,14 @@ export default {
 .pagination {
   ::v-deep input {
     width: 100px !important;
+  }
+}
+.main-tool {
+  display: flex;
+  ::v-deep .input-search {
+    margin-left: 0px;
+    margin-bottom: 20px;
+    width: 250px;
   }
 }
 .main-table {

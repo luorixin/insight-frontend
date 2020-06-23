@@ -29,7 +29,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="id"
+          prop="eventId"
           :label="$t('event.id')"
           width="100"
         ></el-table-column>
@@ -38,10 +38,10 @@
           :label="$t('event.name')"
           width="150"
         ></el-table-column>
-        <el-table-column prop="urls" :label="$t('event.url')" width="180">
+        <el-table-column prop="url" :label="$t('event.url')" width="180">
           <template slot-scope="scope">
-            <el-link :href="scope.row.urls" target="_blank">{{
-              scope.row.urls
+            <el-link :href="scope.row.url" target="_blank">{{
+              scope.row.url
             }}</el-link>
           </template>
         </el-table-column>
@@ -75,6 +75,7 @@
     >
       <choose-event
         @getResult="handleSet"
+        :chooses="currentList"
         :title="$t('funnels.selectEvents')"
         :visible="modal"
       >
@@ -105,6 +106,15 @@ export default {
       default: () => []
     }
   },
+  watch: {
+    results: {
+      handler(newData, oldData) {
+        this.currentList = newData.concat()
+        this.sortedResult = newData.concat()
+      },
+      immediate: true
+    }
+  },
   data() {
     return {
       currentList: this.results,
@@ -132,6 +142,7 @@ export default {
         onEnd({ newIndex, oldIndex }) {
           const currRow = _this.currentList.splice(oldIndex, 1)[0]
           _this.currentList.splice(newIndex, 0, currRow)
+          _this.$emit('changeEvent', _this.currentList)
         }
       })
     },
@@ -147,6 +158,7 @@ export default {
       this.modal = false
       if (result) {
         this.currentList = result
+        this.$emit('changeEvent', this.currentList)
         // this.currentList.forEach((item, index) => {
         //   item.step = index + 1
         //   if (index === this.currentList.length - 1) {
@@ -156,6 +168,8 @@ export default {
         // this.$nextTick(() => {
         //   this.rowDrop()
         // })
+      } else {
+        this.currentList = this.currentList.concat()
       }
     },
     addBodyClass() {

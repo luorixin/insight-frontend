@@ -149,6 +149,7 @@ export default {
       formInline: {
         eventName: null,
         eventId: -1,
+        clientId: -1,
         date: null,
         timeArr: [],
         startTime: null,
@@ -173,23 +174,20 @@ export default {
       if (this.formInline.eventId === -1) return
       this.loading = true
       let params = {
-        startTime: this.formInline.timeArr[0],
-        endTime: this.formInline.timeArr[1],
+        eventId: this.formInline.eventId,
+        clientId: this.formInline.clientId,
+        startTime: moment(this.formInline.timeArr[0]).format('HH:mm:ss'),
+        endTime: moment(this.formInline.timeArr[1]).format('HH:mm:ss'),
         date: this.formInline.date,
-        pageNum: 1,
-        pageSize: 10000
+        page: 1, //this.formInline.page,
+        size: 10000 //this.formInline.pageSize
       }
       eventsApi
-        .list(params)
+        .eventLogTable(params)
         .then(data => {
-          this.allDatas = data.adgroups.concat()
-          this.subtotel = this.allDatas.length > 0 ? data.total : null
-          if (this.subtotel) {
-            this.subtotel.name = this.$t('common.subTotel')
-            this.subtotel.currencyCode = this.allDatas[0].currencyCode
-          }
-          if (this.formInline.adgroupName) {
-            this.doSearch(this.formInline.adgroupName)
+          this.allDatas = data.eventLogList.concat()
+          if (this.formInline.eventName) {
+            this.doSearch(this.formInline.eventName)
           } else {
             let start = 0
             let end = this.formInline.pageSize * this.formInline.page
@@ -208,6 +206,14 @@ export default {
         })
     },
     initData() {
+      if (this.$route.params) {
+        if (this.$route.params.eventId) {
+          this.formInline.eventId = this.$route.params.eventId
+        }
+        if (this.$route.params.clientId) {
+          this.formInline.clientId = this.$route.params.clientId
+        }
+      }
       if (this.formInline.date === null) {
         this.formInline.date = Util.formateDate(new Date())
       }
@@ -218,8 +224,11 @@ export default {
     },
     getEventId(result) {
       let id = result ? result.id : -1
+      let clientId = result ? result.clientId : -1
       this.formInline.eventId = id
+      this.formInline.clientId = clientId
       this.formInline.eventId !== -1 && (this.loading = true)
+      this.getDataList()
     },
     makeDebounce() {
       this.debounceSearch = Util.debounce(this.doSearch, 250)
@@ -273,7 +282,10 @@ export default {
       this.formInline.pageSize = val
       this.debounceSearch(this.formInline.adgroupName)
     },
-    handleView() {},
+    handleView() {
+      this.formInline.page = 1
+      this.getDataList()
+    },
     handleDownload() {
       this.isDownload = true
       let params = {

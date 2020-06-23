@@ -133,16 +133,37 @@
               </div>
               <div
                 class="fa-icon-box"
-                @click="handleHistory(scope.$index, scope.row)"
+                @click="goToLogList(scope.$index, scope.row)"
               >
                 <i class="fa fa-history"></i>
               </div>
               <div
+                v-if="scope.row.tackingType === 0"
                 class="fa-icon-box"
                 @click="handleDownload(scope.$index, scope.row)"
               >
                 <i class="fa fa-download"></i>
               </div>
+              <el-dropdown
+                v-if="scope.row.tackingType === 1"
+                @command="handleDownloadCommand"
+              >
+                <span class="fa-icon-box">
+                  <i class="fa fa-download"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="{ row: scope.row, type: 'Image' }"
+                    >Image</el-dropdown-item
+                  >
+                  <el-dropdown-item :command="{ row: scope.row, type: 'Js' }"
+                    >JavaScript</el-dropdown-item
+                  >
+                  <el-dropdown-item
+                    :command="{ row: scope.row, type: 'Jsfuction' }"
+                    >JavaScript Function</el-dropdown-item
+                  >
+                </el-dropdown-menu>
+              </el-dropdown>
             </template>
           </el-table-column>
         </el-table>
@@ -293,6 +314,16 @@ export default {
     trackingTypeFormatter(row, column, cellValue, index) {
       return convertType(cellValue, TRACKING_TYPE).label
     },
+    goToLogList(index, item) {
+      let params = {
+        eventId: item.id,
+        clientId: item.clientId
+      }
+      this.$router.push({
+        name: 'eventReports',
+        params: params
+      })
+    },
     handleSearch(val) {
       this.formInline.page = 1
       this.debounceSearch(val)
@@ -306,6 +337,55 @@ export default {
       this.optTitle = this.$t('common.edit') + this.$t('event.title')
       this.selectId = row.id
       this.modal = true
+    },
+    handleDownload(index, row, type) {
+      this.loading = true
+      if (!type) {
+        type = 'Universal'
+      }
+      let params = {
+        id: row.id,
+        type: type
+      }
+      eventsApi
+        .download(params)
+        .then(data => {
+          const blob = new Blob([data])
+          let fileName = 'default.txt'
+          switch (type) {
+            case 'Universal':
+              fileName = 'zyz_' + row.clientId + '_1_pageView.txt'
+              break
+            case 'Image':
+              fileName = 'zyz_' + row.clientId + '_1_image_tag_pageView.txt'
+              break
+            case 'Js':
+              fileName = 'zyz_' + row.clientId + '_1_conversion.txt'
+              break
+            case 'Jsfuction':
+              fileName = 'zyz_' + row.clientId + '_1_javascript_func.txt'
+              break
+            default:
+              break
+          }
+          if ('download' in document.createElement('a')) {
+            // 非IE下载
+            const elink = document.createElement('a')
+            elink.download = fileName
+            elink.style.display = 'none'
+            elink.href = URL.createObjectURL(blob)
+            document.body.appendChild(elink)
+            elink.click()
+            URL.revokeObjectURL(elink.href) // 释放URL 对象
+            document.body.removeChild(elink)
+          } else {
+            // IE10+下载
+            navigator.msSaveBlob(blob, fileName)
+          }
+        })
+        .finally(() => {
+          this.loading = false
+        })
     },
     handleSet(result) {
       this.modal = false
@@ -341,6 +421,9 @@ export default {
         this.changeStatus = status
         this.tipVisible = true
       }
+    },
+    handleDownloadCommand(params) {
+      this.handleDownload(0, params.row, params.type)
     },
     doChange() {
       this.subLoading = true

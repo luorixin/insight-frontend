@@ -18,8 +18,8 @@
             }}<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown" style="width: 140px;">
-            <el-dropdown-item command="active">Active</el-dropdown-item>
-            <el-dropdown-item command="pause">Pause</el-dropdown-item>
+            <el-dropdown-item command="live">Active</el-dropdown-item>
+            <el-dropdown-item command="paused">Pause</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-input
@@ -104,12 +104,12 @@
               >
                 <i class="fa fa-edit"></i>
               </div>
-              <div
+              <!-- <div
                 class="fa-icon-box"
                 @click="handleHistory(scope.$index, scope.row)"
               >
                 <i class="fa fa-history"></i>
-              </div>
+              </div> -->
             </template>
           </el-table-column>
         </el-table>
@@ -186,6 +186,7 @@ export default {
       loading: false,
       subLoading: false,
       tipVisible: false,
+      changeStatus: null,
       allList: [],
       currentList: [],
       formInline: {
@@ -208,41 +209,17 @@ export default {
   },
   methods: {
     getDataList() {
-      // this.loading = true
-      // funnelsApi
-      //   .list(this.formInline.search)
-      //   .then(data => {
-      //     this.allList = data.concat()
-      //     this.currentList = this.allList.slice(0, this.formInline.pageSize)
-      //     this.totalCount = this.allList.length
-      //   })
-      //   .finally(() => {
-      //     this.loading = false
-      //   })
-      this.allList = [
-        {
-          id: 1,
-          name: 'test',
-          steps: [
-            {
-              step: 1,
-              eventName: 'test'
-            },
-            {
-              step: 2,
-              eventName: 'test2'
-            },
-            {
-              step: 3,
-              eventName: 'test3'
-            }
-          ],
-          status: false,
-          modifyDate: '2020-02-02'
-        }
-      ]
-      this.currentList = this.allList.slice(0, this.formInline.pageSize)
-      this.totalCount = this.allList.length
+      this.loading = true
+      funnelsApi
+        .list(this.formInline.search)
+        .then(data => {
+          this.allList = data.concat()
+          this.currentList = this.allList.slice(0, this.formInline.pageSize)
+          this.totalCount = this.allList.length
+        })
+        .finally(() => {
+          this.loading = false
+        })
     },
     makeDebounce() {
       this.debounceSearch = Util.debounce(search => {
@@ -281,17 +258,27 @@ export default {
     trackingTypeFormatter(row, column, cellValue, index) {
       return convertType(cellValue, TRACKING_TYPE).label
     },
+    goToLogList(index, item) {
+      let params = {
+        eventId: item.id,
+        clientId: item.clientId
+      }
+      this.$router.push({
+        name: 'eventReports',
+        params: params
+      })
+    },
     handleSearch(val) {
       this.formInline.page = 1
       this.debounceSearch(val)
     },
     handleCreate() {
-      this.optTitle = this.$t('common.create') + this.$t('funnels.title')
+      this.optTitle = this.$t('common.create') + ' ' + this.$t('funnels.title')
       this.selectId = null
       this.modal = true
     },
     handleEdit(index, row) {
-      this.optTitle = this.$t('common.edit') + this.$t('funnels.title')
+      this.optTitle = this.$t('common.edit') + ' ' + this.$t('funnels.title')
       this.selectId = row.id
       this.modal = true
     },
@@ -327,28 +314,26 @@ export default {
       if (this.multipleSelection.length === 0) {
         this.$message.error(this.$t('common.selOption'))
       } else {
+        this.changeStatus = status
         this.tipVisible = true
       }
     },
     doChange() {
       this.subLoading = true
-      console.log(this.multipleSelection)
+      let funnelIds = this.multipleSelection.map(item => item.id)
       let params = {
-        eventId: this.row.eventId,
-        statusType: this.row.status ? 'paused' : 'live'
+        funnelIds: funnelIds,
+        batchType: this.changeStatus
       }
       funnelsApi
-        .changStatus(params)
+        .batchUpdate(params)
         .then(data => {
           this.allList.forEach(item => {
-            if (item.eventId === this.row.eventId) {
-              item.status = !item.status
-            }
-          })
-          this.currentList.forEach(item => {
-            if (item.eventId === this.row.eventId) {
-              item.status = !this.row.status
-            }
+            funnelIds.forEach(eventId => {
+              if (item.id == eventId) {
+                item.status = !item.status
+              }
+            })
           })
           this.tipVisible = false
           this.$message.success(this.$t('common.optSuccess'))
