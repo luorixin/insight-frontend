@@ -57,7 +57,7 @@
           ></el-table-column>
           <el-table-column prop="steps" :label="$t('funnels.eventsAndGoal')">
             <template slot-scope="scope">
-              <el-popover placement="bottom" width="200" trigger="hover">
+              <el-popover placement="right" width="200" trigger="hover">
                 <ul>
                   <li
                     v-for="item in scope.row.steps"

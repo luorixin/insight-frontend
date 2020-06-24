@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="modalRef">
     <div class="slide-close" @click="closeModal">
       <i class="fa fa-close"></i>
     </div>
@@ -346,6 +346,18 @@ export default {
     handleSave() {
       this.$refs['ruleForm'].validate((valid, model) => {
         if (valid) {
+          if (this.ruleForm.tackingType === 0) {
+            if (this.ruleForm.tagList.length > 0) {
+              let isEmptyName = this.ruleForm.tagList.find(item => {
+                return Util.isEmpty(item.name)
+              })
+              if (typeof isEmptyName !== 'undefined') {
+                this.$message.error(this.$t('event.insightTagTable.fillName'))
+                this.$refs.modalRef.parentNode.scrollTop = 250
+                return
+              }
+            }
+          }
           this.loading = true
           let promise = null
           let params = Object.assign({}, this.ruleForm)

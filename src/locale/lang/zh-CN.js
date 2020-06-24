@@ -94,7 +94,7 @@ export default {
     setup: 'Setup',
     eventSetup: 'Event Setup',
     goalSetup: 'Goal Setup',
-    AnalysisSetup: 'Funnel Setup',
+    funnelSetup: 'Funnel Setup',
     dashboard: 'Dashboard',
     propertySummary: 'Property Summary',
     channelAnalysis: 'Channel Analysis',

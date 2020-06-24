@@ -70,9 +70,24 @@ http.interceptors.response.use(
       if (!res.code || res.code === 200) {
         return Promise.resolve(res.data || res)
       } else {
-        Util.showMsg(
-          res.msg || res.errorMessage || i18n.t('login.error.system')
-        )
+        switch (res.code) {
+          // http status handler
+          case 2001:
+          case 60001:
+          case 60003:
+          case 60004:
+            if (Util.getToken()) {
+              Util.removeToken()
+              Util.showMsg(i18n.t('login.error.session'), () => {
+                router.push({ name: 'login' })
+              })
+            }
+            break
+          default:
+            Util.showMsg(
+              res.message || res.errorMessage || i18n.t('login.error.system')
+            )
+        }
         return Promise.reject(res)
       }
     } else {
@@ -80,13 +95,13 @@ http.interceptors.response.use(
       if (httpCode === 401) {
         if (Util.getToken()) {
           Util.removeToken()
-          Util.showMsg(res.msg || i18n.t('login.error.permisson'), () => {
+          Util.showMsg(res.message || i18n.t('login.error.permisson'), () => {
             router.push({ name: 'login' })
           })
         }
       } else {
         // 默认的错误提示
-        Util.showMsg(res.msg || i18n.t('login.error.network'))
+        Util.showMsg(res.message || i18n.t('login.error.network'))
       }
       return Promise.reject(res)
     }

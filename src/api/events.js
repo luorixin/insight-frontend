@@ -62,9 +62,9 @@ export const download = params =>
 export const exportXls = params =>
   $http({
     url: $http.adornUrl(baseUrl + '/export'),
-    method: 'get',
+    method: 'post',
     responseType: 'blob',
-    params: $http.adornParams(params)
+    data: $http.adornData(params)
   })
 
 export const batchUpdate = params =>

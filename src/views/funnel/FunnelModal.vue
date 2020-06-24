@@ -163,6 +163,10 @@ export default {
       this.$emit('getResult', false)
     },
     handleSave() {
+      if (this.ruleForm.steps.length === 0) {
+        this.$message.error(this.$t('funnels.selectEventTip'))
+        return
+      }
       this.$refs['ruleForm'].validate((valid, model) => {
         if (valid) {
           this.loading = true
@@ -193,6 +197,8 @@ export default {
             eventName: item.eventName
           }
         })
+      } else {
+        this.ruleForm.steps = [].slice()
       }
     }
   }

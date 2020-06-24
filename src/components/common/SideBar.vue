@@ -123,6 +123,16 @@ export default {
     ...mapMutations('common', ['changeLang', 'setCurrentMenu']),
     routeHandle(route) {
       this.setCurrentMenu(route.name)
+      // 收缩未选中的父菜单
+      this.menuList.forEach(item => {
+        item.showChild = false
+        if (item.children && item.children.length > 0) {
+          let find = item.children.find(child => {
+            return child.name === route.name
+          })
+          find && (item.showChild = true)
+        }
+      })
     },
     parentSelected(item) {
       if (item.children && item.children.length > 0) {
