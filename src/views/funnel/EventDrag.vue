@@ -29,7 +29,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="eventId"
+          prop="id"
           :label="$t('event.id')"
           width="100"
         ></el-table-column>
@@ -51,8 +51,8 @@
           width="120"
         >
           <template slot-scope="scope">
-            <el-tag :type="scope.row.trackingType ? 'success' : 'danger'">
-              {{ scope.row.trackingType ? 'Insight' : 'Universal' }}
+            <el-tag :type="scope.row.tackingType ? 'success' : 'danger'">
+              {{ scope.row.tackingType === 1 ? 'Universal' : 'Insight' }}
             </el-tag>
           </template>
         </el-table-column>
@@ -157,6 +157,7 @@ export default {
     handleSet(result) {
       this.modal = false
       if (result) {
+        console.log(result)
         this.currentList = result
         this.$emit('changeEvent', this.currentList)
         // this.currentList.forEach((item, index) => {

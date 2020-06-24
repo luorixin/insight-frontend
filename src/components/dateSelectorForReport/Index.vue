@@ -13,7 +13,7 @@
           :label="item.id"
           :key="'dateRange_' + item.id"
         >
-          {{ item.name }}
+          {{ $t(item.name) }}
         </el-radio-button>
       </el-radio-group>
       <div v-if="needCustom" class="customise" @click="showCustomise">
@@ -126,11 +126,11 @@ export default {
   methods: {
     init() {
       this.titleMap = {
-        '-1': this.$t('dateRange.yesterday'),
-        '7': this.$t('dateRange.last7days'),
-        '30': this.$t('dateRange.last30days'),
-        '1week': this.$t('dateRange.lastweek'),
-        '1month': this.$t('dateRange.lastmonth')
+        '-1': 'dateRange.yesterday',
+        '7': 'dateRange.last7days',
+        '30': 'dateRange.last30days',
+        '1week': 'dateRange.lastweek',
+        '1month': 'dateRange.lastmonth'
       }
       this.dataRanges.forEach(item => {
         if (item === -1) {

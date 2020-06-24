@@ -54,8 +54,10 @@
                 width="120"
               >
                 <template slot-scope="scope">
-                  <el-tag :type="scope.row.trackingType ? 'success' : 'danger'">
-                    {{ scope.row.trackingType ? 'Insight' : 'Universal' }}
+                  <el-tag
+                    :type="scope.row.tackingType === 1 ? 'success' : 'danger'"
+                  >
+                    {{ scope.row.tackingType === 1 ? 'Universal' : 'Insight' }}
                   </el-tag>
                 </template>
               </el-table-column>

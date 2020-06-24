@@ -66,7 +66,6 @@ http.interceptors.response.use(
   response => {
     const res = response.data
     const httpCode = response.status
-    // console.log(response)
     if (httpCode === 200) {
       if (!res.code || res.code === 200) {
         return Promise.resolve(res.data || res)

@@ -38,7 +38,7 @@
             <el-form-item :label="$t('funnels.selectEvent')">
               <event-drag
                 v-if="!loading"
-                :results="ruleForm.steps"
+                :results="ruleForm.stepsOrigin"
                 @changeEvent="eventChange"
               ></event-drag>
             </el-form-item>
@@ -108,12 +108,14 @@ export default {
       ruleForm: {
         name: null,
         status: null,
-        steps: []
+        steps: [],
+        stepsOrigin: []
       },
       baseData: {
         name: null,
         status: '1',
-        steps: []
+        steps: [],
+        stepsOrigin: []
       },
       rules: {
         name: [
@@ -136,7 +138,10 @@ export default {
           .then(data => {
             this.ruleForm = Object.assign({}, data.funnel)
             this.ruleForm.status += ''
-            this.ruleForm.steps.forEach(item => (item.id = item.eventId))
+            this.ruleForm.stepsOrigin = this.ruleForm.steps.map(item => {
+              let newItem = Object.assign(item, { id: item.eventId })
+              return newItem
+            })
           })
           .finally(() => {
             this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()

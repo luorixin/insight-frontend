@@ -16,6 +16,7 @@
               type="date"
               :placeholder="$t('common.selPeriod')"
               :clearable="false"
+              @change="changeDate"
               value-format="yyyy-MM-dd"
               align="right"
             >
@@ -95,19 +96,57 @@
           <el-table-column
             prop="eventName"
             :label="$t('eventLog.name')"
-            width=""
+            width="200"
           >
           </el-table-column>
-          <el-table-column prop="from" :label="$t('eventLog.from')" width="100">
+          <el-table-column
+            v-if="eventInfoSelect.eventOneName"
+            prop="eventOne"
+            :label="eventInfoSelect.eventOneName"
+            width="100"
+          >
           </el-table-column>
-          <el-table-column prop="to" :label="$t('eventLog.to')" width="100">
+          <el-table-column
+            v-if="eventInfoSelect.eventTwoName"
+            prop="eventTwo"
+            :label="eventInfoSelect.eventTwoName"
+            width="100"
+          >
           </el-table-column>
-          <el-table-column prop="url" :label="$t('eventLog.url')" width="100">
+          <el-table-column
+            v-if="eventInfoSelect.eventThreeName"
+            prop="eventThree"
+            :label="eventInfoSelect.eventThreeName"
+            width="100"
+          >
+          </el-table-column>
+          <el-table-column
+            v-if="eventInfoSelect.eventFourName"
+            prop="eventFour"
+            :label="eventInfoSelect.eventFourName"
+            width="100"
+          >
+          </el-table-column>
+          <el-table-column
+            v-if="eventInfoSelect.eventFiveName"
+            prop="eventFive"
+            :label="eventInfoSelect.eventFiveName"
+            width="100"
+          >
+          </el-table-column>
+          <el-table-column
+            v-if="eventInfoSelect.eventSixName"
+            prop="eventSix"
+            :label="eventInfoSelect.eventSixName"
+            width="100"
+          >
+          </el-table-column>
+          <el-table-column prop="url" :label="$t('eventLog.url')">
           </el-table-column>
           <el-table-column
             prop="visitorIp"
             :label="$t('eventLog.visitorIp')"
-            width="100"
+            width="120"
           >
           </el-table-column>
         </el-table>
@@ -157,6 +196,14 @@ export default {
         page: 1,
         pageSize: 10
       },
+      eventInfoSelect: {
+        eventOneName: null,
+        eventTwoName: null,
+        eventThreeName: null,
+        eventFourName: null,
+        eventFiveName: null,
+        eventSixName: null
+      },
       totalCount: 0,
       pageSizes: PAGE_SIZES,
       isDownload: false
@@ -186,6 +233,7 @@ export default {
         .eventLogTable(params)
         .then(data => {
           this.allDatas = data.eventLogList.concat()
+          this.eventInfoSelect = Object.assign({}, data.eventInfoSelect)
           if (this.formInline.eventName) {
             this.doSearch(this.formInline.eventName)
           } else {
@@ -218,7 +266,11 @@ export default {
         this.formInline.date = Util.formateDate(new Date())
       }
       if (this.formInline.timeArr.length < 1) {
-        let range = Util.getLastXHours(6, new Date())
+        // let range = Util.getLastXHours(6, new Date())
+        let range = [
+          new Date(new Date().setHours(0, 0, 0, 0)),
+          new Date(new Date().setHours(23, 59, 59, 999))
+        ]
         this.formInline.timeArr = range.concat()
       }
     },
@@ -268,6 +320,9 @@ export default {
     changeTime(val) {
       this.getDataList()
     },
+    changeDate(val) {
+      this.getDataList()
+    },
     handleName(val) {
       this.formInline.page = 1
       this.debounceSearch(val)
@@ -276,11 +331,11 @@ export default {
     handleCurrentChange(val) {
       this.formInline.page = val
       // 数组处理
-      this.debounceSearch(this.formInline.adgroupName)
+      this.debounceSearch(this.formInline.eventName)
     },
     handleSizeChange(val) {
       this.formInline.pageSize = val
-      this.debounceSearch(this.formInline.adgroupName)
+      this.debounceSearch(this.formInline.eventName)
     },
     handleView() {
       this.formInline.page = 1
@@ -289,20 +344,23 @@ export default {
     handleDownload() {
       this.isDownload = true
       let params = {
-        campaignId:
-          this.formInline.campaignId === -1 ? null : this.formInline.campaignId,
-        searchAccountId: this.formInline.searchAccountId,
-        status:
-          this.formInline.status === 'all' ? null : this.formInline.status,
-        startDate: this.formInline.dateRangeArr[0],
-        endDate: this.formInline.dateRangeArr[1]
+        eventId: this.formInline.eventId,
+        startTime: moment(this.formInline.timeArr[0]).format('HH:mm:ss'),
+        endTime: moment(this.formInline.timeArr[1]).format('HH:mm:ss'),
+        date: this.formInline.date,
+        page: 1, //this.formInline.page,
+        size: 10000 //this.formInline.pageSize
       }
       eventsApi
-        .downExcel(params)
+        .exportXls(params)
         .then(data => {
           const blob = new Blob([data])
           const fileName =
-            'AdGroup_' + moment(new Date()).format('YYYYMMDD_HHmmss') + '.xlsx'
+            'eventLog_' +
+            this.formInline.eventId +
+            '_' +
+            moment(new Date()).format('YYYYMMDD_HHmmss') +
+            '.xls'
           if ('download' in document.createElement('a')) {
             // 非IE下载
             const elink = document.createElement('a')

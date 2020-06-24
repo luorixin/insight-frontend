@@ -130,7 +130,7 @@ export default {
         eventId: [
           {
             required: true,
-            message: this.$t('goals.eventId'),
+            message: this.$t('common.selOption'),
             trigger: 'change'
           }
         ]

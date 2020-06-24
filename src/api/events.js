@@ -61,8 +61,9 @@ export const download = params =>
 
 export const exportXls = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/exportXls'),
+    url: $http.adornUrl(baseUrl + '/export'),
     method: 'get',
+    responseType: 'blob',
     params: $http.adornParams(params)
   })
 
