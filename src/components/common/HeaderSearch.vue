@@ -115,6 +115,7 @@
 import Clickoutside from '@/utils/clickoutside'
 import * as authApi from '@/api/auth'
 import Util from '@/utils'
+
 export default {
   name: 'HeaderSearch',
   directives: {
@@ -223,6 +224,8 @@ export default {
         .changeRight(adv.clientId)
         .then(data => {
           if (data) {
+            // Cookies.set('INSIGHTS_USER', data.insights_user)
+            Util.setCookie('INSIGHTS_USER', data.insights_user)
             // this.$router.replace({name: this.$store.state.common.currentMenu})
             this.$router.replace({ path: '/refresh' })
           }

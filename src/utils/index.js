@@ -22,6 +22,14 @@ Util.removeToken = () => {
   return Cookies.remove(TokenKey)
 }
 
+Util.setCookie = (key, value) => {
+  return Cookies.set(key, value)
+}
+
+Util.getCookie = key => {
+  return Cookies.get(key)
+}
+
 /**
  * 存储localStorage
  */
