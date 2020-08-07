@@ -120,6 +120,7 @@ export default {
           this.$t('common.prev') +
           ')'
         : ''
+      this.$emit('change', current)
       return current.titleCur.join('~') + prev
     }
   },

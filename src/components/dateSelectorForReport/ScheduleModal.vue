@@ -170,21 +170,21 @@ export default {
     handleSave() {
       this.$refs['ruleForm'].validate((valid, model) => {
         if (valid) {
-          this.loading = true
-          let promise = null
-          if (this.goalId) {
-            promise = goalsApi.doUpdate(this.ruleForm)
-          } else {
-            promise = goalsApi.doCreate(this.ruleForm)
-          }
-          promise
-            .then(data => {
-              this.$emit('getResult', true)
-              this.$message.success(this.$t('common.optSuccess'))
-            })
-            .finally(() => {
-              this.loading = false
-            })
+          // this.loading = true
+          // let promise = null
+          // if (this.goalId) {
+          //   promise = goalsApi.doUpdate(this.ruleForm)
+          // } else {
+          //   promise = goalsApi.doCreate(this.ruleForm)
+          // }
+          // promise
+          //   .then(data => {
+          //     this.$emit('getResult', true)
+          //     this.$message.success(this.$t('common.optSuccess'))
+          //   })
+          //   .finally(() => {
+          //     this.loading = false
+          //   })
         }
       })
     }

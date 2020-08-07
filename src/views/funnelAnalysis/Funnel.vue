@@ -27,6 +27,7 @@
           <date-selector-for-report
             :needVs="false"
             reportTitle="FunnelAnalysis"
+            @change="changeFunnelDate"
           ></date-selector-for-report>
           <hr class="reporthr" />
           <div class="plan-reports-con mr20">
@@ -45,7 +46,7 @@
                 <div class="report-flex-middle">
                   <funnel-selector
                     @getResult="getFunnelId"
-                    :defaultValue="funnelId"
+                    :defaultValue="funnelForm.funnelId"
                   >
                   </funnel-selector>
                 </div>
@@ -82,8 +83,8 @@
                   </el-input>
                   <div style="margin: 0 20px;">{{ $t('common.vs') }}</div>
                   <funnel-selector
-                    @getResult="getFunnelId"
-                    :defaultValue="funnelId"
+                    @getResult="getBreakdownFunnelId"
+                    :defaultValue="breakdownForm.funnelId"
                     :needdot="true"
                   >
                   </funnel-selector>
@@ -91,41 +92,67 @@
                 <div class="plan-reports-result-inner__breakdown mr20">
                   <div class="breakdown_detail">
                     <div>{{ $t('funnelAnalysis.repeatVisitor') }}</div>
-                    <div>30.00%</div>
+                    <div>
+                      {{
+                        breakdownData.allsite.repeatVisitorRate | toMoneyFilter
+                      }}%
+                    </div>
                   </div>
                   <div class="breakdown_line"></div>
                   <div class="breakdown_detail">
-                    <div>20.00%</div>
+                    <div>
+                      {{
+                        breakdownData.funnel.repeatVisitorRate | toMoneyFilter
+                      }}%
+                    </div>
                   </div>
                 </div>
                 <div class="plan-reports-result-inner__breakdown">
                   <div class="breakdown_detail">
                     <div>{{ $t('funnelAnalysis.frequencyVisit') }}</div>
-                    <div>1.16</div>
+                    <div>
+                      {{ breakdownData.allsite.frequencVisits | toMoneyFilter }}
+                    </div>
                   </div>
                   <div class="breakdown_line"></div>
                   <div class="breakdown_detail">
-                    <div>1.00</div>
+                    <div>
+                      {{ breakdownData.funnel.frequencVisits | toMoneyFilter }}
+                    </div>
                   </div>
                 </div>
                 <div class="plan-reports-result-inner__breakdown">
                   <div class="breakdown_detail">
                     <div>{{ $t('funnelAnalysis.avgPageView') }}</div>
-                    <div>1.45</div>
+                    <div>
+                      {{
+                        breakdownData.allsite.averagePageView | toMoneyFilter
+                      }}
+                    </div>
                   </div>
                   <div class="breakdown_line"></div>
                   <div class="breakdown_detail">
-                    <div>1.98</div>
+                    <div>
+                      {{ breakdownData.funnel.averagePageView | toMoneyFilter }}
+                    </div>
                   </div>
                 </div>
                 <div class="plan-reports-result-inner__breakdown">
                   <div class="breakdown_detail">
                     <div>{{ $t('funnelAnalysis.avgTimeSpan') }}</div>
-                    <div>00:02:24</div>
+                    <div>
+                      {{
+                        breakdownData.allsite.averageTimeSpan | toTimeSpanFilter
+                      }}
+                    </div>
                   </div>
                   <div class="breakdown_line"></div>
                   <div class="breakdown_detail">
-                    <div>00:02:01</div>
+                    <div>
+                      {{
+                        breakdownData.funnel.averageTimeSpan | toTimeSpanFilter
+                      }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -139,11 +166,12 @@
           <date-selector-for-report
             :needVs="false"
             reportTitle="FunnelAnalysis"
+            @change="changeAudienceDate"
           ></date-selector-for-report>
           <hr class="reporthr" />
           <div class="plan-reports-con mr20">
             <div class="plan-reports-result">
-              <div class="plan-reports-result-inner" style="height: 460px;">
+              <div class="plan-reports-result-inner" style="height: 500px;">
                 <!-- world -->
                 <div class="plan-reports-result-inner_title">
                   {{ $t('audience.regions') }}
@@ -153,6 +181,14 @@
                     </div>
                     <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
+                </div>
+                <div class="plan-reports-result-inner__opt">
+                  <funnel-selector
+                    @getResult="getRegionFunnelId"
+                    :defaultValue="regionInline.funnelId"
+                    :needdot="true"
+                  >
+                  </funnel-selector>
                 </div>
                 <div class="report-result-inner__graph" style="height: 370px;">
                   <div id="regions_map">
@@ -195,6 +231,13 @@ import RegionWorldChart from '@/components/charts/RegionWorldChart'
 import MyHeader from '@/components/common/Header'
 import Util from '@/utils'
 import exportUtil from '@/utils/exportUtil'
+import * as analysisFunnelApi from '@/api/analysisFunnel'
+import {
+  ENUM_DATE,
+  CHANNEL_TYPE,
+  DEVICE_TYPE,
+  convertType
+} from '@/utils/constant'
 export default {
   name: 'funnelAnalysis',
   components: {
@@ -206,25 +249,97 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      funnelLoading: false,
+      breakdownLoading: false,
+      regionsLoading: false,
       isDownload: false,
       activeName: 'funnel',
       currentName: 'funnel',
-      funnelId: -1,
       breakdownOpt: 'channel',
       trafficTrendOpt: 'channel',
+      funnelForm: {
+        funnelId: -1
+      },
+      breakdownForm: {
+        funnelId: -1
+      },
+      formInline: {
+        beginDate: null,
+        endDate: null,
+        dateType: null
+      },
+      regionInline: {
+        beginDate: null,
+        endDate: null,
+        dateType: null,
+        funnelId: -1
+      },
       funnelData: [],
       funnelDataColor: ['#EF4136', '#AF0400', '#590E0E'],
+      breakdownData: {
+        allsite: {},
+        funnel: {}
+      },
       regionsData: [],
       regionsDataColor: ['#EF4136']
     }
   },
+  computed: {
+    loading() {
+      return this.breakdownLoading && this.funnelLoading && this.regionsLoading
+    }
+  },
   created() {
+    this.makeDebounce()
     this.initData()
   },
   methods: {
+    getDataList() {
+      this.getFunnelData()
+      this.getBreakdownData()
+    },
+    getFunnelData() {
+      this.funnelLoading = false
+      if (this.funnelForm.funnelId === -1) return
+      this.funnelLoading = true
+      let form = Object.assign({}, this.formInline, this.funnelForm)
+      analysisFunnelApi
+        .detail(form)
+        .then(data => {
+          this.funnelData = data.concat() //Object.assign({}, funnelData)
+        })
+        .finally(() => {
+          this.funnelLoading = false
+        })
+    },
+    getBreakdownData() {
+      this.breakdownLoading = false
+      if (this.breakdownForm.funnelId === -1) return
+      this.breakdownLoading = true
+      let form = Object.assign({}, this.formInline, this.breakdownForm)
+      analysisFunnelApi
+        .breakdown(form)
+        .then(data => {
+          this.breakdownData = Object.assign({}, data)
+        })
+        .finally(() => {
+          this.breakdownLoading = false
+        })
+    },
+    getRegions() {
+      this.regionsLoading = false
+      if (this.regionInline.funnelId === -1) return
+      this.regionsLoading = true
+      analysisFunnelApi
+        .regions(this.regionInline)
+        .then(regions => {
+          // this.regionsData = regions
+        })
+        .finally(() => {
+          this.regionsLoading = false
+        })
+    },
     initData() {
-      this.loading = false
       this.funnelData = [
         {
           value: 35287,
@@ -282,8 +397,21 @@ export default {
         }
       ]
     },
+    makeDebounce() {
+      this.debounceSearch = Util.debounce(this.getDataList, 250)
+      this.debounceGetRegions = Util.debounce(this.getRegions, 250)
+    },
     getFunnelId(result) {
-      this.formInline.funnelId = result ? result.id : -1
+      this.funnelForm.funnelId = result ? result.id : -1
+      this.getFunnelData()
+    },
+    getBreakdownFunnelId(result) {
+      this.breakdownForm.funnelId = result ? result.id : -1
+      this.getBreakdownData()
+    },
+    getRegionFunnelId(result) {
+      this.regionInline.funnelId = result ? result.id : -1
+      this.debounceGetRegions()
     },
     changeTab(tab) {
       if (this.currentName !== tab.name) {
@@ -427,6 +555,25 @@ export default {
           ]
         }
       }
+    },
+    changeFunnelDate(result) {
+      if (result && result.titleCur && result.titlePrev) {
+        this.formInline.beginDate = result.titleCur[0]
+        this.formInline.endDate = result.titleCur[1] || result.titleCur[0]
+        this.formInline.dateType = convertType(result.id, ENUM_DATE).label
+        this.debounceSearch()
+      }
+    },
+    changeAudienceDate(result) {
+      if (result && result.titleCur && result.titlePrev) {
+        this.regionInline.beginDate = result.titleCur[0]
+        this.regionInline.endDate = result.titleCur[1] || result.titleCur[0]
+        this.regionInline.dateType = convertType(result.id, ENUM_DATE).label
+        this.debounceGetRegions()
+      }
+    },
+    getRateClass(rate) {
+      return rate < 0 ? 'fa-caret-down' : 'fa-caret-up'
     },
     handleDownload() {
       this.isDownload = true

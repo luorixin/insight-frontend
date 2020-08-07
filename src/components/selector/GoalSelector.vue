@@ -63,30 +63,30 @@ export default {
   },
   methods: {
     getDataList() {
-      // this.loading = true
-      // goalsApi
-      //   .list()
-      //   .then(data => {
-      //     this.dataList = data.concat()
-      //     this.totalCount = this.dataList.length
-      //     if (this.dataList.length === 0) {
-      //       this.result = this.$t('common.noResult')
-      //       this.$emit('getResult', null)
-      //     } else {
-      //       if (
-      //         this.result == -1 ||
-      //         this.result == this.$t('common.noResult')
-      //       ) {
-      //         this.result = this.dataList[0].id //默认选中第一个。
-      //         this.$emit('getResult', this.dataList[0])
-      //       } else {
-      //         this.handleChange(this.result)
-      //       }
-      //     }
-      //   })
-      //   .finally(() => {
-      //     this.loading = false
-      //   })
+      this.loading = true
+      goalsApi
+        .list()
+        .then(data => {
+          this.dataList = data.concat()
+          this.totalCount = this.dataList.length
+          if (this.dataList.length === 0) {
+            this.result = this.$t('common.noResult')
+            this.$emit('getResult', null)
+          } else {
+            if (
+              this.result == -1 ||
+              this.result == this.$t('common.noResult')
+            ) {
+              this.result = this.dataList[0].id //默认选中第一个。
+              this.$emit('getResult', this.dataList[0])
+            } else {
+              this.handleChange(this.result)
+            }
+          }
+        })
+        .finally(() => {
+          this.loading = false
+        })
     },
     handleChange(val) {
       let result = this.dataList.find(item => item.id == val)

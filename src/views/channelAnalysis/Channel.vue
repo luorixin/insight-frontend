@@ -27,6 +27,7 @@
           <date-selector-for-report
             :needVs="false"
             reportTitle="ChannelAnalysis"
+            @change="changeTrafficDate"
           ></date-selector-for-report>
           <hr class="reporthr" />
           <!-- traffic snapshot -->
@@ -34,6 +35,7 @@
             <div class="plan-reports-result">
               <div
                 class="plan-reports-result-inner"
+                v-loading="trafficBreakdownLoading"
                 style="flex:2;height: 500px;"
               >
                 <!-- Traffic Breakdown -->
@@ -47,7 +49,11 @@
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">
-                  <el-radio-group v-model="breakdownOpt" size="small">
+                  <el-radio-group
+                    v-model="trafficBreakdownForm.type"
+                    @change="changeTrafficBreakdownType"
+                    size="small"
+                  >
                     <el-radio-button label="channel">
                       {{ $t('channel.channel') }}
                     </el-radio-button>
@@ -55,12 +61,25 @@
                       {{ $t('channel.device') }}
                     </el-radio-button>
                   </el-radio-group>
-                  <goal-selector @getResult="getGoalId" :defaultValue="goalId">
-                  </goal-selector>
+                  <el-select
+                    v-model="trafficBreakdownForm.channel"
+                    @change="getBreakDownChannel"
+                    :placeholder="$t('common.selOption')"
+                  >
+                    <el-option
+                      v-for="item in channelTypes"
+                      :key="item.value"
+                      :value="item.value"
+                      :label="item.label"
+                    ></el-option>
+                  </el-select>
                   <span style="margin-right: 15px;line-height: 30px;">{{
                     $t('common.vs')
                   }}</span>
-                  <goal-selector @getResult="getGoalId" :defaultValue="goalId">
+                  <goal-selector
+                    @getResult="getBreakDownGoalId"
+                    :defaultValue="trafficBreakdownForm.goalId"
+                  >
                   </goal-selector>
                 </div>
                 <div class="report-result-inner__graph" style="height: 375px;">
@@ -73,7 +92,11 @@
                   </div>
                 </div>
               </div>
-              <div class="plan-reports-result-inner" style="height: 500px;">
+              <div
+                class="plan-reports-result-inner"
+                v-loading="trafficSourceLoading"
+                style="height: 500px;"
+              >
                 <!-- Traffic Source -->
                 <div class="plan-reports-result-inner_title">
                   {{ $t('channel.trafficSource') }}
@@ -100,7 +123,11 @@
             </div>
             <!-- trafic trend -->
             <div class="plan-reports-result mr15">
-              <div class="plan-reports-result-inner" style="height: 460px;">
+              <div
+                class="plan-reports-result-inner"
+                v-loading="trafficTrendLoading"
+                style="height: 460px;"
+              >
                 <div class="plan-reports-result-inner_title">
                   {{ $t('channel.trafficTrend') }}
                   <el-tooltip class="item" effect="light" placement="top">
@@ -111,7 +138,11 @@
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">
-                  <el-radio-group v-model="trafficTrendOpt" size="small">
+                  <el-radio-group
+                    v-model="trafficTrendForm.type"
+                    @change="changeTrafficTrendType"
+                    size="small"
+                  >
                     <el-radio-button label="channel">
                       {{ $t('channel.channel') }}
                     </el-radio-button>
@@ -119,8 +150,26 @@
                       {{ $t('channel.device') }}
                     </el-radio-button>
                   </el-radio-group>
-                  <goal-selector @getResult="getGoalId" :defaultValue="goalId">
-                  </goal-selector>
+                  <channel-selector
+                    v-show="trafficTrendForm.type === 'channel'"
+                    @getResult="getTrafficTrendChannelId"
+                    :defaultValue="trafficTrendForm.channelId"
+                  >
+                  </channel-selector>
+
+                  <el-select
+                    v-model="trafficTrendForm.device"
+                    v-show="trafficTrendForm.type === 'device'"
+                    @change="getTraffciTrendDevice"
+                    :placeholder="$t('common.selOption')"
+                  >
+                    <el-option
+                      v-for="item in deviceTypes"
+                      :key="item.value"
+                      :value="item.value"
+                      :label="item.label"
+                    ></el-option>
+                  </el-select>
                 </div>
                 <div class="report-result-inner__graph" style="height: 335px;">
                   <div id="traffic_trend_map">
@@ -132,6 +181,7 @@
             <div class="plan-reports-result mr15">
               <div
                 class="plan-reports-result-inner"
+                v-loading="assistLoading"
                 style="flex:2;height: 650px;"
               >
                 <!-- Assist analysis -->
@@ -144,9 +194,20 @@
                     <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
+                <div class="plan-reports-result-inner__opt">
+                  <campaigns-selector
+                    @getResult="getCampaignId"
+                    :defaultValue="assistForm.campaignId"
+                  >
+                  </campaigns-selector>
+                </div>
                 <noresult-report></noresult-report>
               </div>
-              <div class="plan-reports-result-inner" style="height: 650px;">
+              <div
+                class="plan-reports-result-inner"
+                v-loading="conversionPathLoading"
+                style="height: 650px;"
+              >
                 <!-- Top Conversion -->
                 <div class="plan-reports-result-inner_title">
                   {{ $t('channel.conversionPaths') }}
@@ -162,7 +223,10 @@
                   <b style="font-weight: bold;">Booking</b>
                 </p> -->
                 <div class="plan-reports-result-inner__opt mr10">
-                  <goal-selector @getResult="getGoalId" :defaultValue="goalId">
+                  <goal-selector
+                    @getResult="getConversionPathGoalId"
+                    :defaultValue="conversionPathForm.goalId"
+                  >
                   </goal-selector>
                 </div>
                 <div class="plan-reports-result-inner__tablelike mr10">
@@ -204,12 +268,13 @@
         <div id="audience">
           <date-selector-for-report
             :needVs="false"
+            @change="changeAudienceDate"
             reportTitle="ChannelAnalysis"
           ></date-selector-for-report>
           <hr class="reporthr" />
           <div class="plan-reports-con mr20">
             <div class="plan-reports-result">
-              <div class="plan-reports-result-inner" style="height: 460px;">
+              <div class="plan-reports-result-inner" style="height: 500px;">
                 <!-- world -->
                 <div class="plan-reports-result-inner_title">
                   {{ $t('audience.regions') }}
@@ -219,6 +284,13 @@
                     </div>
                     <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
+                </div>
+                <div class="plan-reports-result-inner__opt">
+                  <channel-selector
+                    @getResult="getRegionChannelId"
+                    :defaultValue="regionInline.channelId"
+                  >
+                  </channel-selector>
                 </div>
                 <div class="report-result-inner__graph" style="height: 370px;">
                   <div id="regions_map">
@@ -255,6 +327,8 @@
 <script>
 import DateSelectorForReport from '@/components/dateSelectorForReport/Index.vue'
 import GoalSelector from '@/components/selector/GoalSelector'
+import ChannelSelector from '@/components/selector/ChannelSelector'
+import CampaignsSelector from '@/components/selector/CampaignsSelector'
 import NoresultReport from '@/components/report/Noresult.vue'
 import LineTrendChart from '@/components/charts/LineTrendChart'
 import BarMultiAxisChart from '@/components/charts/BarMultiAxisChart'
@@ -262,11 +336,20 @@ import RegionWorldChart from '@/components/charts/RegionWorldChart'
 import MyHeader from '@/components/common/Header'
 import Util from '@/utils'
 import exportUtil from '@/utils/exportUtil'
+import * as analysisChannelApi from '@/api/analysisChannel'
+import {
+  ENUM_DATE,
+  CHANNEL_TYPE,
+  DEVICE_TYPE,
+  convertType
+} from '@/utils/constant'
 export default {
   name: 'channelAnalysis',
   components: {
     DateSelectorForReport,
     GoalSelector,
+    ChannelSelector,
+    CampaignsSelector,
     NoresultReport,
     LineTrendChart,
     BarMultiAxisChart,
@@ -275,41 +358,218 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      trafficBreakdownLoading: false,
+      trafficSourceLoading: false,
+      trafficTrendLoading: false,
+      conversionPathLoading: false,
+      assistLoading: false,
+      regionsLoading: false,
       isDownload: false,
       activeName: 'channel',
       currentName: 'channel',
+      channelTypes: CHANNEL_TYPE,
+      deviceTypes: DEVICE_TYPE,
+      trafficBreakdownForm: {
+        type: 'channel',
+        goalId: -1,
+        channel: 'conversions'
+      },
+      trafficTrendForm: {
+        type: 'channel',
+        device: 'Computer',
+        channelId: -1
+      },
+      conversionPathForm: {
+        goalId: -1
+      },
+      assistForm: {
+        campaignId: -1
+      },
+      formInline: {
+        beginDate: null,
+        endDate: null,
+        dateType: null
+      },
+      regionInline: {
+        beginDate: null,
+        endDate: null,
+        dateType: null,
+        channelId: -1
+      },
       goalId: -1,
-      breakdownOpt: 'channel',
-      trafficTrendOpt: 'channel',
       trafficTrend: [],
       trafficTrendColor: [],
-      trafficBreakdown: [],
+      trafficBreakdown: null,
       trafficBreakdownColor: ['#8D7B7B', '#4484CF'],
+      trafficSource: [],
+      conversionPaths: [],
+      assist: null,
       regionsData: [],
       regionsDataColor: ['#EF4136']
     }
   },
-  created() {
-    this.initData()
-    let makeData = size => {
-      return new Array(size).fill(1).map((item, index) => {
-        return {
-          date: '2019-05-0' + (index + 1),
-          value: Math.random() * 20000
-        }
-      })
+  computed: {
+    loading() {
+      return (
+        this.trafficBreakdownLoading &&
+        this.trafficSourceLoading &&
+        this.trafficTrendLoading &&
+        this.conversionPathLoading &&
+        this.assistLoading &&
+        this.regionsLoading
+      )
     }
-    let example = makeData(30)
-    let example2 = makeData(30)
-    this.trafficTrend = [example, example2]
+  },
+  created() {
+    this.makeDebounce()
+    this.initData()
   },
   methods: {
+    getDataList() {
+      this.getTrafficBreakDown()
+      this.getTrafficSource()
+      this.getTrafficTrend()
+      this.getConversionPath()
+      this.getAssist()
+    },
+    getTrafficBreakDown() {
+      this.trafficBreakdownLoading = false
+      if (this.trafficBreakdownForm.goalId === -1) return
+      this.trafficBreakdownLoading = true
+      let form = Object.assign({}, this.formInline, this.trafficBreakdownForm)
+      analysisChannelApi
+        .trafficBreakdown(form)
+        .then(trafficBreakdown => {
+          this.trafficBreakdown = [] //Object.assign({}, trafficBreakdown)
+        })
+        .finally(() => {
+          this.trafficBreakdownLoading = false
+        })
+    },
+    getTrafficSource() {
+      this.trafficSourceLoading = true
+      analysisChannelApi
+        .trafficSource(this.formInline)
+        .then(trafficSource => {
+          this.trafficSource = trafficSource.concat()
+        })
+        .finally(() => {
+          this.trafficSourceLoading = false
+        })
+    },
+    getTrafficTrend() {
+      this.trafficTrendLoading = false
+      if (
+        this.trafficTrendForm.type === 'channel' &&
+        this.trafficTrendForm.channelId === -1
+      )
+        return
+      this.trafficTrendLoading = true
+      let form = Object.assign({}, this.formInline, this.trafficTrendForm)
+      analysisChannelApi
+        .trafficTrend(form)
+        .then(trafficTrend => {
+          this.trafficTrend = trafficTrend.concat()
+        })
+        .finally(() => {
+          this.trafficTrendLoading = false
+        })
+    },
+    getConversionPath() {
+      this.conversionPathLoading = false
+      if (this.conversionPathForm.goalId === -1) return
+      this.conversionPathLoading = true
+      let form = Object.assign({}, this.formInline, this.conversionPathForm)
+      analysisChannelApi
+        .conversionPath(form)
+        .then(conversionPath => {
+          this.conversionPaths = conversionPath.concat()
+        })
+        .finally(() => {
+          this.conversionPathLoading = false
+        })
+    },
+    getAssist() {
+      this.assistLoading = false
+      if (this.assistForm.campaignId === -1) return
+      this.assistLoading = true
+      let form = Object.assign({}, this.formInline, this.assistForm)
+      analysisChannelApi
+        .assistAnalysis(form)
+        .then(assist => {
+          this.assist = Object.assign({}, assist)
+        })
+        .finally(() => {
+          this.assistLoading = false
+        })
+    },
+    getRegions() {
+      this.regionsLoading = false
+      if (this.regionInline.channelId === -1) return
+      this.regionsLoading = true
+      analysisChannelApi
+        .regions(this.regionInline)
+        .then(regions => {
+          // this.regionsData = regions
+        })
+        .finally(() => {
+          this.regionsLoading = false
+        })
+    },
     initData() {
-      this.loading = false
+      let makeData = size => {
+        return new Array(size).fill(1).map((item, index) => {
+          return {
+            date: '2019-05-0' + (index + 1),
+            value: Math.random() * 20000
+          }
+        })
+      }
+      let example = makeData(30)
+      let example2 = makeData(30)
+      this.trafficTrend = [example, example2]
+    },
+    makeDebounce() {
+      this.debounceSearch = Util.debounce(this.getDataList, 250)
     },
     getGoalId(result) {
       this.formInline.goalId = result ? result.id : -1
+    },
+    getBreakDownChannel(result) {
+      this.trafficBreakdownForm.channel = result
+      // this.getTrafficBreakDown()
+    },
+    getBreakDownGoalId(result) {
+      this.trafficBreakdownForm.goalId = result ? result.id : -1
+      this.getTrafficBreakDown()
+    },
+    changeTrafficBreakdownType(result) {
+      this.trafficBreakdownForm.type = result
+      this.getTrafficBreakDown()
+    },
+    getTrafficTrendChannelId(result) {
+      this.trafficTrendForm.channelId = result ? result.id : -1
+      this.getTrafficTrend()
+    },
+    changeTrafficTrendType(result) {
+      this.trafficTrendForm.type = result
+      this.getTrafficTrend()
+    },
+    getTraffciTrendDevice(result) {
+      this.trafficTrendForm.device = result
+      this.getTrafficTrend()
+    },
+    getConversionPathGoalId(result) {
+      this.conversionPathForm.goalId = result ? result.id : -1
+      this.getConversionPath()
+    },
+    getRegionChannelId(result) {
+      this.regionInline.channelId = result ? result.id : -1
+      this.getRegions()
+    },
+    getCampaignId(result) {
+      this.assistForm.campaignId = result ? result.id : -1
+      this.getAssist()
     },
     changeTab(tab) {
       if (this.currentName !== tab.name) {
@@ -453,6 +713,25 @@ export default {
           ]
         }
       }
+    },
+    changeTrafficDate(result) {
+      if (result && result.titleCur && result.titlePrev) {
+        this.formInline.beginDate = result.titleCur[0]
+        this.formInline.endDate = result.titleCur[1] || result.titleCur[0]
+        this.formInline.dateType = convertType(result.id, ENUM_DATE).label
+        this.debounceSearch()
+      }
+    },
+    changeAudienceDate(result) {
+      if (result && result.titleCur && result.titlePrev) {
+        this.regionInline.beginDate = result.titleCur[0]
+        this.regionInline.endDate = result.titleCur[1] || result.titleCur[0]
+        this.regionInline.dateType = convertType(result.id, ENUM_DATE).label
+        this.getRegions()
+      }
+    },
+    getRateClass(rate) {
+      return rate < 0 ? 'fa-caret-down' : 'fa-caret-up'
     },
     handleDownload() {
       this.isDownload = true

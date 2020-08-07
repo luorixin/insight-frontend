@@ -23,14 +23,14 @@
 </template>
 
 <script>
-import * as funnelsApi from '@/api/funnels.js'
+import * as analysisChannelApi from '@/api/analysisChannel.js'
 import Util from '@/utils'
 export default {
-  name: 'funnelSelector',
+  name: 'campaignsSelector',
   props: {
     placeholder: {
       type: String,
-      default: 'Please select a funnel'
+      default: 'Please select a campaign'
     },
     disabled: {
       type: Boolean,
@@ -77,10 +77,12 @@ export default {
   methods: {
     getDataList() {
       this.loading = true
-      funnelsApi
-        .list()
+      analysisChannelApi
+        .campaigns()
         .then(data => {
-          this.dataList = data.concat()
+          this.dataList = data.map(item => {
+            return { id: item, name: item }
+          })
           this.totalCount = this.dataList.length
           if (this.dataList.length === 0) {
             this.result = this.$t('common.noResult')

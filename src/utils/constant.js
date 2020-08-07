@@ -191,6 +191,83 @@ export const DEDUPLICATION_LIST = [
   }
 ]
 
+export const ENUM_DATE = [
+  {
+    value: '-1',
+    label: 'day'
+  },
+  {
+    value: '7',
+    label: 'last7'
+  },
+  {
+    value: '30',
+    label: 'last30'
+  },
+  {
+    value: '1week',
+    label: 'week'
+  },
+  {
+    value: '1month',
+    label: 'month'
+  }
+]
+
+export const CHANNEL_TYPE = [
+  {
+    value: 'conversions',
+    label: 'conversions'
+  },
+  {
+    value: 'averageTimeSpan',
+    label: 'averageTimeSpan'
+  },
+  {
+    value: 'uniqueVistors',
+    label: 'uniqueVistors'
+  },
+  {
+    value: 'newVisitors',
+    label: 'newVisitors'
+  },
+  {
+    value: 'channelName',
+    label: 'channelName'
+  },
+  {
+    value: 'repeatVistors',
+    label: 'repeatVistors'
+  },
+  {
+    value: 'frequencyVisit',
+    label: 'frequencyVisit'
+  },
+  {
+    value: 'averagePv',
+    label: 'averagePv'
+  },
+  {
+    value: 'uniqueVisits',
+    label: 'uniqueVisits'
+  }
+]
+
+export const DEVICE_TYPE = [
+  {
+    value: 'Computer',
+    label: 'Computer'
+  },
+  {
+    value: 'Mobile',
+    label: 'Mobile'
+  },
+  {
+    value: 'Tablet',
+    label: 'Tablet'
+  }
+]
+
 export const convertType = (value, typeArr, defaultNotFound) => {
   defaultNotFound = defaultNotFound ? defaultNotFound : { text: '无匹配类型' }
   let types = typeArr.filter(item => {

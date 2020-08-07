@@ -24,16 +24,24 @@
       <el-tab-pane name="summary">
         <div slot="label">{{ $t('property.title') }}</div>
         <div id="summary">
-          <date-selector-for-report></date-selector-for-report>
+          <date-selector-for-report
+            @change="changeSummaryDate"
+          ></date-selector-for-report>
           <hr class="reporthr" />
           <!-- performance snapshot -->
           <div class="plan-reports-con">
             <p class="plan-reports-title">
               {{ $t('property.performanceSnap') }}
             </p>
-            <goal-selector @getResult="getGoalId" :defaultValue="goalId">
+            <goal-selector
+              @getResult="getGoalId"
+              :defaultValue="formInline.goalId"
+            >
             </goal-selector>
-            <div class="plan-reports-result mr20">
+            <div
+              class="plan-reports-result mr20"
+              v-loading="performanceLoading"
+            >
               <!-- unique conversion -->
               <div class="plan-reports-result-inner">
                 <div
@@ -48,22 +56,56 @@
                     <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
-                <p class="plan-reports-result-inner_text">123</p>
+                <p class="plan-reports-result-inner_text">
+                  {{
+                    performanceData.current.uniqueConversions | toThousandFilter
+                  }}
+                </p>
                 <p class="plan-reports-result-inner_textsub">
-                  {{ $t('property.outOfConv') }}: 23123
+                  {{ $t('property.outOfConv') }}:
+                  {{ performanceData.current.conversions | toThousandFilter }}
                 </p>
                 <div class="report-flex-row mr20">
-                  <label> {{ $t('common.vs') }} 1372 </label>
+                  <label>
+                    {{ $t('common.vs') }}
+                    {{
+                      performanceData.previous.uniqueConversions
+                        | toThousandFilter
+                    }}
+                  </label>
                   <div class="plan-growth">
-                    <i class="fa fa-caret-up"></i>
-                    <span>1.18</span>
+                    <i
+                      class="fa"
+                      :class="
+                        getRateClass(
+                          performanceData.growthRate.uniqueConversionsRisingRate
+                        )
+                      "
+                    ></i>
+                    <span>{{
+                      performanceData.growthRate.uniqueConversionsRisingRate
+                    }}</span>
                   </div>
                 </div>
                 <div class="report-flex-row">
-                  <label> {{ $t('property.outOfConv') }}: 1372 </label>
+                  <label>
+                    {{ $t('property.outOfConv') }}:
+                    {{
+                      performanceData.previous.conversions | toThousandFilter
+                    }}
+                  </label>
                   <div class="plan-growth">
-                    <i class="fa fa-caret-up"></i>
-                    <span>1.18</span>
+                    <i
+                      class="fa"
+                      :class="
+                        getRateClass(
+                          performanceData.growthRate.conversionsRisingRate
+                        )
+                      "
+                    ></i>
+                    <span>{{
+                      performanceData.growthRate.conversionsRisingRate
+                    }}</span>
                   </div>
                 </div>
               </div>
@@ -81,13 +123,32 @@
                     <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
-                <p class="plan-reports-result-inner_text">3123</p>
+                <p class="plan-reports-result-inner_text">
+                  {{
+                    performanceData.current.uniqueCustomers | toThousandFilter
+                  }}
+                </p>
                 <div class="report-flex-column mr10">
                   <div class="plan-growth">
-                    <i class="fa fa-caret-up"></i>
-                    <span>1.18</span>
+                    <i
+                      class="fa"
+                      :class="
+                        getRateClass(
+                          performanceData.growthRate.conversionsRisingRate
+                        )
+                      "
+                    ></i>
+                    <span>{{
+                      performanceData.growthRate.uniqueCustomersRisingRate
+                    }}</span>
                   </div>
-                  <label> {{ $t('common.vs') }} 1372 </label>
+                  <label>
+                    {{ $t('common.vs') }}
+                    {{
+                      performanceData.previous.uniqueCustomers
+                        | toThousandFilter
+                    }}
+                  </label>
                 </div>
               </div>
               <!-- last mile ratio -->
@@ -108,9 +169,19 @@
                     {{ $t('property.nonSearch') }}
                   </div>
                 </div>
-                <p class="plan-reports-result-inner_text">0.40 : 1</p>
+                <p class="plan-reports-result-inner_text">
+                  {{ performanceData.current.paidCount | toThousandFilter }} :
+                  {{ performanceData.current.nonePaidCount | toThousandFilter }}
+                </p>
                 <div class="report-flex-column mr10">
-                  <label> {{ $t('common.vs') }} 1372 : 0.9 </label>
+                  <label>
+                    {{ $t('common.vs') }}
+                    {{ performanceData.previous.paidCount | toThousandFilter }}
+                    :
+                    {{
+                      performanceData.previous.nonePaidCount | toThousandFilter
+                    }}
+                  </label>
                 </div>
               </div>
               <!-- Time-to-Convert -->
@@ -131,15 +202,35 @@
                   <div class="report-convert-inner">
                     <label>{{ $t('property.fullPath') }}</label>
                     <div class="report-convert-inner__detail">
-                      <label>3.02 {{ $t('common.days') }}</label>
+                      <label
+                        >{{
+                          performanceData.current.fullPath | toThousandFilter
+                        }}
+                        {{ $t('common.days') }}</label
+                      >
                       <div class="report-flex-row">
                         <label>
-                          {{ $t('common.vs') }} 1372
+                          {{ $t('common.vs') }}
+                          {{
+                            performanceData.previous.fullPath | toThousandFilter
+                          }}
                           {{ $t('common.days') }}</label
                         >
                         <div class="plan-growth">
-                          <i class="fa fa-caret-up"></i>
-                          <span>1.18 {{ $t('common.days') }}</span>
+                          <i
+                            class="fa"
+                            :class="
+                              getRateClass(
+                                performanceData.growthRate.fullPathRisingRate
+                              )
+                            "
+                          ></i>
+                          <span
+                            >{{
+                              performanceData.growthRate.fullPathRisingRate
+                            }}
+                            {{ $t('common.days') }}</span
+                          >
                         </div>
                       </div>
                     </div>
@@ -147,15 +238,33 @@
                   <div class="report-convert-inner mr10">
                     <label>{{ $t('property.lastMile') }}</label>
                     <div class="report-convert-inner__detail">
-                      <label>3.02 {{ $t('common.days') }}</label>
+                      <label
+                        >{{
+                          performanceData.current.lastMile | toThousandFilter
+                        }}
+                        {{ $t('common.days') }}</label
+                      >
                       <div class="report-flex-row">
                         <label>
-                          {{ $t('common.vs') }} 1372
+                          {{ $t('common.vs') }}
+                          {{
+                            performanceData.previous.lastMile | toThousandFilter
+                          }}
                           {{ $t('common.days') }}</label
                         >
                         <div class="plan-growth">
-                          <i class="fa fa-caret-up"></i>
-                          <span>1.18 {{ $t('common.days') }}</span>
+                          <i
+                            class="fa"
+                            :class="
+                              getRateClass(
+                                performanceData.growthRate.mileRisingRate
+                              )
+                            "
+                          ></i>
+                          <span
+                            >{{ performanceData.growthRate.mileRisingRate }}
+                            {{ $t('common.days') }}</span
+                          >
                         </div>
                       </div>
                     </div>
@@ -166,7 +275,7 @@
           </div>
           <hr class="reporthr" />
           <!-- traffic snapshot -->
-          <div class="plan-reports-con">
+          <div class="plan-reports-con" v-loading="trafficLoading">
             <p class="plan-reports-title">
               {{ $t('property.trafficSnapShot') }}
             </p>
@@ -187,13 +296,29 @@
                         <span class="fa fa-question-circle-o"></span>
                       </el-tooltip>
                     </div>
-                    <p class="plan-reports-result-inner_text">3123</p>
+                    <p class="plan-reports-result-inner_text">
+                      {{ trafficData.current.uniqueVisits | toThousandFilter }}
+                    </p>
                     <div class="report-flex-column mr10">
                       <div class="plan-growth">
-                        <i class="fa fa-caret-up"></i>
-                        <span>1.18</span>
+                        <i
+                          class="fa"
+                          :class="
+                            getRateClass(
+                              trafficData.growthRate.uniqueVisitsRate
+                            )
+                          "
+                        ></i>
+                        <span>{{
+                          trafficData.growthRate.uniqueVisitsRate
+                        }}</span>
                       </div>
-                      <label> {{ $t('common.vs') }} 1372 </label>
+                      <label>
+                        {{ $t('common.vs') }}
+                        {{
+                          trafficData.previous.uniqueVisits | toThousandFilter
+                        }}
+                      </label>
                     </div>
                     <div class="report-result-inner__graph">
                       <div id="unique_visits_map">
@@ -216,13 +341,31 @@
                         <span class="fa fa-question-circle-o"></span>
                       </el-tooltip>
                     </div>
-                    <p class="plan-reports-result-inner_text">3123</p>
+                    <p class="plan-reports-result-inner_text">
+                      {{
+                        trafficData.current.uniqueVisitors | toThousandFilter
+                      }}
+                    </p>
                     <div class="report-flex-column mr10">
                       <div class="plan-growth">
-                        <i class="fa fa-caret-up"></i>
-                        <span>1.18</span>
+                        <i
+                          class="fa"
+                          :class="
+                            getRateClass(
+                              trafficData.growthRate.uniqueVisitorsRate
+                            )
+                          "
+                        ></i>
+                        <span>{{
+                          trafficData.growthRate.uniqueVisitorsRate
+                        }}</span>
                       </div>
-                      <label> {{ $t('common.vs') }} 1372 </label>
+                      <label>
+                        {{ $t('common.vs') }}
+                        {{
+                          trafficData.previous.uniqueVisitors | toThousandFilter
+                        }}
+                      </label>
                     </div>
                     <div class="report-result-inner__graph">
                       <div id="unique_visitors_map">
@@ -251,14 +394,28 @@
                     </el-tooltip>
                   </div>
                   <div class="report-flex-middle mr20">
-                    <label class="report-flex-middle__detail">1.16</label>
+                    <label class="report-flex-middle__detail">{{
+                      trafficData.current.frequencyVisit
+                    }}</label>
                     <div class="report-flex-middle__line"></div>
                     <div class="report-flex-middle__detail report-flex-column">
                       <div class="plan-growth">
-                        <i class="fa fa-caret-up"></i>
-                        <span>1.18</span>
+                        <i
+                          class="fa"
+                          :class="
+                            getRateClass(
+                              trafficData.growthRate.frequencyVisitRate
+                            )
+                          "
+                        ></i>
+                        <span>{{
+                          trafficData.growthRate.frequencyVisitRate
+                        }}</span>
                       </div>
-                      <label> {{ $t('common.vs') }} 1372 </label>
+                      <label>
+                        {{ $t('common.vs') }}
+                        {{ trafficData.previous.frequencyVisit }}
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -274,14 +431,28 @@
                     </el-tooltip>
                   </div>
                   <div class="report-flex-middle mr20">
-                    <label class="report-flex-middle__detail">11.16</label>
+                    <label class="report-flex-middle__detail">{{
+                      trafficData.current.averagePageViews
+                    }}</label>
                     <div class="report-flex-middle__line"></div>
                     <div class="report-flex-middle__detail report-flex-column">
                       <div class="plan-growth">
-                        <i class="fa fa-caret-up"></i>
-                        <span>11.18</span>
+                        <i
+                          class="fa"
+                          :class="
+                            getRateClass(
+                              trafficData.growthRate.averagePageViewsRate
+                            )
+                          "
+                        ></i>
+                        <span>{{
+                          trafficData.growthRate.averagePageViewsRate
+                        }}</span>
                       </div>
-                      <label> {{ $t('common.vs') }} 1372 </label>
+                      <label>
+                        {{ $t('common.vs') }}
+                        {{ trafficData.previous.averagePageViews }}
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -306,14 +477,22 @@
                 <div class="plan-reports-result-split__row split-row-middle">
                   <div class="split-row__detail">
                     <p class="plan-reports-result-inner_text">
-                      3123
+                      {{ trafficData.current.newVistors }}
                     </p>
                     <div class="report-flex-column mr10">
                       <div class="plan-growth">
-                        <i class="fa fa-caret-up"></i>
-                        <span>1.18</span>
+                        <i
+                          class="fa"
+                          :class="
+                            getRateClass(trafficData.growthRate.newVistorsRate)
+                          "
+                        ></i>
+                        <span>{{ trafficData.growthRate.newVistorsRate }}</span>
                       </div>
-                      <label> {{ $t('common.vs') }} 1372 </label>
+                      <label>
+                        {{ $t('common.vs') }}
+                        {{ trafficData.previous.newVistors }}
+                      </label>
                     </div>
                   </div>
                   <div class="split-row__detail split-row__detail-vs">
@@ -325,14 +504,26 @@
                       class="plan-reports-result-inner_text"
                       style="color:#4484CF;"
                     >
-                      60.18
+                      {{ trafficData.current.repeatVistors }}
                     </p>
                     <div class="report-flex-column mr10">
                       <div class="plan-growth">
-                        <i class="fa fa-caret-up"></i>
-                        <span>1.18</span>
+                        <i
+                          class="fa"
+                          :class="
+                            getRateClass(
+                              trafficData.growthRate.repeatVistorsRate
+                            )
+                          "
+                        ></i>
+                        <span>{{
+                          trafficData.growthRate.repeatVistorsRate
+                        }}</span>
                       </div>
-                      <label> {{ $t('common.vs') }} 1372 </label>
+                      <label>
+                        {{ $t('common.vs') }}
+                        {{ trafficData.previous.repeatVistors }}
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -364,14 +555,24 @@
                     </el-tooltip>
                   </div>
                   <div class="report-flex-middle mr20">
-                    <label class="report-flex-middle__detail">60.15%</label>
+                    <label class="report-flex-middle__detail"
+                      >{{ trafficData.current.bounceRate }}%</label
+                    >
                     <div class="report-flex-middle__line"></div>
                     <div class="report-flex-middle__detail report-flex-column">
                       <div class="plan-growth">
-                        <i class="fa fa-caret-up"></i>
-                        <span>7.31%</span>
+                        <i
+                          class="fa"
+                          :class="
+                            getRateClass(trafficData.growthRate.bounceRate)
+                          "
+                        ></i>
+                        <span>{{ trafficData.growthRate.bounceRate }}%</span>
                       </div>
-                      <label> {{ $t('common.vs') }} 67.82% </label>
+                      <label>
+                        {{ $t('common.vs') }}
+                        {{ trafficData.previous.bounceRate }}%
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -387,14 +588,33 @@
                     </el-tooltip>
                   </div>
                   <div class="report-flex-middle mr20">
-                    <label class="report-flex-middle__detail">00:02:24</label>
+                    <label class="report-flex-middle__detail">{{
+                      trafficData.current.averageTimeSpan | toTimeSpanFilter
+                    }}</label>
                     <div class="report-flex-middle__line"></div>
                     <div class="report-flex-middle__detail report-flex-column">
                       <div class="plan-growth">
-                        <i class="fa fa-caret-up"></i>
-                        <span>11s</span>
+                        <i
+                          class="fa"
+                          :class="
+                            getRateClass(
+                              trafficData.growthRate.averageTimeSpanRate
+                            )
+                          "
+                        ></i>
+                        <span
+                          >{{
+                            trafficData.growthRate.averageTimeSpanRate
+                          }}s</span
+                        >
                       </div>
-                      <label> {{ $t('common.vs') }} 00:02:56 </label>
+                      <label>
+                        {{ $t('common.vs') }}
+                        {{
+                          trafficData.previous.averageTimeSpan
+                            | toTimeSpanFilter
+                        }}
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -428,9 +648,12 @@
       <el-tab-pane name="audience">
         <div slot="label">{{ $t('audience.analysis') }}</div>
         <div id="audience">
-          <date-selector-for-report :needVs="false"></date-selector-for-report>
+          <date-selector-for-report
+            :needVs="false"
+            @change="changeAudienceDate"
+          ></date-selector-for-report>
           <hr class="reporthr" />
-          <div class="plan-reports-con mr20">
+          <div class="plan-reports-con mr20" v-loading="regionsLoading">
             <div class="plan-reports-result">
               <div class="plan-reports-result-inner" style="height: 460px;">
                 <!-- world -->
@@ -484,6 +707,8 @@ import RegionWorldChart from '@/components/charts/RegionWorldChart'
 import MyHeader from '@/components/common/Header'
 import Util from '@/utils'
 import exportUtil from '@/utils/exportUtil'
+import * as summaryApi from '@/api/summary'
+import { ENUM_DATE, convertType } from '@/utils/constant'
 export default {
   name: 'propertySummary',
   components: {
@@ -496,11 +721,37 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      regionsLoading: false,
+      performanceLoading: false,
+      trafficLoading: false,
       isDownload: false,
       activeName: 'summary',
       currentName: 'summary',
-      goalId: -1,
+      formInline: {
+        goalId: -1,
+        beginDate: null,
+        endDate: null,
+        preBeginDate: null,
+        preEndDate: null,
+        dateType: null
+      },
+      regionInline: {
+        beginDate: null,
+        endDate: null,
+        dateType: null
+      },
+      debounceSearch: null,
+      performanceData: {
+        current: {},
+        previous: {},
+        growthRate: {}
+      },
+      trafficData: {
+        current: {},
+        previous: {},
+        growthRate: {}
+      },
+      distributionData: {},
       uniqueVisits: [],
       uniqueVisitsColor: ['#ccc'],
       uniqueVisitors: [],
@@ -513,12 +764,59 @@ export default {
       regionsDataColor: ['#EF4136']
     }
   },
+  computed: {
+    loading() {
+      return (
+        this.trafficLoading && this.performanceLoading && this.regionsLoading
+      )
+    }
+  },
   created() {
+    this.makeDebounce()
     this.initData()
   },
   methods: {
+    getDataList() {
+      this.getPerformance()
+      let promises = [
+        summaryApi.traffic(this.formInline),
+        summaryApi.distribution(this.formInline)
+      ]
+      this.trafficLoading = true
+      Promise.all(promises)
+        .then(([traffic, distribution]) => {
+          this.trafficData = Object.assign({}, traffic)
+          this.distributionData = Object.assign({}, distribution)
+        })
+        .finally(() => {
+          this.trafficLoading = false
+        })
+    },
+    getPerformance() {
+      this.performanceLoading = false
+      if (this.formInline.goalId === -1) return
+      this.performanceLoading = true
+      summaryApi
+        .performance(this.formInline)
+        .then(performance => {
+          this.performanceData = Object.assign({}, performance)
+        })
+        .finally(() => {
+          this.performanceLoading = false
+        })
+    },
+    getRegions() {
+      this.regionsLoading = true
+      summaryApi
+        .regions(this.regionInline)
+        .then(regions => {
+          // this.regionsData = regions
+        })
+        .finally(() => {
+          this.regionsLoading = false
+        })
+    },
     initData() {
-      this.loading = false
       let makeData = size => {
         return new Array(size).fill(1).map((item, index) => {
           return {
@@ -542,8 +840,12 @@ export default {
         { date: '6', value: 124059245 }
       ]
     },
+    makeDebounce() {
+      this.debounceSearch = Util.debounce(this.getDataList, 250)
+    },
     getGoalId(result) {
       this.formInline.goalId = result ? result.id : -1
+      this.getPerformance()
     },
     changeTab(tab) {
       if (this.currentName !== tab.name) {
@@ -687,6 +989,27 @@ export default {
           ]
         }
       }
+    },
+    changeSummaryDate(result) {
+      if (result && result.titleCur && result.titlePrev) {
+        this.formInline.beginDate = result.titleCur[0]
+        this.formInline.endDate = result.titleCur[1] || result.titleCur[0]
+        this.formInline.preBeginDate = result.titlePrev[0]
+        this.formInline.preEndDate = result.titlePrev[1] || result.titlePrev[0]
+        this.formInline.dateType = convertType(result.id, ENUM_DATE).label
+        this.debounceSearch()
+      }
+    },
+    changeAudienceDate(result) {
+      if (result && result.titleCur && result.titlePrev) {
+        this.regionInline.beginDate = result.titleCur[0]
+        this.regionInline.endDate = result.titleCur[1] || result.titleCur[0]
+        this.regionInline.dateType = convertType(result.id, ENUM_DATE).label
+        this.getRegions()
+      }
+    },
+    getRateClass(rate) {
+      return rate < 0 ? 'fa-caret-down' : 'fa-caret-up'
     },
     handleDownload() {
       this.isDownload = true

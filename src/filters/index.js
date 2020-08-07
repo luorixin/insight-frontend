@@ -9,6 +9,23 @@ export function toDateFilter(date) {
   return date ? moment(date).format('YYYY-MM-DD') : '尚未填写'
 }
 
+function PadZero(str) {
+  //补零
+  return new RegExp(/^\d$/g).test(str) ? `0${str}` : str
+}
+
+/**
+ * 秒转是分秒
+ * @param {second} 秒
+ */
+export function toTimeSpanFilter(seconds) {
+  if (!parseInt(seconds)) return '00:00:00'
+  let durations = moment.duration(seconds, 'seconds')
+  return `${PadZero(durations.hours())}:${PadZero(
+    durations.minutes()
+  )}:${PadZero(durations.seconds())}`
+}
+
 /**
  * 日期格式化 yyyymmdd => yyyy-mm-dd
  * @param {日期} date

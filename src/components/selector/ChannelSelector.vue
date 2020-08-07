@@ -1,36 +1,31 @@
 <template>
-  <div style="position:relative;">
-    <el-select
-      v-model="result"
-      @change="handleChange"
-      filterable
-      class="handle-select"
-      :class="{ pd30: needdot }"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      :clearable="clearable"
-      v-loading="loading"
-    >
-      <el-option
-        v-for="item in dataList"
-        :key="item.id"
-        :value="item.id"
-        :label="item.name"
-      ></el-option>
-    </el-select>
-    <i class="dot" v-if="needdot" :style="{ background: dotColor }"></i>
-  </div>
+  <el-select
+    v-model="result"
+    @change="handleChange"
+    filterable
+    :placeholder="placeholder"
+    :disabled="disabled"
+    :clearable="clearable"
+    v-loading="loading"
+  >
+    <el-option
+      v-for="item in dataList"
+      :key="item.id"
+      :value="item.id"
+      :label="item.name"
+    ></el-option>
+  </el-select>
 </template>
 
 <script>
-import * as funnelsApi from '@/api/funnels.js'
+import * as channelApi from '@/api/analysisChannel.js'
 import Util from '@/utils'
 export default {
-  name: 'funnelSelector',
+  name: 'channelSelector',
   props: {
     placeholder: {
       type: String,
-      default: 'Please select a funnel'
+      default: 'Please select a channel'
     },
     disabled: {
       type: Boolean,
@@ -43,14 +38,6 @@ export default {
     defaultValue: {
       type: Number,
       default: null
-    },
-    needdot: {
-      type: Boolean,
-      default: false
-    },
-    dotColor: {
-      type: String,
-      default: '#4484CF'
     }
   },
   data() {
@@ -77,7 +64,7 @@ export default {
   methods: {
     getDataList() {
       this.loading = true
-      funnelsApi
+      channelApi
         .list()
         .then(data => {
           this.dataList = data.concat()
@@ -109,27 +96,13 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .handle-select {
-  width: 189px;
+  width: 120px;
 }
 
 .handle-input {
   width: 200px;
   display: inline-block;
-}
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 8px;
-  display: inline-block;
-  position: absolute;
-  left: 10px;
-  top: 12px;
-}
-.pd30 {
-  ::v-deep .el-input__inner {
-    padding-left: 30px;
-  }
 }
 </style>
