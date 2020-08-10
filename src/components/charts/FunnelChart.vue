@@ -23,9 +23,9 @@
       <div
         class="funnelLegend-detail"
         v-for="(item, i) in datas"
-        :key="'funnelChart_' + item.name"
+        :key="'funnelChart_' + item.eventName"
       >
-        <div class="funnelLegend-detail_line"></div>
+        <div class="funnelLegend-detail_line" v-if="item.Exit"></div>
         <!-- <div class="funnelLegend-detail_con">
           <p>{{ item.name }}</p>
 
@@ -37,8 +37,12 @@
           :style="{ left: processLeft(i) }"
           v-if="i > 0"
         >
-          <p>proceed to {{ item.name }}</p>
-          <p>{{ item.value | toThousandFilter }} ({{ getPer(item.value) }}%)</p>
+          <p>proceed to {{ item.eventName }}</p>
+          <p>
+            {{ item.totalEvents | toThousandFilter }} ({{
+              getPer(item.totalEvents)
+            }}%)
+          </p>
         </div>
         <div class="funnelLegend-detail_exit" v-if="item.Exit">
           <span class="fa fa-caret-right"></span>
@@ -92,37 +96,59 @@ export default {
   components: {
     'v-chart': ECharts
   },
+  watch: {
+    datas: {
+      handler(newName, oldName) {
+        this.initData(newName.concat())
+      },
+      immediate: true
+    }
+  },
+  mounted() {
+    if (this.datas.length > 0) {
+      this.initData(this.datas)
+    }
+  },
   data() {
-    let min = 0,
-      max = 100,
-      _min = 1,
-      total = 0,
-      seriesData = [],
-      fixedValue = [20, 40, 60, 80, 100]
-    for (let i = 0; i < this.datas.length; i++) {
-      let data = this.datas[i]
-      let value = parseFloat(data.value)
-      total += value
-      if (min == 0 || min > value) {
-        min = value
-      }
-      if (max < value) {
-        max = value
-      }
-      if (value == 0) {
-        _min = 0
-      }
-      let fixedObj = Object.assign(data, {
-        trueValue: data.value,
-        value: fixedValue[i]
-      })
-      seriesData.push(fixedObj)
-    }
-    if (_min == 0) {
-      min = 0
-    }
     return {
-      options: {
+      options: null,
+      total: 0
+    }
+  },
+  methods: {
+    initData() {
+      let min = 0,
+        max = 100,
+        _min = 1,
+        total = 0,
+        seriesData = [],
+        fixedValue = [20, 40, 60, 80, 100],
+        dataRev = this.datas.concat().reverse()
+      for (let i = 0; i < dataRev.length; i++) {
+        let data = dataRev[i]
+        let value = parseFloat(data.totalEvents)
+        total += value
+        if (min == 0 || min > value) {
+          min = value
+        }
+        if (max < value) {
+          max = value
+        }
+        if (value == 0) {
+          _min = 0
+        }
+        let fixedObj = Object.assign(data, {
+          trueValue: data.totalEvents,
+          name: data.eventName,
+          value: fixedValue[i]
+        })
+        seriesData.push(fixedObj)
+      }
+      if (_min == 0) {
+        min = 0
+      }
+      this.total = total
+      this.options = {
         color: this.color,
         tooltip: {
           trigger: 'item',
@@ -140,10 +166,10 @@ export default {
             let _li = ''
             let _header =
               '<label style="font-size: 12px;float:left;overflow:hidden;text-overflow:ellipsis;width:120px;margin:0 5px;font-weight:bold;">' +
-              params.name +
+              params.eventName +
               '</label>'
-            if (params.data.Channels) {
-              for (let j in params.data.Channels) {
+            if (params.data.next) {
+              for (let j in params.data.next) {
                 _li +=
                   '<li style="z-index:99999;display:block;white-space:nowrap;box-sizing: border-box;float:left;overflow:hidden;text-overflow:ellipsis;width:180px;height:25px;line-height:25px;" title="' +
                   j +
@@ -152,7 +178,7 @@ export default {
                   j +
                   '</span>' +
                   '<span style="float:right;">' +
-                  Util.getKWMformat(params.data.Channels[j]) +
+                  Util.getKWMformat(params.data.next[j]) +
                   '</span>' +
                   '</li>'
               }
@@ -185,7 +211,9 @@ export default {
               show: true,
               position: 'inside',
               fontFamily: 'Open Sans',
-              formatter: ['{a|{b}}', '{c}'].join('\n'),
+              formatter: item => {
+                return ['{a|' + item.name + '}', item.data.trueValue].join('\n')
+              },
               rich: {
                 a: {
                   lineHeight: 30,
@@ -203,11 +231,8 @@ export default {
             data: seriesData
           }
         ]
-      },
-      total: total
-    }
-  },
-  methods: {
+      }
+    },
     getPer(value) {
       return this.total == 0
         ? 0

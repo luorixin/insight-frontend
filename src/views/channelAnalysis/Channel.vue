@@ -113,9 +113,12 @@
                 </div> -->
                 <div class="report-result-inner__rank">
                   <ul>
-                    <li v-for="item in 10" :key="'rank_' + item">
-                      <span class="rank_ico">{{ item }}</span>
-                      <label>http://www.baidu.com</label>
+                    <li
+                      v-for="(item, index) in trafficSource"
+                      :key="'rank_' + item.name"
+                    >
+                      <span class="rank_ico">{{ index + 1 }}</span>
+                      <label>{{ item.name }}</label>
                     </li>
                   </ul>
                 </div>

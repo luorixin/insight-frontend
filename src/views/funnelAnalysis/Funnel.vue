@@ -32,7 +32,11 @@
           <hr class="reporthr" />
           <div class="plan-reports-con mr20">
             <div class="plan-reports-result">
-              <div class="plan-reports-result-inner" style="height: 600px;">
+              <div
+                class="plan-reports-result-inner"
+                v-loading="funnelLoading"
+                style="height: 600px;"
+              >
                 <!-- Funnel -->
                 <div class="plan-reports-result-inner_title">
                   {{ $t('funnelAnalysis.funnel') }}
@@ -52,7 +56,11 @@
                 </div>
                 <div class="report-result-inner__graph" style="height: 475px;">
                   <div id="funnel_map">
+                    <noresult-report
+                      v-show="!funnelData || funnelData.length === 0"
+                    ></noresult-report>
                     <funnel-chart
+                      v-if="funnelData && funnelData.length > 0"
                       :datas="funnelData"
                       :height="475"
                       :color="funnelDataColor"
@@ -62,7 +70,11 @@
               </div>
             </div>
             <div class="plan-reports-result mr15">
-              <div class="plan-reports-result-inner" style="height: 275px;">
+              <div
+                class="plan-reports-result-inner"
+                v-loading="breakdownLoading"
+                style="height: 275px;"
+              >
                 <!-- Funnel Breakdown -->
                 <div class="plan-reports-result-inner_title">
                   {{ $t('funnelAnalysis.breakdown') }}
@@ -245,7 +257,8 @@ export default {
     FunnelSelector,
     FunnelChart,
     RegionWorldChart,
-    MyHeader
+    MyHeader,
+    NoresultReport
   },
   data() {
     return {
@@ -342,9 +355,9 @@ export default {
     initData() {
       this.funnelData = [
         {
-          value: 35287,
-          name: 'Newsletter',
-          Channels: {
+          totalEvents: 35287,
+          eventName: 'Newsletter',
+          next: {
             'Organic Search': 1308000,
             Direct: 844000,
             Social: 998000,
@@ -360,9 +373,9 @@ export default {
           }
         },
         {
-          value: 23478,
-          name: 'Enquiry',
-          Channels: {
+          totalEvents: 23478,
+          eventName: 'Enquiry',
+          next: {
             'Organic Search': 130800,
             Direct: 854000,
             Social: 998000,
@@ -378,9 +391,9 @@ export default {
           }
         },
         {
-          value: 11695,
-          name: 'Booking',
-          Channels: {
+          totalEvents: 11695,
+          eventName: 'Booking',
+          next: {
             'Organic Search': 130800,
             Direct: 844000,
             Social: 998000,

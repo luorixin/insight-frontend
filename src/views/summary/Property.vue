@@ -761,7 +761,8 @@ export default {
       timeDistData: [],
       timeDistDataColor: ['#F37A72'],
       regionsData: [],
-      regionsDataColor: ['#EF4136']
+      regionsDataColor: ['#EF4136'],
+      dayConvert: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     }
   },
   computed: {
@@ -787,10 +788,107 @@ export default {
         .then(([traffic, distribution]) => {
           this.trafficData = Object.assign({}, traffic)
           this.distributionData = Object.assign({}, distribution)
+          this.timeDistData = this.dayConvert.map((item, index) => {
+            let value = 0
+            if (this.distributionData[item]) {
+              value = this.distributionData[item]
+            }
+            return {
+              date: index + '',
+              value: value
+            }
+          })
+          // 获取日期区间
+          let dateRange = Util.getRangeByDate(
+            this.formInline.beginDate,
+            this.formInline.endDate
+          )
+          let timeRange = new Array(24).fill(1).map((item, index) => {
+            return index + ''
+          })
+          this.uniqueVisits = []
+          this.uniqueVisitors = []
+          if (this.formInline.beginDate === this.formInline.endDate) {
+            this.uniqueVisits.push(
+              this.getLineChartHour(
+                timeRange,
+                this.trafficData.current.uniqueVisitsList
+              )
+            )
+            this.uniqueVisitors.push(
+              this.getLineChartHour(
+                timeRange,
+                this.trafficData.current.uniqueVisitorsList
+              )
+            )
+            let newVisitorList = this.getLineChartHour(
+              timeRange,
+              this.trafficData.current.newVisitorList
+            )
+            let repeatVisitorsList = this.getLineChartHour(
+              timeRange,
+              this.trafficData.current.repeatVisitorsList
+            )
+            this.newrepeqtVisitors = [newVisitorList, repeatVisitorsList]
+          } else {
+            this.uniqueVisits.push(
+              this.getLineChartDate(
+                dateRange,
+                this.trafficData.current.uniqueVisitsList
+              )
+            )
+            this.uniqueVisitors.push(
+              this.getLineChartDate(
+                dateRange,
+                this.trafficData.current.uniqueVisitorsList
+              )
+            )
+            let newVisitorList = this.getLineChartDate(
+              dateRange,
+              this.trafficData.current.newVisitorList
+            )
+            let repeatVisitorsList = this.getLineChartDate(
+              dateRange,
+              this.trafficData.current.repeatVisitorsList
+            )
+            this.newrepeqtVisitors = [newVisitorList, repeatVisitorsList]
+          }
         })
         .finally(() => {
           this.trafficLoading = false
         })
+    },
+    getLineChartHour(timeRange, list) {
+      return timeRange.map(item => {
+        let value = 0
+        let find = this._findListValue(list, 'date', item)
+        if (find) {
+          value = find.value
+        }
+        let date = item.length < 2 ? '0' + item : item
+        return {
+          date: date + ':00',
+          value: value
+        }
+      })
+    },
+    getLineChartDate(dateRange, list) {
+      return dateRange.map(item => {
+        let value = 0
+        let find = this._findListValue(list, 'date', item, '20')
+        if (find) {
+          value = find.value
+        }
+        return {
+          date: item,
+          value: value
+        }
+      })
+    },
+    _findListValue(list, key, value, special = '') {
+      if (!list || list.length === 0) return null
+      let find = list.find(item => special + item[key] === value)
+      return find
     },
     getPerformance() {
       this.performanceLoading = false
@@ -817,28 +915,28 @@ export default {
         })
     },
     initData() {
-      let makeData = size => {
-        return new Array(size).fill(1).map((item, index) => {
-          return {
-            date: '2019-05-0' + (index + 1),
-            value: Math.random() * 20000
-          }
-        })
-      }
-      let example = makeData(30)
-      this.uniqueVisits = [example]
-      let example2 = makeData(30)
-      this.uniqueVisitors = [example2]
-      this.newrepeqtVisitors = [this.uniqueVisits[0], this.uniqueVisitors[0]]
-      this.timeDistData = [
-        { date: '0', value: 118974390 },
-        { date: '1', value: 132721289 },
-        { date: '2', value: 142809968 },
-        { date: '3', value: 149229238 },
-        { date: '4', value: 139460403 },
-        { date: '5', value: 138566027 },
-        { date: '6', value: 124059245 }
-      ]
+      // let makeData = size => {
+      //   return new Array(size).fill(1).map((item, index) => {
+      //     return {
+      //       date: '2019-05-0' + (index + 1),
+      //       value: Math.random() * 20000
+      //     }
+      //   })
+      // }
+      // let example = makeData(30)
+      // this.uniqueVisits = [example]
+      // let example2 = makeData(30)
+      // this.uniqueVisitors = [example2]
+      // this.newrepeqtVisitors = [this.uniqueVisits[0], this.uniqueVisitors[0]]
+      // this.timeDistData = [
+      //   { date: '0', value: 118974390 },
+      //   { date: '1', value: 132721289 },
+      //   { date: '2', value: 142809968 },
+      //   { date: '3', value: 149229238 },
+      //   { date: '4', value: 139460403 },
+      //   { date: '5', value: 138566027 },
+      //   { date: '6', value: 124059245 }
+      // ]
     },
     makeDebounce() {
       this.debounceSearch = Util.debounce(this.getDataList, 250)

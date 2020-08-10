@@ -116,7 +116,7 @@ export default {
     left: 0;
     width: 100%;
     font-size: 14px;
-    z-index: 1000;
+    z-index: 2000;
     position: relative;
     .container {
       padding: 0 20px 0 0px;

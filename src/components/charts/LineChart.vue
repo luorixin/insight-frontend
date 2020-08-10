@@ -37,39 +37,58 @@ export default {
   components: {
     'v-chart': ECharts
   },
-  data() {
-    let xAxis = [],
-      series = []
-    for (let index = 0; index < this.datas.length; index++) {
-      let data = this.datas[index]
-      if (index === 0) {
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].date) {
-            xAxis.push(data[i].date)
-          }
-        }
-      }
-      let seriesData = []
-      for (let i = 0; i < data.length; i++) {
-        if (typeof data[i].value != 'undefined') {
-          seriesData.push(data[i].value)
-        }
-      }
-      series.push({
-        data: seriesData,
-        symbol: 'circle',
-        symbolSize: '6',
-        showSymbol: false,
-        type: 'line',
-        areaStyle: {
-          normal: {
-            color: this.color[index]
-          }
-        }
-      })
+  watch: {
+    datas: {
+      handler(newName, oldName) {
+        this.initData(newName.concat())
+      },
+      immediate: true
     }
+  },
+  mounted() {
+    if (this.datas.length > 0) {
+      this.initData(this.datas)
+    }
+  },
+  data() {
     return {
-      options: {
+      options: null
+    }
+  },
+  methods: {
+    initData(datas) {
+      let xAxis = [],
+        series = []
+      for (let index = 0; index < datas.length; index++) {
+        let data = datas[index]
+        if (index === 0) {
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].date) {
+              xAxis.push(data[i].date)
+            }
+          }
+        }
+        let seriesData = []
+        for (let i = 0; i < data.length; i++) {
+          if (typeof data[i].value != 'undefined') {
+            seriesData.push(data[i].value)
+          }
+        }
+        series.push({
+          data: seriesData,
+          symbol: 'circle',
+          symbolSize: '6',
+          showSymbol: false,
+          type: 'line',
+          areaStyle: {
+            normal: {
+              color: this.color[index]
+            }
+          }
+        })
+      }
+      console.log(series)
+      this.options = {
         color: this.color,
         grid: {
           left: '0',

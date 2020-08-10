@@ -501,4 +501,52 @@ Util.getLastXWeeks = (total = 1, fmt = 'yyyy-MM-dd') => {
   return [Util.formateDate(new Date(monday), fmt), Util.formateDate(new Date(sunday), fmt)]
 }
 
+/**
+ * 获取日期区间的所有日期
+ */
+Util.getRangeByDate = (begin, end) => {
+  let arr = []
+  let getDate = str => {
+    let tempDate = new Date();
+    let list = str.split('-')
+    tempDate.setFullYear(list[0]);
+    tempDate.setMonth(list[1] - 1);
+    tempDate.setDate(list[2]);
+    return tempDate;
+  }
+  let beginDate = getDate(begin)
+  let endDate = getDate(end)
+  if (beginDate > endDate) {
+    let tempDate = beginDate;
+    beginDate = endDate;
+    endDate = tempDate;
+  }
+  beginDate.setDate(beginDate.getDate());
+  let dateArr = [];
+  let i = 0;
+  while (!(beginDate.getFullYear() == endDate.getFullYear()
+&& beginDate.getMonth() == endDate.getMonth() && beginDate.getDate() == endDate
+    .getDate()))
+  {
+
+    let dayStr =beginDate.getDate().toString();
+    if(dayStr.length ==1){
+      dayStr='0'+dayStr;
+    }
+    let monthStr = beginDate.getMonth() + 1+ ''
+    if(monthStr.length ==1){
+      monthStr='0'+monthStr;
+    }
+    dateArr[i] = beginDate.getFullYear() + '-' + (monthStr) + '-'
++ dayStr;
+
+    beginDate.setDate(beginDate.getDate() + 1);
+    i++;
+  }
+
+  arr=dateArr;
+  arr.push(end)
+  return arr;
+}
+
 export default Util
