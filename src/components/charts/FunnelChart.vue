@@ -1,14 +1,27 @@
 <template>
   <div class="chartGraph">
     <div class="funnelLegend funnelEntrance">
-      <div class="funnelLegend-detail">
+      <div class="funnelLegend-detail" v-show="entrance && entrance.length > 0">
         <div class="funnelLegend-detail_exit">
           <span class="fa fa-caret-right"></span>
           <p>Entrance</p>
-          <div class="exit_con">
-            <div><span>signin.html</span><span>687 (11.11%)</span></div>
-            <div><span>store.html</span><span>354 (11.11%)</span></div>
-            <div><span>basket.html</span><span>267 (11.11%)</span></div>
+          <div
+            class="exit_con"
+            v-for="item in entrance"
+            :key="'entrance_' + item.page_name"
+          >
+            <div>
+              <el-tooltip
+                :content="item.page_name"
+                effect="light"
+                :disabled="item.page_name.length < 17"
+              >
+                <span class="textOverflow" style="width: 100px;">{{
+                  item.page_name
+                }}</span>
+              </el-tooltip>
+              <span>{{ item.page_cnt }} ({{ item.rate }}%)</span>
+            </div>
           </div>
         </div>
         <div class="funnelLegend-detail_line"></div>
@@ -25,7 +38,10 @@
         v-for="(item, i) in datas"
         :key="'funnelChart_' + item.eventName"
       >
-        <div class="funnelLegend-detail_line" v-if="item.Exit"></div>
+        <div
+          class="funnelLegend-detail_line"
+          v-if="item.exit && item.exit.length > 0"
+        ></div>
         <!-- <div class="funnelLegend-detail_con">
           <p>{{ item.name }}</p>
 
@@ -44,16 +60,27 @@
             }}%)
           </p>
         </div>
-        <div class="funnelLegend-detail_exit" v-if="item.Exit">
+        <div
+          class="funnelLegend-detail_exit"
+          v-if="item.exit && item.exit.length > 0"
+        >
           <span class="fa fa-caret-right"></span>
           <p>{{ $t('funnelAnalysis.exit') }}</p>
           <div class="exit_con">
             <div
-              v-for="(exits, key, index) in item.Exit"
-              :key="'exit_' + index"
+              v-for="(exits, index) in item.exit"
+              :key="'exit_' + exits.page_name + index"
             >
-              <span>{{ key }}</span>
-              <span>{{ exits }} ( 11.11% )</span>
+              <el-tooltip
+                :content="exits.page_name"
+                effect="light"
+                :disabled="exits.page_name.length < 17"
+              >
+                <span class="textOverflow" style="width: 100px;">{{
+                  exits.page_name
+                }}</span>
+              </el-tooltip>
+              <span>{{ exits.page_cnt }} ( {{ exits.rate }}% )</span>
             </div>
           </div>
         </div>
@@ -112,18 +139,19 @@ export default {
   data() {
     return {
       options: null,
-      total: 0
+      total: 0,
+      entrance: []
     }
   },
   methods: {
-    initData() {
+    initData(datas) {
       let min = 0,
         max = 100,
         _min = 1,
         total = 0,
         seriesData = [],
         fixedValue = [20, 40, 60, 80, 100],
-        dataRev = this.datas.concat().reverse()
+        dataRev = datas.concat().reverse()
       for (let i = 0; i < dataRev.length; i++) {
         let data = dataRev[i]
         let value = parseFloat(data.totalEvents)
@@ -146,6 +174,9 @@ export default {
       }
       if (_min == 0) {
         min = 0
+      }
+      if (datas.length > 0 && datas[0].entrance) {
+        this.entrance = datas[0].entrance.concat()
       }
       this.total = total
       this.options = {

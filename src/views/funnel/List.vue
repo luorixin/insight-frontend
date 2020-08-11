@@ -273,12 +273,12 @@ export default {
       this.debounceSearch(val)
     },
     handleCreate() {
-      this.optTitle = this.$t('common.create') + ' ' + this.$t('funnels.title')
+      this.optTitle = this.$t('common.create') + ' ' + this.$t('funnels.create')
       this.selectId = null
       this.modal = true
     },
     handleEdit(index, row) {
-      this.optTitle = this.$t('common.edit') + ' ' + this.$t('funnels.title')
+      this.optTitle = this.$t('common.edit') + ' ' + this.$t('funnels.create')
       this.selectId = row.id
       this.modal = true
     },

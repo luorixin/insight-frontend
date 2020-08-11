@@ -41,7 +41,7 @@
                 :label="$t('event.name')"
                 width="120"
               ></el-table-column>
-              <el-table-column prop="urls" :label="$t('event.url')" width="180">
+              <el-table-column prop="urls" :label="$t('event.url')">
                 <template slot-scope="scope">
                   <el-link :href="scope.row.urls" target="_blank">{{
                     scope.row.urls
@@ -61,18 +61,18 @@
                   </el-tag>
                 </template>
               </el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 prop="isGoal"
                 :label="$t('event.includedGoal')"
                 width="180"
               >
                 <template slot-scope="scope">
-                  <choose-tab :choose="scope.row.isGoal"></choose-tab>
-                  <!-- <el-tag :type="scope.row.isGoal ? 'success' : 'danger'">
+                  <choose-tab :choose="scope.row.isGoal"></choose-tab> -->
+              <!-- <el-tag :type="scope.row.isGoal ? 'success' : 'danger'">
                 {{ scope.row.isGoal ? 'Yes' : 'No' }}
               </el-tag> -->
-                </template>
-              </el-table-column>
+              <!-- </template>
+              </el-table-column> -->
             </el-table>
             <div class="pagination">
               <el-pagination
@@ -114,9 +114,9 @@ import {
 } from '@/utils/constant.js'
 export default {
   name: 'chooseEvent',
-  components: {
-    ChooseTab
-  },
+  // components: {
+  //   ChooseTab
+  // },
   props: {
     title: {
       type: String,

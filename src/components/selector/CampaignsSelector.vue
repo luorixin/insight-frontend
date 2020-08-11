@@ -41,7 +41,7 @@ export default {
       default: false
     },
     defaultValue: {
-      type: Number,
+      type: [Number, String],
       default: null
     },
     needdot: {

@@ -69,11 +69,12 @@
             width="120"
           >
             <template slot-scope="scope">
-              <el-tag
+              <!-- <el-tag
                 :type="scope.row.tackingType === 1 ? 'success' : 'danger'"
               >
                 {{ scope.row.tackingType === 1 ? 'Universal' : 'Insight' }}
-              </el-tag>
+              </el-tag> -->
+              {{ scope.row.tackingType === 1 ? 'Universal' : 'Insight' }}
             </template>
           </el-table-column>
           <el-table-column
@@ -82,7 +83,8 @@
             width="180"
           >
             <template slot-scope="scope">
-              <choose-tab :choose="scope.row.isGoal"></choose-tab>
+              <!-- <choose-tab :choose="scope.row.isGoal"></choose-tab> -->
+              {{ scope.row.isGoal ? 'Yes' : 'No' }}
               <!-- <el-tag :type="scope.row.isGoal ? 'success' : 'danger'">
                 {{ scope.row.isGoal ? 'Yes' : 'No' }}
               </el-tag> -->
@@ -94,7 +96,8 @@
             width="180"
           >
             <template slot-scope="scope">
-              <choose-tab :choose="scope.row.isFunnel"></choose-tab>
+              <!-- <choose-tab :choose="scope.row.isFunnel"></choose-tab> -->
+              {{ scope.row.isFunnel ? 'Yes' : 'No' }}
               <!-- <el-tag :type="scope.row.isFunnel ? 'success' : 'danger'">
                 {{ scope.row.isFunnel ? 'Yes' : 'No' }}
               </el-tag> -->
@@ -234,8 +237,8 @@ import {
 export default {
   name: 'eventList',
   components: {
-    EventModal,
-    ChooseTab
+    EventModal
+    // ChooseTab
   },
   data() {
     return {
@@ -329,12 +332,12 @@ export default {
       this.debounceSearch(val)
     },
     handleCreate() {
-      this.optTitle = this.$t('common.create') + this.$t('event.title')
+      this.optTitle = this.$t('common.create') + ' ' + this.$t('event.create')
       this.selectId = null
       this.modal = true
     },
     handleEdit(index, row) {
-      this.optTitle = this.$t('common.edit') + this.$t('event.title')
+      this.optTitle = this.$t('common.edit') + ' ' + this.$t('event.create')
       this.selectId = row.id
       this.modal = true
     },

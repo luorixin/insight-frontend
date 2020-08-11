@@ -1,5 +1,6 @@
 import { convertType } from '../utils/constant.js'
 import moment from 'moment'
+import i18n from '../locale'
 
 /**
  * 时间戳转日期字符串
@@ -78,4 +79,25 @@ export function toMoneyFilter(s, n) {
       .reverse()
       .join('') + r
   )
+}
+
+/**
+ * 格式化时间，秒数转换成小时分钟天
+ */
+export function formatSeconds(s) {
+  if (typeof s === 'undefined' || s === null) s = 0
+  let oneDay = 60 * 60 * 24
+  let oneHour = 60 * 60
+  let oneMinute = 60
+  let result = parseInt(s)
+  if (result > oneDay) {
+    result = (result / oneDay).toFixed(2) + ' ' + i18n.t('common.days')
+  } else if (result > oneHour) {
+    result = (result / oneHour).toFixed(2) + ' ' + i18n.t('common.hours')
+  } else if (result > oneMinute) {
+    result = (result / oneMinute).toFixed(2) + ' ' + i18n.t('common.minutes')
+  } else {
+    result = result + ' ' + i18n.t('common.seconds')
+  }
+  return result
 }

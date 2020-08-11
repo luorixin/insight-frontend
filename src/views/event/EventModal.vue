@@ -17,6 +17,7 @@
             <el-form-item :label="$t('event.name')" prop="eventName">
               <el-input
                 v-model="ruleForm.eventName"
+                :maxlength="100"
                 :placeholder="$t('event.namePlaceholder')"
               ></el-input>
             </el-form-item>

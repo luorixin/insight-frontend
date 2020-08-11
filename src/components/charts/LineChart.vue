@@ -87,7 +87,6 @@ export default {
           }
         })
       }
-      console.log(series)
       this.options = {
         color: this.color,
         grid: {

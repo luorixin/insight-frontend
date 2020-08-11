@@ -217,39 +217,35 @@ export const ENUM_DATE = [
 export const CHANNEL_TYPE = [
   {
     value: 'conversions',
-    label: 'conversions'
+    label: 'Conversions'
   },
   {
     value: 'averageTimeSpan',
-    label: 'averageTimeSpan'
+    label: 'AverageTimeSpan'
   },
   {
     value: 'uniqueVistors',
-    label: 'uniqueVistors'
+    label: 'UniqueVistors'
   },
   {
     value: 'newVisitors',
-    label: 'newVisitors'
-  },
-  {
-    value: 'channelName',
-    label: 'channelName'
+    label: 'NewVisitors'
   },
   {
     value: 'repeatVistors',
-    label: 'repeatVistors'
+    label: 'RepeatVistors'
   },
   {
     value: 'frequencyVisit',
-    label: 'frequencyVisit'
+    label: 'FrequencyVisit'
   },
   {
     value: 'averagePv',
-    label: 'averagePv'
+    label: 'AveragePv'
   },
   {
     value: 'uniqueVisits',
-    label: 'uniqueVisits'
+    label: 'UniqueVisits'
   }
 ]
 
@@ -265,6 +261,41 @@ export const DEVICE_TYPE = [
   {
     value: 'Tablet',
     label: 'Tablet'
+  }
+]
+
+export const CHANNEL_NAME = [
+  {
+    value: 'direct',
+    label: 'Direct'
+  },
+  {
+    value: 'organic',
+    label: 'Organic'
+  },
+  {
+    value: 'paidsearch',
+    label: 'Paid Search'
+  },
+  {
+    value: 'display',
+    label: 'Display'
+  },
+  {
+    value: 'video',
+    label: 'Video'
+  },
+  {
+    value: 'social',
+    label: 'Social'
+  },
+  {
+    value: 'referral',
+    label: 'Referral'
+  },
+  {
+    value: 'others',
+    label: 'Others'
   }
 ]
 

@@ -67,7 +67,14 @@ export default {
       channelApi
         .list()
         .then(data => {
-          this.dataList = data.concat()
+          this.dataList = data.map(item => {
+            return {
+              id: item.id,
+              name: item.name
+                .toLowerCase()
+                .replace(/( |^)[a-z]/g, L => L.toUpperCase())
+            }
+          })
           this.totalCount = this.dataList.length
           if (this.dataList.length === 0) {
             this.result = this.$t('common.noResult')

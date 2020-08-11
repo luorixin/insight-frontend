@@ -17,6 +17,7 @@
         <el-table-column
           prop="step"
           :label="$t('funnels.eventTable.step')"
+          class-name="fa fa-bars"
           width="80"
         >
           <template slot-scope="scope">
@@ -36,7 +37,6 @@
         <el-table-column
           prop="eventName"
           :label="$t('event.name')"
-          width="150"
         ></el-table-column>
         <el-table-column prop="url" :label="$t('event.url')" width="180">
           <template slot-scope="scope">
@@ -56,13 +56,13 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="updatedAt"
           :label="$t('event.lastEvent')"
           :formatter="dateFormater"
           width="150"
         >
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
     <el-dialog
@@ -183,8 +183,21 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .main-table {
   margin-top: 20px;
+  ::v-deep .fa-bars {
+    display: table-cell !important;
+    &::before {
+      position: absolute;
+      cursor: pointer;
+      top: calc(50% - 5px);
+      left: 5px;
+    }
+    .cell {
+      width: calc(100% - 10px);
+      margin: 0 10px;
+    }
+  }
 }
 </style>
