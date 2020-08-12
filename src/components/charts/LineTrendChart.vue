@@ -36,59 +36,84 @@ export default {
   components: {
     'v-chart': ECharts
   },
+  watch: {
+    datas: {
+      handler(newName, oldName) {
+        this.initData(newName.concat())
+      },
+      immediate: true
+    }
+  },
+  mounted() {
+    if (this.datas.length > 0) {
+      this.initData(this.datas)
+    }
+  },
   data() {
-    let xAxis = [],
-      series = [],
-      legends = []
-    for (let index = 0; index < this.datas.length; index++) {
-      let data = this.datas[index]
-      if (index === 0) {
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].date) {
-            xAxis.push(data[i].date)
-          }
-        }
-      }
-      let seriesData = []
-      for (let i = 0; i < data.length; i++) {
-        if (typeof data[i].value != 'undefined') {
-          seriesData.push(data[i].value)
-        }
-      }
-      legends.push({
-        icon: 'circle',
-        name: 'series' + index,
-        value: 'series' + index
-      })
-      series.push({
-        data: seriesData,
-        name: 'series' + index,
-        symbol: 'circle',
-        symbolSize: '6',
-        type: 'line',
-        showAllSymbol: true,
-        hoverAnimation: false,
-        cursor: 'default',
-        areaStyle: {
-          normal: {
-            opacity: 0
-          }
-        }
-      })
-    }
-    let axisinterval = xAxis.length - 2
-    if (xAxis.length < 6) {
-      axisinterval = 0
-    } else if (xAxis.length < 11) {
-      axisinterval = 1
-    } else if (xAxis.length < 21) {
-      axisinterval = 2
-    } else if (xAxis.length < 31) {
-      axisinterval = 3
-    }
-    console.log(legends)
     return {
-      options: {
+      options: null
+    }
+  },
+  methods: {
+    initData(datas) {
+      let xAxis = [],
+        series = [],
+        legends = []
+      for (let index = 0; index < datas.length; index++) {
+        let data = datas[index]['data']
+        let seriesName = datas[index]['name']
+        if (index === 0) {
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].date) {
+              xAxis.push(data[i].date)
+            }
+          }
+        }
+        let seriesData = []
+        for (let j = 0; j < data.length; j++) {
+          if (typeof data[j].value != 'undefined') {
+            seriesData.push(data[j].value)
+          }
+        }
+        legends.push({
+          icon: 'circle',
+          name: seriesName,
+          value: seriesName
+        })
+        series.push({
+          data: seriesData,
+          name: seriesName,
+          symbol: 'circle',
+          symbolSize: '6',
+          type: 'line',
+          showAllSymbol: true,
+          hoverAnimation: false,
+          cursor: 'default',
+          areaStyle: {
+            normal: {
+              opacity: 0
+            }
+          }
+        })
+      }
+      let axisinterval = xAxis.length - 2
+      let defaultNoSelected = {}
+      legends.forEach((item, index) => {
+        defaultNoSelected[item.name] = true
+        if (index > 4) {
+          defaultNoSelected[item.name] = false
+        }
+      })
+      if (xAxis.length < 9) {
+        axisinterval = 0
+      } else if (xAxis.length < 11) {
+        axisinterval = 1
+      } else if (xAxis.length < 21) {
+        axisinterval = 2
+      } else if (xAxis.length < 31) {
+        axisinterval = 3
+      }
+      this.options = {
         title: {
           show: false
         },
@@ -140,9 +165,7 @@ export default {
           itemGap: 20,
           data: legends,
           bottom: 0,
-          selected: {
-            series1: false
-          }
+          selected: defaultNoSelected
         },
         grid: {
           left: '0',

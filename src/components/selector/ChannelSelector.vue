@@ -68,9 +68,10 @@ export default {
         .list()
         .then(data => {
           this.dataList = data.map(item => {
+            let name = item.name ? item.name : ''
             return {
               id: item.id,
-              name: item.name
+              name: name
                 .toLowerCase()
                 .replace(/( |^)[a-z]/g, L => L.toUpperCase())
             }

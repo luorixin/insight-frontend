@@ -137,6 +137,7 @@
                     ></i>
                     <span>{{
                       performanceData.growthRate.conversionsRisingRate
+                        | toThousandFilter
                     }}</span>
                   </div>
                   <label>
@@ -178,6 +179,7 @@
                     ></i>
                     <span>{{
                       performanceData.growthRate.uniqueCustomersRisingRate
+                        | toThousandFilter
                     }}</span>
                   </div>
                   <label>
@@ -343,6 +345,7 @@
                         ></i>
                         <span>{{
                           trafficData.growthRate.uniqueVisitsRate
+                            | toThousandFilter
                         }}</span>
                       </div>
                       <label>
@@ -390,6 +393,7 @@
                         ></i>
                         <span>{{
                           trafficData.growthRate.uniqueVisitorsRate
+                            | toThousandFilter
                         }}</span>
                       </div>
                       <label>
@@ -479,6 +483,7 @@
                         ></i>
                         <span>{{
                           trafficData.growthRate.averagePageViewsRate
+                            | toMoneyFilter
                         }}</span>
                       </div>
                       <label>
@@ -519,7 +524,10 @@
                             getRateClass(trafficData.growthRate.newVistorsRate)
                           "
                         ></i>
-                        <span>{{ trafficData.growthRate.newVistorsRate }}</span>
+                        <span>{{
+                          trafficData.growthRate.newVistorsRate
+                            | toThousandFilter
+                        }}</span>
                       </div>
                       <label>
                         {{ $t('common.vs') }}
@@ -578,7 +586,7 @@
                 style="height: 290px;"
               >
                 <div class="plan-reports-result-inner">
-                  <!-- frequency visits -->
+                  <!-- bounce rate -->
                   <div class="plan-reports-result-inner_title">
                     {{ $t('property.bounceRate') }}
                     <el-tooltip class="item" effect="light" placement="top">
@@ -601,7 +609,11 @@
                             getRateClass(trafficData.growthRate.bounceRate)
                           "
                         ></i>
-                        <span>{{ trafficData.growthRate.bounceRate }}%</span>
+                        <span
+                          >{{
+                            trafficData.growthRate.bounceRate | toMoneyFilter
+                          }}%</span
+                        >
                       </div>
                       <label>
                         {{ $t('common.vs') }}
@@ -611,7 +623,7 @@
                   </div>
                 </div>
                 <div class="plan-reports-result-inner">
-                  <!-- avg page views -->
+                  <!-- avg time span -->
                   <div class="plan-reports-result-inner_title">
                     {{ $t('property.avgTimeSpan') }}
                     <el-tooltip class="item" effect="light" placement="top">

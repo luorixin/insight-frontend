@@ -10,7 +10,7 @@
         </label>
         <label class="title-label_sub"
           >{{ $t('header.advertiser') }}:
-          {{ currentAdvertiser.clientName }}</label
+          {{ currentAdvertiser ? currentAdvertiser.clientName : '' }}</label
         >
         <i class="fa fa-caret-down"></i>
       </div>
@@ -39,7 +39,9 @@
                   <a href="javascript:;" @click="changeRight(item)">
                     <el-tooltip
                       placement="top"
-                      :disabled="item.clientName.length < 30"
+                      :disabled="
+                        !item.clientName || item.clientName.length < 30
+                      "
                       :content="item.clientName"
                       effect="light"
                     >
@@ -88,7 +90,7 @@
                       <a href="javascript:;" @click="changeRight(adv)">
                         <el-tooltip
                           placement="top"
-                          :disabled="adv.clientName.length < 30"
+                          :disabled="!adv || adv.clientName.length < 30"
                           :content="adv.clientName"
                           effect="light"
                         >
@@ -152,7 +154,10 @@ export default {
         .then(data => {
           const userHeader = data.userHeader
           this.agents = userHeader.totalAgents.concat()
-          this.recentAdvertisers = userHeader.recentClients
+          let recents = userHeader.recentClients ? userHeader.recentClients : []
+          this.recentAdvertisers = recents.filter(item => {
+            return item !== null
+          })
           this.currentAdvertiser = userHeader.currentClient
           this.currentAgent = userHeader.currentAgent
           this.agents.forEach(item => {

@@ -80,7 +80,7 @@
                   exits.page_name
                 }}</span>
               </el-tooltip>
-              <span>{{ exits.page_cnt }} ( {{ exits.rate }}% )</span>
+              <span>{{ exits.page_cnt }} ({{ exits.rate }}%)</span>
             </div>
           </div>
         </div>
@@ -318,7 +318,7 @@ export default {
       }
     }
     .funnelLegend-detail_exit {
-      width: 160px;
+      width: 170px;
       // align-self: flex-end;
       border: 1px solid #dfdfdf;
       padding: 10px;

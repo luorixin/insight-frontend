@@ -549,4 +549,29 @@ Util.getRangeByDate = (begin, end) => {
   return arr;
 }
 
+/**
+ * 按指定数组进行排序
+ * @param {对象数组} list 
+ * @param {排序数组} sortArr 
+ * @param {排序字段} key 
+ */
+Util.sortListByAssign = (list, sortArr = [], key) => {
+  if (!list || list.length === 0) return []
+  if (sortArr.length === 0) return list
+  let result = []
+  sortArr.forEach(type => {
+    let find = list.find(item => {
+      return item[key] === type
+    })
+    if (find) {
+      result.push(find)
+    }else {
+      result.push({
+        key: type
+      })
+    }
+  })
+  return result
+}
+
 export default Util

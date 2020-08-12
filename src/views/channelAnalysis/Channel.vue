@@ -106,7 +106,11 @@
                 </div>
                 <div class="report-result-inner__graph" style="height: 375px;">
                   <div id="traffic_breakdown_map">
+                    <noresult-report
+                      v-show="trafficBreakdown.isEmpty"
+                    ></noresult-report>
                     <bar-multi-axis-chart
+                      v-show="!trafficBreakdown.isEmpty"
                       :datas="trafficBreakdown"
                       :height="375"
                       :color="trafficBreakdownColor"
@@ -186,7 +190,6 @@
                   </channel-selector> -->
                   <el-select
                     v-model="trafficTrendForm.channelId"
-                    v-show="trafficTrendForm.type === 'channel'"
                     @change="getTrafficTrendChannelId"
                     :placeholder="$t('common.selOption')"
                   >
@@ -198,7 +201,7 @@
                     ></el-option>
                   </el-select>
 
-                  <el-select
+                  <!-- <el-select
                     v-model="trafficTrendForm.device"
                     v-show="trafficTrendForm.type === 'device'"
                     @change="getTraffciTrendDevice"
@@ -210,11 +213,17 @@
                       :value="item.value"
                       :label="item.label"
                     ></el-option>
-                  </el-select>
+                  </el-select> -->
                 </div>
                 <div class="report-result-inner__graph" style="height: 335px;">
                   <div id="traffic_trend_map">
-                    <line-trend-chart :datas="trafficTrend"></line-trend-chart>
+                    <noresult-report
+                      v-show="!trafficTrend || trafficTrend.length === 0"
+                    ></noresult-report>
+                    <line-trend-chart
+                      v-show="trafficTrend && trafficTrend.length > 0"
+                      :datas="trafficTrend"
+                    ></line-trend-chart>
                   </div>
                 </div>
               </div>
@@ -485,7 +494,7 @@ export default {
   },
   created() {
     this.makeDebounce()
-    this.initData()
+    // this.initData()
   },
   methods: {
     getDataList() {
@@ -503,7 +512,7 @@ export default {
       analysisChannelApi
         .trafficBreakdown(form)
         .then(trafficBreakdown => {
-          this.trafficBreakdown = {}
+          this.trafficBreakdown = { isEmpty: true }
           let leftAxis = trafficBreakdown[this.trafficBreakdownForm.type]
           let rightAxis = trafficBreakdown.goal
 
@@ -541,6 +550,7 @@ export default {
             }
             return Object.assign({ value: value }, channel)
           })
+          this.justifyBreakdown()
         })
         .finally(() => {
           this.trafficBreakdownLoading = false
@@ -569,11 +579,54 @@ export default {
       analysisChannelApi
         .trafficTrend(form)
         .then(trafficTrend => {
-          this.trafficTrend = trafficTrend.concat()
+          // 获取日期区间
+          this.trafficTrend = []
+          let dateRange = Util.getRangeByDate(form.beginDate, form.endDate)
+          for (let trend in trafficTrend) {
+            this.trafficTrend.push({
+              name: trend,
+              data: this.getLineChartDate(
+                dateRange,
+                trafficTrend[trend],
+                form.channelId
+              )
+            })
+          }
+          if (form.type === 'device') {
+            let sortArr = ['Computer', 'Mobile', 'Tablet', 'Unknown']
+            this.trafficTrend = Util.sortListByAssign(
+              this.trafficTrend,
+              sortArr,
+              'name'
+            )
+          }
         })
         .finally(() => {
           this.trafficTrendLoading = false
         })
+    },
+    getLineChartDate(dateRange, list, type) {
+      return dateRange.map(item => {
+        let value = 0
+        let find = this._findListValue(list, 'beginDate', item, '20')
+        if (find) {
+          value = find[type] ? find[type] : 0
+        } else {
+          find = {}
+        }
+        return Object.assign(
+          {
+            date: item,
+            value: value
+          },
+          find
+        )
+      })
+    },
+    _findListValue(list, key, value, special = '') {
+      if (!list || list.length === 0) return null
+      let find = list.find(item => special + item[key] === value)
+      return find
     },
     getConversionPath() {
       this.conversionPathLoading = false
@@ -664,7 +717,15 @@ export default {
         this.trafficBreakdown.leftAxis.forEach(item => {
           item.value = item[this.trafficBreakdownForm.channel]
         })
+        this.justifyBreakdown()
       }
+    },
+    justifyBreakdown() {
+      let findLeft = this.trafficBreakdown.leftAxis.find(item => item.value > 0)
+      let findRight = this.trafficBreakdown.rightAxis.find(
+        item => item.value > 0
+      )
+      this.trafficBreakdown.isEmpty = !(findLeft || findRight)
     },
     getTraffciBreakdownDevice(result) {
       this.trafficBreakdownForm.device = result
@@ -681,7 +742,15 @@ export default {
     },
     getTrafficTrendChannelId(result) {
       this.trafficTrendForm.channelId = result
-      this.getTrafficTrend()
+      this.changeTrafficChannel()
+    },
+    changeTrafficChannel() {
+      for (let trend in this.trafficTrend) {
+        this.trafficTrend[trend].data.forEach(item => {
+          item.value = item[this.trafficTrendForm.channelId] || 0
+        })
+      }
+      this.trafficTrend = this.trafficTrend.concat()
     },
     changeTrafficTrendType(result) {
       this.trafficTrendForm.type = result
