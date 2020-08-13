@@ -80,7 +80,7 @@ export default {
       if (!this.datas.columns || this.datas.columns.length === 0) {
         return
       }
-      console.log(datas.leftAxis)
+      // console.log(datas.leftAxis)
       let xData = datas.columns //['A', 'B', 'C', 'D', 'E', 'F', 'G']
       let leftAxis = datas.leftAxis //[3, 20, 62, 34, 55, 65, 33]
       let rightAxis = datas.rightAxis //[11, 38, 23, 39, 66, 66, 79]

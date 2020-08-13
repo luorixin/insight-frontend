@@ -79,6 +79,7 @@ export default {
           symbol: 'circle',
           symbolSize: '6',
           showSymbol: false,
+          smooth: true,
           type: 'line',
           areaStyle: {
             normal: {

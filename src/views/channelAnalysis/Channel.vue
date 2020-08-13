@@ -70,7 +70,6 @@
 
                   <el-select
                     v-model="trafficBreakdownForm.channel"
-                    v-show="trafficBreakdownForm.type === 'channel'"
                     @change="getBreakDownChannel"
                     :placeholder="$t('common.selOption')"
                   >
@@ -82,7 +81,7 @@
                     ></el-option>
                   </el-select>
 
-                  <el-select
+                  <!-- <el-select
                     v-model="trafficBreakdownForm.device"
                     v-show="trafficBreakdownForm.type === 'device'"
                     @change="getTraffciBreakdownDevice"
@@ -94,7 +93,7 @@
                       :value="item.value"
                       :label="item.label"
                     ></el-option>
-                  </el-select>
+                  </el-select> -->
                   <span style="margin-right: 15px;line-height: 30px;">{{
                     $t('common.vs')
                   }}</span>
@@ -232,7 +231,7 @@
               <div
                 class="plan-reports-result-inner"
                 v-loading="assistLoading"
-                style="flex:2;height: 650px;"
+                style="flex:2;height: 650px;width:0;"
               >
                 <!-- Assist analysis -->
                 <div class="plan-reports-result-inner_title">
@@ -251,7 +250,75 @@
                   >
                   </campaigns-selector>
                 </div>
-                <noresult-report></noresult-report>
+                <noresult-report
+                  v-show="assist.columns.length === 0"
+                ></noresult-report>
+                <div class="main-table" v-show="assist.columns.length > 0">
+                  <el-table
+                    :data="assist.data"
+                    border
+                    class="table"
+                    ref="table"
+                    :max-height="500"
+                    v-loading="assistLoading"
+                    header-row-class-name="main-table"
+                  >
+                    <el-table-column
+                      :label="$t('channel.topAssist')"
+                      class-name="greyColumn"
+                      :width="assist.columns.length > 3 ? '150px' : ''"
+                      :fixed="assist.columns.length > 3"
+                      prop="name"
+                    >
+                      <template slot-scope="scope">
+                        <span style="font-weight:bold;">
+                          {{
+                            scope.row.name === 'Total'
+                              ? $t('channel.total')
+                              : scope.row.name
+                          }}
+                        </span>
+                      </template>
+                    </el-table-column>
+                    <template v-for="col in assist.columns">
+                      <el-table-column
+                        :label="col.label"
+                        :width="assist.columns.length > 3 ? '120px' : ''"
+                        :prop="col.prop"
+                        :key="col.label"
+                      >
+                        <template slot-scope="scope">
+                          <span
+                            :class="{
+                              'max-val': isMaxVal(col.prop, scope.row.name)
+                            }"
+                          >
+                            {{ scope.row[col.prop] }}
+                          </span>
+                        </template>
+                      </el-table-column>
+                    </template>
+                    <el-table-column
+                      :label="$t('channel.totalAssist')"
+                      width="120px"
+                      prop="total"
+                    >
+                      <template slot-scope="scope">
+                        <span
+                          style="font-weight:bold;"
+                          :class="{
+                            'max-val': isMaxVal('total', scope.row.name)
+                          }"
+                        >
+                          {{ scope.row['total'] }}
+                        </span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                  <p style="color:#ef4136;margin-top: 20px;">
+                    {{ $t('channel.assistNotice') }}
+                  </p>
+                </div>
               </div>
               <div
                 class="plan-reports-result-inner"
@@ -475,7 +542,12 @@ export default {
       trafficBreakdownColor: ['#8D7B7B', '#4484CF'],
       trafficSource: [],
       conversionPaths: [],
-      assist: null,
+      assist: {
+        columns: [],
+        assists: [],
+        data: [],
+        max: {}
+      },
       regionsData: [],
       regionsDataColor: ['#EF4136']
     }
@@ -516,37 +588,56 @@ export default {
           let leftAxis = trafficBreakdown[this.trafficBreakdownForm.type]
           let rightAxis = trafficBreakdown.goal
 
-          this.trafficBreakdown.columns = this.channelNames.map(
-            item => item.label
-          )
+          let yAxis =
+            this.trafficBreakdownForm.type === 'channel'
+              ? this.channelNames
+              : this.deviceTypes
+
+          this.trafficBreakdown.columns = yAxis.map(item => item.label)
           this.trafficBreakdown.legend = [
             this.trafficBreakdownForm.type,
             this.trafficBreakdownForm.goalName
           ]
-          this.trafficBreakdown.leftAxis = this.channelNames.map(item => {
+          this.trafficBreakdown.leftAxis = yAxis.map(item => {
             let channel = leftAxis.find(channel => {
-              return channel.channelName === item.value
+              let y =
+                this.trafficBreakdownForm.type === 'channel'
+                  ? channel.channelName
+                  : channel.device
+              return y === item.label
             })
             let value = 0
             if (channel) {
               value = channel[this.trafficBreakdownForm.channel]
               channel.channelLabel = item.label
             } else {
-              channel = { channelName: item.value, channelLabel: item.label }
+              channel = {
+                channelName: item.value,
+                device: item.value,
+                channelLabel: item.label
+              }
             }
             return Object.assign({ value: value }, channel)
           })
 
-          this.trafficBreakdown.rightAxis = this.channelNames.map(item => {
+          this.trafficBreakdown.rightAxis = yAxis.map(item => {
             let channel = rightAxis.find(channel => {
-              return channel.channelName === item.value
+              let y =
+                this.trafficBreakdownForm.type === 'channel'
+                  ? channel.channelName
+                  : channel.device
+              return y === item.label
             })
             let value = 0
             if (channel) {
-              value = channel['conversions']
+              value = channel['conversions'] // 固定的
               channel.channelLabel = item.label
             } else {
-              channel = { channelName: item.value, channelLabel: item.label }
+              channel = {
+                channelName: item.label,
+                device: item.label,
+                channelLabel: item.label
+              }
             }
             return Object.assign({ value: value }, channel)
           })
@@ -662,7 +753,124 @@ export default {
       analysisChannelApi
         .assistAnalysis(form)
         .then(assist => {
-          this.assist = Object.assign({}, assist)
+          this.assist = {
+            columns: [],
+            assists: [],
+            data: [],
+            max: {}
+          }
+          if (!assist.detail || assist.detail.length === 0) return
+          // 获取column, assist
+          let columns = []
+          let assists = []
+          let max = {}
+          // example
+          // assist.detail = [
+          //   {
+          //     originid: '1_3',
+          //     rate: 100.0,
+          //     assistCount: 1,
+          //     origin: 'Google(Paid Search)',
+          //     assist: 'Baidu',
+          //     assistid: '1_3'
+          //   },
+          //   {
+          //     originid: '3_5',
+          //     rate: 80.0,
+          //     assistCount: 1,
+          //     origin: 'Google(Paid)',
+          //     assist: 'Bing',
+          //     assistid: '3_5'
+          //   },
+          //   {
+          //     originid: '2_3',
+          //     rate: 21.0,
+          //     assistCount: 1,
+          //     origin: 'Baidu(Paid Search)',
+          //     assist: 'Google(Paid Search)',
+          //     assistid: '1_3'
+          //   },
+          //   {
+          //     originid: '4_5',
+          //     rate: 33.0,
+          //     assistCount: 1,
+          //     origin: 'Baidu(Paid)',
+          //     assist: 'bing(Paid Search)',
+          //     assistid: '4_3'
+          //   }
+          // ]
+          assist.detail.forEach(item => {
+            columns.push({
+              label: item.origin,
+              prop: item.originid
+            })
+            assists.push({
+              label: item.assist,
+              rate: item.rate,
+              assistCount: item.assistCount
+            })
+            max[item.originid] = { value: 0, name: item.assist }
+          })
+          // 去重排序
+          this.assist.columns = Util.uniqueAndSortArr(columns, 'label')
+          this.assist.assists = Util.uniqueAndSortArr(assists, 'label')
+
+          // 获取table数据
+          this.assist.data = this.assist.assists.map(item => {
+            let result = { name: item.label }
+            this.assist.columns.forEach(column => {
+              let find = assist.detail.find(detail => {
+                return (
+                  detail.origin === column.label &&
+                  detail.assist === result.name
+                )
+              })
+              if (find) {
+                result[column.prop] = Util.formatNum(find.rate) + '%'
+                if (max[column.prop]['value'] < find.rate) {
+                  max[column.prop] = { value: find.rate, name: result.name }
+                }
+              } else {
+                result[column.prop] = '0.00%'
+              }
+            })
+            return result
+          })
+
+          // 补充total列
+          // total最大值
+          max['total'] = {
+            value: 0,
+            name: this.assist.data[0].name
+          }
+          let columnTotal = 0
+          this.assist.data.forEach(item => {
+            item.total = '0.00%'
+            for (let i in assist.total) {
+              if (i === item.name) {
+                item.total = Util.formatNum(assist.total[i]) + '%'
+                columnTotal += assist.total[i]
+                if (max['total']['value'] < assist.total[i]) {
+                  max['total'] = { value: assist.total[i], name: item.name }
+                }
+              }
+            }
+          })
+          // 增加total行
+          let totalData = { name: 'Total' }
+          this.assist.columns.forEach(item => {
+            let total = this.assist.data.reduce(
+              (total, data) => total + parseFloat(data[item.prop]),
+              0
+            )
+            totalData[item.prop] = Util.formatNum(total) + '%'
+          })
+          totalData.total = Util.formatNum(columnTotal) + '%'
+          this.assist.data.push(totalData)
+
+          // 获取列的最大值
+          this.assist.max = max
+          console.log(this.assist.max)
         })
         .finally(() => {
           this.assistLoading = false
@@ -685,6 +893,13 @@ export default {
         .finally(() => {
           this.regionsLoading = false
         })
+    },
+    isMaxVal(col, name) {
+      return this.assist.max &&
+        this.assist.max[col] &&
+        this.assist.max[col]['name'] === name
+        ? true
+        : false
     },
     initData() {
       let makeData = size => {
@@ -813,4 +1028,45 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.main-table {
+  margin-top: 20px;
+  ::v-deep .cell {
+    word-break: break-word;
+  }
+  ::v-deep .el-table__row:last-child {
+    .cell span {
+      font-weight: bold !important;
+    }
+    .greyColumn {
+      background: #fff !important;
+    }
+  }
+  ::v-deep .el-table__row {
+    & > td:last-child {
+      .cell span {
+        font-weight: bold !important;
+      }
+    }
+  }
+  ::v-deep .el-table--enable-row-hover {
+    .el-table__body {
+      tr {
+        &:hover {
+          & > td {
+            &.greyColumn {
+              background: #dfdfdf;
+            }
+          }
+        }
+      }
+    }
+  }
+  ::v-deep .el-table__body tr.hover-row > td.greyColumn {
+    background: #dfdfdf;
+  }
+  .max-val {
+    color: #ef4136;
+  }
+}
+</style>

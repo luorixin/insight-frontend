@@ -298,7 +298,10 @@ export default {
     conversionPathsTip: 'Top Conversion Paths',
     goal: 'Goal',
     conversion: 'Conversion',
-    campaign: 'Campaign'
+    campaign: 'Campaign',
+    topAssist: 'Top Assisting Channel(s)',
+    totalAssist: 'Total Assisted',
+    total: '总计'
   },
   funnelAnalysis: {
     title: 'Funnel Analysis',

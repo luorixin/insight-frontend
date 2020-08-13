@@ -261,6 +261,10 @@ export const DEVICE_TYPE = [
   {
     value: 'Tablet',
     label: 'Tablet'
+  },
+  {
+    value: 'Unknown',
+    label: 'Unknown'
   }
 ]
 

@@ -82,7 +82,7 @@ Util.showMsg = (msg, $confirm, type = 'alert', icon = 'cubeic-alert') => {
 /**
  * json排序
  */
-Util.sortJson = (order, sortBy, fun) => {
+Util.sortJson = (order, sortBy, fun='String') => {
   let ordAlpah = order == 'asc' ? '>' : '<'
   let sortFun = new Function(
     'a',
@@ -571,6 +571,29 @@ Util.sortListByAssign = (list, sortArr = [], key) => {
       })
     }
   })
+  return result
+}
+
+/**
+ * 对数组进行去重排序
+ * @param {对象数组} arr 
+ * @param {去重字段} key 
+ */
+Util.uniqueAndSortArr = (arr, key, sort='asc') => {
+  if (!arr || arr.length === 0) return []
+  if (!key) return arr
+  let result = []
+
+  arr.forEach(item => {
+    let find = result.find(res => {
+      return res[key] === item[key]
+    })
+    if (!find) result.push(item)
+  })
+
+  result = result.sort(
+    Util.sortJson(sort, key)
+  )
   return result
 }
 

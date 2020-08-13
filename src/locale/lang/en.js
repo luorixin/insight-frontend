@@ -22,7 +22,7 @@ export default {
     remove: 'Remove',
     total: 'Total',
     days: 'day(s)',
-    hours: 'hour(s)',
+    hours: 'hr(s)',
     minutes: 'min(s)',
     seconds: 'sec(s)',
     exclude: 'Exclude',
@@ -303,7 +303,10 @@ export default {
     conversionPathsTip: 'Top Conversion Paths',
     goal: 'Goal',
     conversion: 'Conversion',
-    campaign: 'Campaign'
+    campaign: 'Campaign',
+    topAssist: 'Top Assisting Channel(s)',
+    totalAssist: 'Total Assisted',
+    total: 'Total'
   },
   funnelAnalysis: {
     title: 'Funnel Analysis',

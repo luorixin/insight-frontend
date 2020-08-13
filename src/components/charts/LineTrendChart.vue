@@ -86,6 +86,7 @@ export default {
           symbol: 'circle',
           symbolSize: '6',
           type: 'line',
+          smooth: false,
           showAllSymbol: true,
           hoverAnimation: false,
           cursor: 'default',
