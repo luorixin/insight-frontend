@@ -431,7 +431,7 @@
                   </div>
                   <div class="report-flex-middle mr20">
                     <label class="report-flex-middle__detail">{{
-                      trafficData.current.frequencyVisit
+                      trafficData.current.frequencyVisit | toMoneyFilter
                     }}</label>
                     <div class="report-flex-middle__line"></div>
                     <div class="report-flex-middle__detail report-flex-column">
@@ -446,11 +446,14 @@
                         ></i>
                         <span>{{
                           trafficData.growthRate.frequencyVisitRate
+                            | toMoneyFilter
                         }}</span>
                       </div>
                       <label>
                         {{ $t('common.vs') }}
-                        {{ trafficData.previous.frequencyVisit }}
+                        {{
+                          trafficData.previous.frequencyVisit | toMoneyFilter
+                        }}
                       </label>
                     </div>
                   </div>
@@ -468,7 +471,7 @@
                   </div>
                   <div class="report-flex-middle mr20">
                     <label class="report-flex-middle__detail">{{
-                      trafficData.current.averagePageViews
+                      trafficData.current.averagePageViews | toMoneyFilter
                     }}</label>
                     <div class="report-flex-middle__line"></div>
                     <div class="report-flex-middle__detail report-flex-column">
@@ -488,7 +491,9 @@
                       </div>
                       <label>
                         {{ $t('common.vs') }}
-                        {{ trafficData.previous.averagePageViews }}
+                        {{
+                          trafficData.previous.averagePageViews | toMoneyFilter
+                        }}
                       </label>
                     </div>
                   </div>
@@ -598,7 +603,9 @@
                   </div>
                   <div class="report-flex-middle mr20">
                     <label class="report-flex-middle__detail"
-                      >{{ trafficData.current.bounceRate }}%</label
+                      >{{
+                        trafficData.current.bounceRate | toMoneyFilter
+                      }}%</label
                     >
                     <div class="report-flex-middle__line"></div>
                     <div class="report-flex-middle__detail report-flex-column">
@@ -617,7 +624,7 @@
                       </div>
                       <label>
                         {{ $t('common.vs') }}
-                        {{ trafficData.previous.bounceRate }}%
+                        {{ trafficData.previous.bounceRate | toMoneyFilter }}%
                       </label>
                     </div>
                   </div>

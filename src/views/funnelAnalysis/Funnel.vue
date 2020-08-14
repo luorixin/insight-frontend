@@ -327,7 +327,30 @@ export default {
       analysisFunnelApi
         .detail(form)
         .then(data => {
-          this.funnelData = data.concat() //Object.assign({}, funnelData)
+          this.funnelData = []
+          if (data && data.length > 0) {
+            let _makeOthers = (list, otherName = 'Other') => {
+              let max = 5
+              let result = list || []
+              if (list && list.length > max) {
+                result = list.slice(0, max - 1)
+                let last = { page_cnt: 0, rate: 0, page_name: otherName }
+                let lastArr = list.slice(max - 1)
+                lastArr.forEach(item => {
+                  last.page_cnt += item.page_cnt
+                  last.rate = (last.rate * 100 + item.rate * 100) / 100
+                })
+                result.push(last)
+              }
+              return result
+            }
+            this.funnelData = data.map(item => {
+              let modify = []
+              item.entrance = _makeOthers(item.entrance)
+              item.exit = _makeOthers(item.exit)
+              return item
+            })
+          }
         })
         .finally(() => {
           this.funnelLoading = false

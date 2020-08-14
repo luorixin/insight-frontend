@@ -266,8 +266,8 @@
                     <el-table-column
                       :label="$t('channel.topAssist')"
                       class-name="greyColumn"
-                      :width="assist.columns.length > 3 ? '150px' : ''"
-                      :fixed="assist.columns.length > 3"
+                      :width="assist.columns.length > 4 ? '150px' : ''"
+                      :fixed="assist.columns.length > 4"
                       prop="name"
                     >
                       <template slot-scope="scope">
@@ -283,14 +283,14 @@
                     <template v-for="col in assist.columns">
                       <el-table-column
                         :label="col.label"
-                        :width="assist.columns.length > 3 ? '120px' : ''"
+                        :width="assist.columns.length > 4 ? '120px' : ''"
                         :prop="col.prop"
-                        :key="col.label"
+                        :key="col.prop"
                       >
                         <template slot-scope="scope">
                           <span
                             :class="{
-                              'max-val': isMaxVal(col.prop, scope.row.name)
+                              'max-val': isMaxVal(col.prop, scope.row.assistId)
                             }"
                           >
                             {{ scope.row[col.prop] }}
@@ -298,7 +298,7 @@
                         </template>
                       </el-table-column>
                     </template>
-                    <el-table-column
+                    <!-- <el-table-column
                       :label="$t('channel.totalAssist')"
                       width="120px"
                       prop="total"
@@ -307,13 +307,13 @@
                         <span
                           style="font-weight:bold;"
                           :class="{
-                            'max-val': isMaxVal('total', scope.row.name)
+                            'max-val': isMaxVal('total', scope.row.assistId)
                           }"
                         >
                           {{ scope.row['total'] }}
                         </span>
                       </template>
-                    </el-table-column>
+                    </el-table-column> -->
                   </el-table>
                   <p style="color:#ef4136;margin-top: 20px;">
                     {{ $t('channel.assistNotice') }}
@@ -381,7 +381,15 @@
                       ></el-progress>
                     </div>
                     <div class="tablelike_td">
-                      <p>{{ item.name }}</p>
+                      <el-tooltip
+                        :content="item.name"
+                        effect="light"
+                        :disabled="item.name && item.name.length < 17"
+                      >
+                        <p class="textOverflow" style="width: 100px;">
+                          {{ item.name }}
+                        </p>
+                      </el-tooltip>
                     </div>
                   </div>
                 </div>
@@ -806,29 +814,38 @@ export default {
             })
             assists.push({
               label: item.assist,
+              assistId: item.assistid,
               rate: item.rate,
               assistCount: item.assistCount
             })
-            max[item.originid] = { value: 0, name: item.assist }
+            max[item.originid] = {
+              value: 0,
+              name: item.assist,
+              assistId: item.assistid
+            }
           })
           // 去重排序
-          this.assist.columns = Util.uniqueAndSortArr(columns, 'label')
-          this.assist.assists = Util.uniqueAndSortArr(assists, 'label')
+          this.assist.columns = Util.uniqueAndSortArr(columns, 'prop')
+          this.assist.assists = Util.uniqueAndSortArr(assists, 'assistId')
 
           // 获取table数据
           this.assist.data = this.assist.assists.map(item => {
-            let result = { name: item.label }
+            let result = { name: item.label, assistId: item.assistId }
             this.assist.columns.forEach(column => {
               let find = assist.detail.find(detail => {
                 return (
-                  detail.origin === column.label &&
-                  detail.assist === result.name
+                  detail.originid === column.prop &&
+                  detail.assistid === result.assistId
                 )
               })
               if (find) {
                 result[column.prop] = Util.formatNum(find.rate) + '%'
                 if (max[column.prop]['value'] < find.rate) {
-                  max[column.prop] = { value: find.rate, name: result.name }
+                  max[column.prop] = {
+                    value: find.rate,
+                    name: result.name,
+                    assistId: result.assistId
+                  }
                 }
               } else {
                 result[column.prop] = '0.00%'
@@ -841,7 +858,8 @@ export default {
           // total最大值
           max['total'] = {
             value: 0,
-            name: this.assist.data[0].name
+            name: this.assist.data[0].name,
+            assistId: this.assist.data[0].assistId
           }
           let columnTotal = 0
           this.assist.data.forEach(item => {
@@ -851,7 +869,11 @@ export default {
                 item.total = Util.formatNum(assist.total[i]) + '%'
                 columnTotal += assist.total[i]
                 if (max['total']['value'] < assist.total[i]) {
-                  max['total'] = { value: assist.total[i], name: item.name }
+                  max['total'] = {
+                    value: assist.total[i],
+                    name: item.name,
+                    assistId: item.assistId
+                  }
                 }
               }
             }
@@ -870,7 +892,7 @@ export default {
 
           // 获取列的最大值
           this.assist.max = max
-          console.log(this.assist.max)
+          // console.log(this.assist.max)
         })
         .finally(() => {
           this.assistLoading = false
@@ -894,10 +916,10 @@ export default {
           this.regionsLoading = false
         })
     },
-    isMaxVal(col, name) {
+    isMaxVal(col, assistId) {
       return this.assist.max &&
         this.assist.max[col] &&
-        this.assist.max[col]['name'] === name
+        this.assist.max[col]['assistId'] === assistId
         ? true
         : false
     },

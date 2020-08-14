@@ -354,8 +354,8 @@ Util.isEmpty = str => {
 Util.formatNum = (str, len) => {
   let newStr = ''
   let count = 0
-  str = Number(str).toFixed(len) + ''
   Util.isNumber(len) || (len = 2)
+  str = Number(str).toFixed(len) + ''
   let zero = ''
   for (let j = 0; j < len; j++) {
     zero += '0'

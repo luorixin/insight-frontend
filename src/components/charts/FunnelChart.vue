@@ -20,7 +20,11 @@
                   item.page_name
                 }}</span>
               </el-tooltip>
-              <span>{{ item.page_cnt }} ({{ item.rate }}%)</span>
+              <span
+                >{{ item.page_cnt }} ({{
+                  (item.rate * 100) | toMoneyFilter
+                }}%)</span
+              >
             </div>
           </div>
         </div>
@@ -80,7 +84,11 @@
                   exits.page_name
                 }}</span>
               </el-tooltip>
-              <span>{{ exits.page_cnt }} ({{ exits.rate }}%)</span>
+              <span
+                >{{ exits.page_cnt }} ({{
+                  (exits.rate * 100) | toMoneyFilter
+                }}%)</span
+              >
             </div>
           </div>
         </div>
@@ -318,7 +326,7 @@ export default {
       }
     }
     .funnelLegend-detail_exit {
-      width: 170px;
+      width: 180px;
       // align-self: flex-end;
       border: 1px solid #dfdfdf;
       padding: 10px;

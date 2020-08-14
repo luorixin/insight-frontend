@@ -157,7 +157,7 @@ export default {
     handleSet(result) {
       this.modal = false
       if (result) {
-        console.log(result)
+        // console.log(result)
         this.currentList = result
         this.$emit('changeEvent', this.currentList)
         // this.currentList.forEach((item, index) => {
