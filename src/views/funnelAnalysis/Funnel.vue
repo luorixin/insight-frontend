@@ -202,7 +202,7 @@
                   <funnel-selector
                     @getResult="getRegionFunnelId"
                     :defaultValue="regionInline.funnelId"
-                    :needdot="true"
+                    :needdot="false"
                   >
                   </funnel-selector>
                 </div>

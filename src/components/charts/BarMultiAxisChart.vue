@@ -357,6 +357,9 @@ export default {
   width: 100%;
   height: 100%;
 }
+.echarts {
+  flex: 1;
+}
 .chartGraph {
   display: flex;
   .chartLegend {

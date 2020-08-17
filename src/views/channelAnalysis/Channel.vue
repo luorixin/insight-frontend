@@ -36,7 +36,7 @@
               <div
                 class="plan-reports-result-inner"
                 v-loading="trafficBreakdownLoading"
-                style="flex:2;height: 500px;"
+                style="flex:2.5;height: 500px;"
               >
                 <!-- Traffic Breakdown -->
                 <div class="plan-reports-result-inner_title">
@@ -52,6 +52,7 @@
                   <el-radio-group
                     v-model="trafficBreakdownForm.type"
                     @change="changeTrafficBreakdownType"
+                    style="position:absolute; left:20px;"
                     size="small"
                   >
                     <el-radio-button label="channel">
@@ -67,41 +68,66 @@
                     :defaultValue="trafficBreakdownForm.channel"
                   >
                   </channel-selector> -->
+                  <div class="chooseBreakdown" style="margin-right: 0px;">
+                    <div
+                      style="width: 135px;margin-right:15px;"
+                      v-show="
+                        trafficBreakdownForm.rightChannel === 'conversions'
+                      "
+                    ></div>
+                    <el-select
+                      v-model="trafficBreakdownForm.channel"
+                      @change="getBreakDownChannel"
+                      :placeholder="$t('common.selOption')"
+                      style="width: 135px;"
+                    >
+                      <el-option
+                        v-for="item in channelTypes"
+                        :key="item.value"
+                        :value="item.value"
+                        :label="item.label"
+                      ></el-option>
+                    </el-select>
 
-                  <el-select
-                    v-model="trafficBreakdownForm.channel"
-                    @change="getBreakDownChannel"
-                    :placeholder="$t('common.selOption')"
-                  >
-                    <el-option
-                      v-for="item in channelTypes"
-                      :key="item.value"
-                      :value="item.value"
-                      :label="item.label"
-                    ></el-option>
-                  </el-select>
-
-                  <!-- <el-select
-                    v-model="trafficBreakdownForm.device"
-                    v-show="trafficBreakdownForm.type === 'device'"
-                    @change="getTraffciBreakdownDevice"
-                    :placeholder="$t('common.selOption')"
-                  >
-                    <el-option
-                      v-for="item in deviceTypes"
-                      :key="item.value"
-                      :value="item.value"
-                      :label="item.label"
-                    ></el-option>
-                  </el-select> -->
-                  <span style="margin-right: 15px;line-height: 30px;">{{
-                    $t('common.vs')
-                  }}</span>
-                  <goal-selector
-                    @getResult="getBreakDownGoalId"
-                    :defaultValue="trafficBreakdownForm.goalId"
-                  >
-                  </goal-selector>
+                    <!-- <el-select
+                      v-model="trafficBreakdownForm.device"
+                      v-show="trafficBreakdownForm.type === 'device'"
+                      @change="getTraffciBreakdownDevice"
+                      :placeholder="$t('common.selOption')"
+                    >
+                      <el-option
+                        v-for="item in deviceTypes"
+                        :key="item.value"
+                        :value="item.value"
+                        :label="item.label"
+                      ></el-option>
+                    </el-select> -->
+                    <span style="margin:0 7.5px;line-height: 30px;">{{
+                      $t('common.vs')
+                    }}</span>
+                    <el-select
+                      v-model="trafficBreakdownForm.rightChannel"
+                      @change="getBreakDownRightChannel"
+                      :placeholder="$t('common.selOption')"
+                      style="width: 135px;"
+                    >
+                      <el-option
+                        v-for="item in channelTypes"
+                        :key="item.value"
+                        :value="item.value"
+                        :label="item.label"
+                      ></el-option>
+                    </el-select>
+                    <goal-selector
+                      @getResult="getBreakDownGoalId"
+                      v-show="
+                        trafficBreakdownForm.rightChannel === 'conversions'
+                      "
+                      :defaultValue="trafficBreakdownForm.goalId"
+                      style="width: 135px;margin-left: 15px;"
+                    >
+                    </goal-selector>
+                  </div>
                 </div>
                 <div class="report-result-inner__graph" style="height: 375px;">
                   <div id="traffic_breakdown_map">
@@ -519,7 +545,8 @@ export default {
         device: 'Computer',
         goalId: -1,
         goalName: '',
-        channel: 'conversions'
+        channel: 'conversions',
+        rightChannel: 'conversions'
       },
       trafficTrendForm: {
         type: 'channel',
@@ -546,7 +573,9 @@ export default {
       goalId: -1,
       trafficTrend: [],
       trafficTrendColor: [],
-      trafficBreakdown: {},
+      trafficBreakdown: {
+        isEmpty: true
+      },
       trafficBreakdownColor: ['#8D7B7B', '#4484CF'],
       trafficSource: [],
       conversionPaths: [],
@@ -628,6 +657,7 @@ export default {
             return Object.assign({ value: value }, channel)
           })
 
+          // rightchannel 为conversion时候，取goal的conversions，否则取对应channel
           this.trafficBreakdown.rightAxis = yAxis.map(item => {
             let channel = rightAxis.find(channel => {
               let y =
@@ -636,19 +666,28 @@ export default {
                   : channel.device
               return y === item.label
             })
+            let channelLeft = leftAxis.find(channel => {
+              let y =
+                this.trafficBreakdownForm.type === 'channel'
+                  ? channel.channelName
+                  : channel.device
+              return y === item.label
+            })
             let value = 0
-            if (channel) {
-              value = channel['conversions'] // 固定的
-              channel.channelLabel = item.label
-            } else {
+            if (!channel) {
               channel = {
                 channelName: item.label,
                 device: item.label,
-                channelLabel: item.label
+                channelLabel: item.label,
+                conversions: 0
               }
             }
+            channel = Object.assign(channelLeft || {}, channel)
+            value = channel[this.trafficBreakdownForm.rightChannel] // goal固定的
+            channel.channelLabel = item.label
             return Object.assign({ value: value }, channel)
           })
+          console.log(this.trafficBreakdown)
           this.justifyBreakdown()
         })
         .finally(() => {
@@ -946,6 +985,10 @@ export default {
       this.trafficBreakdownForm.channel = result
       this.changeBreakdownChannelChart()
     },
+    getBreakDownRightChannel(result) {
+      this.trafficBreakdownForm.rightChannel = result
+      this.changeBreakdownRightChannelChart()
+    },
     changeBreakdownChannelChart() {
       if (
         this.trafficBreakdown.leftAxis &&
@@ -953,6 +996,17 @@ export default {
       ) {
         this.trafficBreakdown.leftAxis.forEach(item => {
           item.value = item[this.trafficBreakdownForm.channel]
+        })
+        this.justifyBreakdown()
+      }
+    },
+    changeBreakdownRightChannelChart() {
+      if (
+        this.trafficBreakdown.rightAxis &&
+        this.trafficBreakdown.rightAxis.length > 0
+      ) {
+        this.trafficBreakdown.rightAxis.forEach(item => {
+          item.value = item[this.trafficBreakdownForm.rightChannel]
         })
         this.justifyBreakdown()
       }
@@ -1051,6 +1105,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.chooseBreakdown {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-left: 150px;
+  margin-right: 0px;
+}
 .main-table {
   margin-top: 20px;
   ::v-deep .cell {

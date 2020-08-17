@@ -189,14 +189,20 @@ export default {
           this.agents = this.allAgents.filter(item => {
             // if(reg.test(item.agentName)){
             //   reg.lastIndex=0;
-            if (item.agentName.toLowerCase().includes(search)) {
+            if (
+              item.agentName.toLowerCase().includes(search) ||
+              String(item.agentId) === search
+            ) {
               return true
             } else {
               if (item.clients && item.clients.length > 0) {
                 let adv = item.clients.find(el => {
                   // if(reg.test(el.clientName)){
                   //   reg.lastIndex=0;
-                  if (el.clientName.toLowerCase().includes(search)) {
+                  if (
+                    el.clientName.toLowerCase().includes(search) ||
+                    String(el.clientId) === search
+                  ) {
                     return true
                   }
                 })
@@ -208,10 +214,16 @@ export default {
             return false
           })
           this.agents.forEach(item => {
-            if (!item.agentName.toLowerCase().includes(search)) {
+            if (
+              !item.agentName.toLowerCase().includes(search) &&
+              String(item.agentId) !== search
+            ) {
               if (item.clients && item.clients.length > 0) {
                 item.clients = item.clients.filter(el => {
-                  if (el.clientName.toLowerCase().includes(search)) {
+                  if (
+                    el.clientName.toLowerCase().includes(search) ||
+                    String(el.clientId) === search
+                  ) {
                     return true
                   }
                 })

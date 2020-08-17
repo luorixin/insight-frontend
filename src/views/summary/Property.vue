@@ -563,6 +563,7 @@
                         ></i>
                         <span>{{
                           trafficData.growthRate.repeatVistorsRate
+                            | toThousandFilter
                         }}</span>
                       </div>
                       <label>

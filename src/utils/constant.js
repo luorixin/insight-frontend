@@ -217,7 +217,7 @@ export const ENUM_DATE = [
 export const CHANNEL_TYPE = [
   {
     value: 'conversions',
-    label: 'Conversions'
+    label: 'All Conversions'
   },
   {
     value: 'averageTimeSpan',
