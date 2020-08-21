@@ -304,7 +304,7 @@ export default {
     goal: 'Goal',
     conversion: 'Conversion',
     campaign: 'Campaign',
-    topAssist: 'Top Assisting Channel(s)',
+    topAssist: 'Channel | Media',
     totalAssist: 'Total Assisted',
     total: 'Total'
   },

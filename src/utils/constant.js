@@ -246,6 +246,10 @@ export const CHANNEL_TYPE = [
   {
     value: 'uniqueVisits',
     label: 'UniqueVisits'
+  },
+  {
+    value: 'bounceRate',
+    label: 'BounceRate'
   }
 ]
 

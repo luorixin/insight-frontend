@@ -927,7 +927,7 @@ export default {
             totalData[item.prop] = Util.formatNum(total) + '%'
           })
           totalData.total = Util.formatNum(columnTotal) + '%'
-          this.assist.data.push(totalData)
+          // this.assist.data.push(totalData)
 
           // 获取列的最大值
           this.assist.max = max
@@ -1117,21 +1117,21 @@ export default {
   ::v-deep .cell {
     word-break: break-word;
   }
-  ::v-deep .el-table__row:last-child {
-    .cell span {
-      font-weight: bold !important;
-    }
-    .greyColumn {
-      background: #fff !important;
-    }
-  }
-  ::v-deep .el-table__row {
-    & > td:last-child {
-      .cell span {
-        font-weight: bold !important;
-      }
-    }
-  }
+  // ::v-deep .el-table__row:last-child {
+  //   .cell span {
+  //     font-weight: bold !important;
+  //   }
+  //   .greyColumn {
+  //     background: #fff !important;
+  //   }
+  // }
+  // ::v-deep .el-table__row {
+  //   & > td:last-child {
+  //     .cell span {
+  //       font-weight: bold !important;
+  //     }
+  //   }
+  // }
   ::v-deep .el-table--enable-row-hover {
     .el-table__body {
       tr {
