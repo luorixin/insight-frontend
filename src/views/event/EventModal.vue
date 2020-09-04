@@ -110,14 +110,16 @@
                 v-model="ruleForm.urls"
               >
               </el-input>
-              <p style="margin-top: 10px;">
+            </el-form-item>
+            <el-form-item>
+              <p>
                 {{ $t('event.universalTable.thirdParty') }}
               </p>
               <el-input
                 type="textarea"
                 :rows="5"
                 :placeholder="$t('event.universalTable.keywordsPerLineTip')"
-                v-model="ruleForm.javaScripts"
+                v-model="ruleForm.javascripts"
               >
               </el-input>
             </el-form-item>
@@ -262,7 +264,7 @@ export default {
         isFunnel: 0,
         tagList: [],
         urls: null,
-        javaScripts: null
+        javascripts: null
       },
       baseData: {
         eventName: null,
@@ -276,7 +278,7 @@ export default {
         isFunnel: 0,
         eventId: null,
         urls: null,
-        javaScripts: null
+        javascripts: null
       },
       rules: {
         eventName: [

@@ -141,14 +141,14 @@
                 <i class="fa fa-history"></i>
               </div>
               <div
-                v-if="scope.row.tackingType === 0"
+                v-if="scope.row.tackingType === 1"
                 class="fa-icon-box"
                 @click="handleDownload(scope.$index, scope.row)"
               >
                 <i class="fa fa-download"></i>
               </div>
               <el-dropdown
-                v-if="scope.row.tackingType === 1"
+                v-if="scope.row.tackingType === 0"
                 @command="handleDownloadCommand"
               >
                 <span class="fa-icon-box">

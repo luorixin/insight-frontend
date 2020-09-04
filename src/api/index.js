@@ -80,6 +80,7 @@ http.interceptors.response.use(
           case 60001:
           case 60003:
           case 60004:
+          case 60006:
             if (Util.getToken()) {
               Util.removeToken()
               Util.showMsg(i18n.t('login.error.session'), () => {

@@ -16,9 +16,9 @@
           {{ $t(item.name) }}
         </el-radio-button>
       </el-radio-group>
-      <div v-if="needCustom" class="customise" @click="showCustomise">
-        <span>{{ $t('common.customise') }}</span>
-      </div>
+<!--      <div v-if="needCustom" class="customise" @click="showCustomise">-->
+<!--        <span>{{ $t('common.customise') }}</span>-->
+<!--      </div>-->
     </div>
     <div v-show="needSelf">
       <el-date-picker

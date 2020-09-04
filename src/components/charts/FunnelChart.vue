@@ -16,7 +16,7 @@
                 effect="light"
                 :disabled="item.page_name.length < 17"
               >
-                <span class="textOverflow" style="width: 100px;">{{
+                <span class="textOverflow" style="width: 95px;">{{
                   item.page_name
                 }}</span>
               </el-tooltip>
@@ -80,7 +80,7 @@
                 effect="light"
                 :disabled="exits.page_name.length < 17"
               >
-                <span class="textOverflow" style="width: 100px;">{{
+                <span class="textOverflow" style="width: 95px;">{{
                   exits.page_name
                 }}</span>
               </el-tooltip>

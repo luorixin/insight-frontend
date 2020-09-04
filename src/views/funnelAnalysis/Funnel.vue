@@ -35,6 +35,7 @@
               <div
                 class="plan-reports-result-inner"
                 v-loading="funnelLoading"
+                ref="funnelInner"
                 style="height: 600px;"
               >
                 <!-- Funnel -->
@@ -44,7 +45,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('funnelAnalysis.funnelTip') }}
                     </div>
-                    <span class="fa fa-question-circle-o"></span>
+                    <!--<span class="fa fa-question-circle-o"></span>-->
                   </el-tooltip>
                 </div>
                 <div class="report-flex-middle">
@@ -54,7 +55,11 @@
                   >
                   </funnel-selector>
                 </div>
-                <div class="report-result-inner__graph" style="height: 475px;">
+                <div
+                  class="report-result-inner__graph"
+                  ref="funnelInnerCanvas"
+                  style="height: 475px;"
+                >
                   <div id="funnel_map">
                     <noresult-report
                       v-show="!funnelData || funnelData.length === 0"
@@ -82,7 +87,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('funnelAnalysis.breakdownTip') }}
                     </div>
-                    <span class="fa fa-question-circle-o"></span>
+                    <!--<span class="fa fa-question-circle-o"></span>-->
                   </el-tooltip>
                 </div>
                 <div class="report-flex-middle">
@@ -195,7 +200,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('audience.regionsTip') }}
                     </div>
-                    <span class="fa fa-question-circle-o"></span>
+                    <!--<span class="fa fa-question-circle-o"></span>-->
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">
@@ -344,12 +349,23 @@ export default {
               }
               return result
             }
-            this.funnelData = data.map(item => {
+            let funnelData = data.map(item => {
               let modify = []
               item.entrance = _makeOthers(item.entrance)
               item.exit = _makeOthers(item.exit)
               return item
             })
+            if (funnelData.length === 4) {
+              this.$refs['funnelInner'].style.height = '775px'
+              this.$refs['funnelInnerCanvas'].style.height = '650px'
+            } else if (funnelData.length === 5) {
+              this.$refs['funnelInner'].style.height = '1025px'
+              this.$refs['funnelInnerCanvas'].style.height = '900px'
+            } else {
+              this.$refs['funnelInner'].style.height = '600px'
+              this.$refs['funnelInnerCanvas'].style.height = '475px'
+            }
+            this.funnelData = funnelData
           }
         })
         .finally(() => {

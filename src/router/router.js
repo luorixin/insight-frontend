@@ -121,13 +121,14 @@ export const appRouter = [
         name: 'eventReports',
         component: () => import('@/views/event/LogList.vue'),
         meta: { title: 'menu.eventReports' }
-      },
-      {
-        path: 'download',
-        name: 'downloadReports',
-        component: () => import('@/views/downloadReport/List.vue'),
-        meta: { title: 'menu.downloadReports' }
       }
+      // ,
+      // {
+      //   path: 'download',
+      //   name: 'downloadReports',
+      //   component: () => import('@/views/downloadReport/List.vue'),
+      //   meta: { title: 'menu.downloadReports' }
+      // }
     ]
   },
   { path: '*', redirect: '/404', meta: { title: '404', notInMenu: true } }

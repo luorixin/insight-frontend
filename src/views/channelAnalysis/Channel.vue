@@ -155,7 +155,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('channel.trafficSourceTip') }}
                     </div>
-                    <span class="fa fa-question-circle-o"></span>
+                    <!--<span class="fa fa-question-circle-o"></span>-->
                   </el-tooltip>
                 </div>
                 <!-- <div class="report-flex-middle">
@@ -191,7 +191,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('channel.trafficTrendTip') }}
                     </div>
-                    <span class="fa fa-question-circle-o"></span>
+                    <!--<span class="fa fa-question-circle-o"></span>-->
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">
@@ -266,7 +266,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('channel.assistTip') }}
                     </div>
-                    <span class="fa fa-question-circle-o"></span>
+                    <!--<span class="fa fa-question-circle-o"></span>-->
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">
@@ -358,7 +358,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('channel.conversionPathsTip') }}
                     </div>
-                    <span class="fa fa-question-circle-o"></span>
+                    <!--<span class="fa fa-question-circle-o"></span>-->
                   </el-tooltip>
                 </div>
                 <!-- <p>
@@ -447,7 +447,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('audience.regionsTip') }}
                     </div>
-                    <span class="fa fa-question-circle-o"></span>
+                    <!--<span class="fa fa-question-circle-o"></span>-->
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">
@@ -654,7 +654,10 @@ export default {
                 channelLabel: item.label
               }
             }
-            return Object.assign({ value: value }, channel)
+            return Object.assign(
+              { value: value, axis: this.trafficBreakdownForm.channel },
+              channel
+            )
           })
 
           // rightchannel 为conversion时候，取goal的conversions，否则取对应channel
@@ -685,7 +688,10 @@ export default {
             channel = Object.assign(channelLeft || {}, channel)
             value = channel[this.trafficBreakdownForm.rightChannel] // goal固定的
             channel.channelLabel = item.label
-            return Object.assign({ value: value }, channel)
+            return Object.assign(
+              { value: value, axis: this.trafficBreakdownForm.rightChannel },
+              channel
+            )
           })
           console.log(this.trafficBreakdown)
           this.justifyBreakdown()
@@ -996,6 +1002,7 @@ export default {
       ) {
         this.trafficBreakdown.leftAxis.forEach(item => {
           item.value = item[this.trafficBreakdownForm.channel]
+          item.axis = this.trafficBreakdownForm.channel
         })
         this.justifyBreakdown()
       }
@@ -1007,6 +1014,7 @@ export default {
       ) {
         this.trafficBreakdown.rightAxis.forEach(item => {
           item.value = item[this.trafficBreakdownForm.rightChannel]
+          item.axis = this.trafficBreakdownForm.rightChannel
         })
         this.justifyBreakdown()
       }

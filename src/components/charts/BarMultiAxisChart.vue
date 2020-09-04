@@ -9,9 +9,7 @@
       >
         {{ item }}
         <el-tooltip class="item" effect="light" placement="top">
-          <div slot="content" class="tooltip-content">
-            {{ item }}
-          </div>
+          <div slot="content" class="tooltip-content">{{ item }}</div>
           <span class="fa fa-question-circle-o"></span>
         </el-tooltip>
       </div>
@@ -127,9 +125,9 @@ export default {
                 params.forEach(function(item) {
                   if (item.seriesName != 'test') {
                     if (item.value) {
-                      let unit = item.seriesIndex == '2' ? '%' : ''
+                      let unit = item.data.axis === 'bounceRate' ? '%' : ''
                       let num =
-                        item.seriesIndex == '2'
+                        item.data.axis === 'bounceRate'
                           ? Util.formatNum(item.value, 2)
                           : Util.formatNum(item.value, 0)
                       result +=
