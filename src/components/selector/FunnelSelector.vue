@@ -80,7 +80,9 @@ export default {
       funnelsApi
         .list()
         .then(data => {
-          this.dataList = data.concat()
+          this.dataList = data.concat().filter(item => {
+            return item.status === 1
+          })
           this.totalCount = this.dataList.length
           if (this.dataList.length === 0) {
             this.result = this.$t('common.noResult')

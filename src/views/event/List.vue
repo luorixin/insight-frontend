@@ -54,7 +54,7 @@
           <el-table-column
             prop="eventName"
             :label="$t('event.name')"
-            width="180"
+            :width="firstWidth"
           ></el-table-column>
           <el-table-column prop="urls" :label="$t('event.url')" width="180">
             <template slot-scope="scope">
@@ -246,6 +246,7 @@ export default {
       subLoading: false,
       tipVisible: false,
       changeStatus: null,
+      firstWidth: 200,
       allList: [],
       currentList: [],
       formInline: {
@@ -265,6 +266,11 @@ export default {
   created() {
     this.getDataList()
     this.makeDebounce()
+    if (window.innerWidth > 1600) {
+      this.firstWidth = ''
+    } else {
+      this.firstWidth = 200
+    }
   },
   methods: {
     getDataList() {
