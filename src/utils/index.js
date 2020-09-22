@@ -567,7 +567,7 @@ Util.sortListByAssign = (list, sortArr = [], key) => {
       result.push(find)
     }else {
       result.push({
-        key: type
+        [key]: type
       })
     }
   })
