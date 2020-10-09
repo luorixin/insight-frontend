@@ -26,6 +26,7 @@
         <div id="summary">
           <date-selector-for-report
             @change="changeSummaryDate"
+            reportType="summary"
           ></date-selector-for-report>
           <hr class="reporthr" />
           <!-- performance snapshot -->
@@ -704,6 +705,7 @@
         <div id="audience">
           <date-selector-for-report
             :needVs="false"
+            reportType="summary"
             @change="changeAudienceDate"
           ></date-selector-for-report>
           <hr class="reporthr" />

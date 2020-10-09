@@ -21,6 +21,7 @@
               <el-date-picker
                 v-model="ruleForm.dateRangeArr"
                 type="daterange"
+                :clearable="false"
                 @change="changeDate"
                 :picker-options="pickerOptions"
                 range-separator=" ~ "
@@ -35,7 +36,10 @@
               </p>
             </el-form-item>
             <hr style="margin:0 -20px 20px -20px" />
-            <el-form-item :label="$t('scheduleReport.emailNotify')">
+            <el-form-item
+              :label="$t('scheduleReport.emailNotify')"
+              prop="emails"
+            >
               <el-input type="textarea" :rows="5" v-model="ruleForm.emails">
               </el-input>
             </el-form-item>
@@ -59,7 +63,7 @@
 </template>
 
 <script>
-import * as goalsApi from '@/api/goals'
+import * as downloadApi from '@/api/downloadReports'
 import Util from '@/utils'
 import pickerOption from '@/mixins/pickerOption'
 export default {
@@ -85,6 +89,10 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    reportType: {
+      type: String,
+      default: 'summary'
     }
   },
   watch: {
@@ -100,6 +108,12 @@ export default {
         newName && this.getDataList()
       },
       immediate: true
+    },
+    reportType: {
+      handler(newName, oldName) {
+        this.ruleForm.reportType = newName
+      },
+      immediate: true
     }
   },
   data() {
@@ -108,6 +122,7 @@ export default {
       ruleForm: {
         name: null,
         emails: null,
+        reportType: null,
         dateRangeArr: []
       },
       baseData: {
@@ -122,6 +137,13 @@ export default {
           {
             required: true,
             message: this.$t('common.selPeriod'),
+            trigger: 'change'
+          }
+        ],
+        emails: [
+          {
+            required: true,
+            message: this.$t('errorInfo.emptyInput'),
             trigger: 'change'
           }
         ]
@@ -157,6 +179,8 @@ export default {
       //       this.loading = false
       //     })
       // }
+      this.ruleForm.dateRangeArr = Util.getLastXDays(7)
+      this.changeDate(this.ruleForm.dateRangeArr)
     },
     closeModal() {
       this.$emit('getResult', false)
@@ -169,22 +193,23 @@ export default {
     },
     handleSave() {
       this.$refs['ruleForm'].validate((valid, model) => {
+        // console.log(this.ruleForm)
         if (valid) {
-          // this.loading = true
-          // let promise = null
-          // if (this.goalId) {
-          //   promise = goalsApi.doUpdate(this.ruleForm)
-          // } else {
-          //   promise = goalsApi.doCreate(this.ruleForm)
-          // }
-          // promise
-          //   .then(data => {
-          //     this.$emit('getResult', true)
-          //     this.$message.success(this.$t('common.optSuccess'))
-          //   })
-          //   .finally(() => {
-          //     this.loading = false
-          //   })
+          this.loading = true
+          let promise = null
+          if (this.goalId) {
+            // promise = downloadApi.update(this.ruleForm)
+          } else {
+            promise = downloadApi.create(this.ruleForm)
+          }
+          promise
+            .then(data => {
+              this.$emit('getResult', true)
+              this.$message.success(this.$t('common.optSuccess'))
+            })
+            .finally(() => {
+              this.loading = false
+            })
         }
       })
     }

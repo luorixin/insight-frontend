@@ -27,6 +27,7 @@
           <date-selector-for-report
             :needVs="false"
             reportTitle="ChannelAnalysis"
+            reportType="channel"
             @change="changeTrafficDate"
           ></date-selector-for-report>
           <hr class="reporthr" />
@@ -430,6 +431,7 @@
           <date-selector-for-report
             :needVs="false"
             @change="changeAudienceDate"
+            reportType="channel"
             reportTitle="ChannelAnalysis"
           ></date-selector-for-report>
           <hr class="reporthr" />

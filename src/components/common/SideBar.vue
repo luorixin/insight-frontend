@@ -12,13 +12,15 @@
           <i
             class="fa"
             :class="[item.showChild ? 'fa-caret-down' : 'fa-caret-right']"
-            v-if="item.children && item.children.length > 1"
+            v-if="item.children && item.children.length > minShow"
           ></i>
         </a>
         <el-collapse-transition>
           <ul
             class="sub-menu"
-            v-show="item.children && item.children.length > 1 && item.showChild"
+            v-show="
+              item.children && item.children.length > minShow && item.showChild
+            "
           >
             <li
               :class="{ active: sub.name === currentMenu }"
@@ -94,6 +96,7 @@ export default {
     return {
       smallScreen: false,
       showLang: false,
+      minShow: 0, // child少于多少个隐藏子节点而直接显示父类
       menuList: []
     }
   },
@@ -149,7 +152,7 @@ export default {
       if (item.name) {
         this.$router.push({ name: item.name })
       } else {
-        if (item.children.length > 1) {
+        if (item.children.length > this.minShow) {
           // 展开收缩
           item.showChild = !item.showChild
         } else {

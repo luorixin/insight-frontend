@@ -107,7 +107,9 @@ export default {
     reports: 'Reports',
     eventReports: 'Event Log',
     eventLog: 'Event Log',
-    downloadReports: 'Download Reports'
+    downloadReports: 'Download Reports',
+    tools: 'Tools',
+    generate: 'Generate'
   },
   footer: {
     power: 'Powered by iClick. All Rights Reserved. ',
@@ -342,6 +344,24 @@ export default {
     genTime: 'Generated Time',
     status: 'Status',
     action: 'Action'
+  },
+  generate: {
+    title: 'Enter the website URL and campaign information',
+    tip:
+      'Fill out the required fields(mark with *) in the form below, and once complete the full campaign URL will be generated for you. ',
+    tip2:
+      'Note: the generated URL is automatically updated as you make changes.',
+    website: 'Website URL',
+    websiteTip: 'The full website URL (e.g. https://www.example.com)',
+    channel: 'Campaign Channel',
+    channelTip: 'The Channel: (e.g. search, display)',
+    media: 'Campaign Media',
+    mediaTip: 'Media: (e.g. iAccess, Tencent, Red)',
+    name: 'Campaign Name',
+    nameTip: 'Campaign Name (e.g. spring_sale)',
+    urlTitle: 'Share the generated campaign URL',
+    urlTip:
+      'Use the URL in any promotional channels you want to be associated with this custom campaign'
   },
   errorInfo: {
     emptyInput: 'Please enter something!'

@@ -116,20 +116,20 @@ export default {
   },
   methods: {
     getDataList() {
-      // this.loading = true
-      // downloadReportsApi
-      //   .list()
-      //   .then(data => {
-      //     this.allAccounts = data.concat()
-      //     this.currentAccounts = this.allAccounts.slice(
-      //       0,
-      //       this.formInline.pageSize
-      //     )
-      //     this.totalCount = this.allAccounts.length
-      //   })
-      //   .finally(() => {
-      //     this.loading = false
-      //   })
+      this.loading = true
+      downloadReportsApi
+        .list()
+        .then(data => {
+          this.allAccounts = data.concat()
+          this.currentAccounts = this.allAccounts.slice(
+            0,
+            this.formInline.pageSize
+          )
+          this.totalCount = this.allAccounts.length
+        })
+        .finally(() => {
+          this.loading = false
+        })
     },
     makeDebounce() {
       this.debounceSearch = Util.debounce(search => {

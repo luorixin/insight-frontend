@@ -27,6 +27,7 @@
           <date-selector-for-report
             :needVs="false"
             reportTitle="FunnelAnalysis"
+            reportType="funnel"
             @change="changeFunnelDate"
           ></date-selector-for-report>
           <hr class="reporthr" />
@@ -183,6 +184,7 @@
           <date-selector-for-report
             :needVs="false"
             reportTitle="FunnelAnalysis"
+            reportType="funnel"
             @change="changeAudienceDate"
           ></date-selector-for-report>
           <hr class="reporthr" />

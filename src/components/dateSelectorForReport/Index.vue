@@ -16,9 +16,9 @@
           {{ $t(item.name) }}
         </el-radio-button>
       </el-radio-group>
-<!--      <div v-if="needCustom" class="customise" @click="showCustomise">-->
-<!--        <span>{{ $t('common.customise') }}</span>-->
-<!--      </div>-->
+      <div v-if="needCustom" class="customise" @click="showCustomise">
+        <span>{{ $t('common.customise') }}</span>
+      </div>
     </div>
     <div v-show="needSelf">
       <el-date-picker
@@ -47,6 +47,7 @@
         @getResult="handleSet"
         :title="optTitle"
         :reportTitle="reportTitle"
+        :reportType="reportType"
         :visible="modal"
       >
       </schedule-modal>
@@ -89,6 +90,10 @@ export default {
     reportTitle: {
       type: String,
       default: 'SummaryAnalysis'
+    },
+    reportType: {
+      type: String,
+      default: 'summary'
     }
   },
   data() {

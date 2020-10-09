@@ -36,3 +36,10 @@ export const regions = params =>
     method: 'post',
     data: $http.adornData(params)
   })
+
+export const create = params =>
+  $http({
+    url: $http.adornUrl(baseUrl + '/create'),
+    method: 'post',
+    data: $http.adornData(params)
+  })
