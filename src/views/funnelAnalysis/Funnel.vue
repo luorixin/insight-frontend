@@ -46,7 +46,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('funnelAnalysis.funnelTip') }}
                     </div>
-                    <!--<span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <div class="report-flex-middle">
@@ -88,7 +88,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('funnelAnalysis.breakdownTip') }}
                     </div>
-                    <!--<span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <div class="report-flex-middle">
@@ -202,7 +202,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('audience.regionsTip') }}
                     </div>
-                    <!--<span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">

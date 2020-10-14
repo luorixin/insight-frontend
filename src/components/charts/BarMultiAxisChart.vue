@@ -134,7 +134,8 @@ export default {
                         '<p><span style="display:inline-block;margin-right:5px;border-radius:10px!important;width:9px;height:9px;background-color:' +
                         item.color +
                         '"></span>' +
-                        item.seriesName +
+                        // item.seriesName +
+                        params[0].data.axis +
                         ': ' +
                         num +
                         unit +

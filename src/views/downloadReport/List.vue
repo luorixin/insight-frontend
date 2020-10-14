@@ -185,7 +185,7 @@ export default {
     handleGenerate(index, row) {
       this.loading = true
       downloadReportsApi
-        .download(row.id)
+        .download(row)
         .then(data => {
           const blob = new Blob([data])
           const fileName = row.fileName || row.reportName + '.xlsx'

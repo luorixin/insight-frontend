@@ -7,7 +7,7 @@
         </div>
       </div>
     </div>
-    <hr />
+    <hr style="margin:0 -20px" />
     <div class="page_tip">
       <label>{{ $t('generate.tip') }}</label>
       <label class="italic">{{ $t('generate.tip2') }}</label>

@@ -120,7 +120,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('property.uniqueConvTip') }}
                     </div>
-                    <!--                    <span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <p class="plan-reports-result-inner_text">
@@ -160,7 +160,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('property.uniqueCustomersTip') }}
                     </div>
-                    <!--                    <span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <p class="plan-reports-result-inner_text">
@@ -201,9 +201,9 @@
                   {{ $t('property.lastMileRatio') }}
                   <el-tooltip class="item" effect="light" placement="top">
                     <div slot="content" class="tooltip-content">
-                      {{ $t('property.lastMileRatio') }}
+                      {{ $t('property.lastMileRatioTip') }}
                     </div>
-                    <!--                    <span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                   <div class="plan-reports-result-inner__subtitle">
                     {{ $t('property.search') }} {{ $t('common.vs') }}
@@ -236,7 +236,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('property.timeToConvertTip') }}
                     </div>
-                    <!--                    <span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <div class="report-convert mr-10">
@@ -328,7 +328,7 @@
                         <div slot="content" class="tooltip-content">
                           {{ $t('property.uniqueVisitTip') }}
                         </div>
-                        <!--  <span class="fa fa-question-circle-o"></span>-->
+                        <span class="fa fa-question-circle-o"></span>
                       </el-tooltip>
                     </div>
                     <p class="plan-reports-result-inner_text">
@@ -374,7 +374,7 @@
                         <div slot="content" class="tooltip-content">
                           {{ $t('property.uniqueVisitorsTip') }}
                         </div>
-                        <!--  <span class="fa fa-question-circle-o"></span>-->
+                        <span class="fa fa-question-circle-o"></span>
                       </el-tooltip>
                     </div>
                     <p class="plan-reports-result-inner_text">
@@ -427,7 +427,7 @@
                       <div slot="content" class="tooltip-content">
                         {{ $t('property.frequencyVisitTip') }}
                       </div>
-                      <!--<span class="fa fa-question-circle-o"></span>-->
+                      <span class="fa fa-question-circle-o"></span>
                     </el-tooltip>
                   </div>
                   <div class="report-flex-middle mr20">
@@ -467,7 +467,7 @@
                       <div slot="content" class="tooltip-content">
                         {{ $t('property.avgPageViewTip') }}
                       </div>
-                      <!--<span class="fa fa-question-circle-o"></span>-->
+                      <span class="fa fa-question-circle-o"></span>
                     </el-tooltip>
                   </div>
                   <div class="report-flex-middle mr20">
@@ -514,7 +514,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('property.newVisitorsTip') }}
                     </div>
-                    <!--                    <span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-split__row split-row-middle">
@@ -600,7 +600,7 @@
                       <div slot="content" class="tooltip-content">
                         {{ $t('property.bounceRateTip') }}
                       </div>
-                      <!--<span class="fa fa-question-circle-o"></span>-->
+                      <span class="fa fa-question-circle-o"></span>
                     </el-tooltip>
                   </div>
                   <div class="report-flex-middle mr20">
@@ -639,7 +639,7 @@
                       <div slot="content" class="tooltip-content">
                         {{ $t('property.avgTimeSpanTip') }}
                       </div>
-                      <!--<span class="fa fa-question-circle-o"></span>-->
+                      <span class="fa fa-question-circle-o"></span>
                     </el-tooltip>
                   </div>
                   <div class="report-flex-middle mr20">
@@ -684,7 +684,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('property.timeDistTip') }}
                     </div>
-                    <!--                    <span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <div class="report-result-inner__graph" style="height: 250px;">
@@ -719,7 +719,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('audience.regionsTip') }}
                     </div>
-                    <!--                    <span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <div class="report-result-inner__graph" style="height: 370px;">

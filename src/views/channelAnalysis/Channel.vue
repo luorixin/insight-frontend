@@ -42,12 +42,12 @@
                 <!-- Traffic Breakdown -->
                 <div class="plan-reports-result-inner_title">
                   {{ $t('channel.breakdown') }}
-                  <!-- <el-tooltip class="item" effect="light" placement="top">
+                  <el-tooltip class="item" effect="light" placement="top">
                     <div slot="content" class="tooltip-content">
                       {{ $t('channel.breakdownTip') }}
                     </div>
                     <span class="fa fa-question-circle-o"></span>
-                  </el-tooltip> -->
+                  </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">
                   <el-radio-group
@@ -156,7 +156,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('channel.trafficSourceTip') }}
                     </div>
-                    <!--<span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <!-- <div class="report-flex-middle">
@@ -192,7 +192,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('channel.trafficTrendTip') }}
                     </div>
-                    <!--<span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">
@@ -267,7 +267,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('channel.assistTip') }}
                     </div>
-                    <!--<span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">
@@ -359,7 +359,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('channel.conversionPathsTip') }}
                     </div>
-                    <!--<span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <!-- <p>
@@ -449,7 +449,7 @@
                     <div slot="content" class="tooltip-content">
                       {{ $t('audience.regionsTip') }}
                     </div>
-                    <!--<span class="fa fa-question-circle-o"></span>-->
+                    <span class="fa fa-question-circle-o"></span>
                   </el-tooltip>
                 </div>
                 <div class="plan-reports-result-inner__opt">
@@ -657,7 +657,13 @@ export default {
               }
             }
             return Object.assign(
-              { value: value, axis: this.trafficBreakdownForm.channel },
+              {
+                value: value,
+                axis: convertType(
+                  this.trafficBreakdownForm.channel,
+                  CHANNEL_TYPE
+                ).label
+              },
               channel
             )
           })
@@ -691,7 +697,13 @@ export default {
             value = channel[this.trafficBreakdownForm.rightChannel] // goal固定的
             channel.channelLabel = item.label
             return Object.assign(
-              { value: value, axis: this.trafficBreakdownForm.rightChannel },
+              {
+                value: value,
+                axis: convertType(
+                  this.trafficBreakdownForm.rightChannel,
+                  CHANNEL_TYPE
+                ).label
+              },
               channel
             )
           })
@@ -1004,7 +1016,10 @@ export default {
       ) {
         this.trafficBreakdown.leftAxis.forEach(item => {
           item.value = item[this.trafficBreakdownForm.channel]
-          item.axis = this.trafficBreakdownForm.channel
+          item.axis = convertType(
+            this.trafficBreakdownForm.channel,
+            CHANNEL_TYPE
+          ).label
         })
         this.justifyBreakdown()
       }
@@ -1016,7 +1031,10 @@ export default {
       ) {
         this.trafficBreakdown.rightAxis.forEach(item => {
           item.value = item[this.trafficBreakdownForm.rightChannel]
-          item.axis = this.trafficBreakdownForm.rightChannel
+          item.axis = convertType(
+            this.trafficBreakdownForm.rightChannel,
+            CHANNEL_TYPE
+          ).label
         })
         this.justifyBreakdown()
       }
