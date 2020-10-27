@@ -109,7 +109,7 @@ export default {
     eventLog: 'Event Log',
     downloadReports: 'Download Reports',
     tools: 'Tools',
-    generate: 'Generate'
+    generate: 'Campaign URL Builder'
   },
   footer: {
     power: 'Powered by iClick. All Rights Reserved. ',

@@ -31,7 +31,7 @@
           class="handleSelect"
         >
           <el-option label="search" value="search"> </el-option>
-          <el-option label="dispaly" value="dispaly"> </el-option>
+          <el-option label="display" value="display"> </el-option>
           <el-option label="video" value="video"> </el-option>
           <el-option label="social" value="social"> </el-option>
         </el-select>
@@ -86,7 +86,7 @@ export default {
         website: [
           {
             required: true,
-            message: this.$t('common.emptyInput'),
+            message: this.$t('errorInfo.emptyInput'),
             trigger: 'change'
           }
         ],
@@ -109,7 +109,16 @@ export default {
   },
   computed: {
     finalUrl() {
-      return `${this.form.website}/?in_channel=${this.form.channel}&in_meida=${this.form.media}&in_campaign=${this.form.name}`
+      let gang =
+        this.form.website.charAt(this.form.website.length - 1) === '/'
+          ? ''
+          : '/'
+      let wen = '?'
+      if (this.form.website.indexOf('?') > -1) {
+        wen = '&'
+        gang = ''
+      }
+      return `${this.form.website}${gang}${wen}in_channel=${this.form.channel}&in_meida=${this.form.media}&in_campaign=${this.form.name}`
     }
   },
   created() {
