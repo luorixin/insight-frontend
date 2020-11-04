@@ -307,6 +307,41 @@ export const CHANNEL_NAME = [
   }
 ]
 
+export const CHANNEL_ID = [
+  {
+    value: '1',
+    label: 'Direct'
+  },
+  {
+    value: '2',
+    label: 'Organic'
+  },
+  {
+    value: '3',
+    label: 'Paid Search'
+  },
+  {
+    value: '4',
+    label: 'Display'
+  },
+  {
+    value: '5',
+    label: 'Video'
+  },
+  {
+    value: '6',
+    label: 'Social'
+  },
+  {
+    value: '7',
+    label: 'Referral'
+  },
+  {
+    value: '8',
+    label: 'Others'
+  }
+]
+
 export const convertType = (value, typeArr, defaultNotFound) => {
   defaultNotFound = defaultNotFound ? defaultNotFound : { text: '无匹配类型' }
   let types = typeArr.filter(item => {

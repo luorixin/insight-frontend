@@ -118,7 +118,7 @@ export default {
         wen = '&'
         gang = ''
       }
-      return `${this.form.website}${gang}${wen}in_channel=${this.form.channel}&in_meida=${this.form.media}&in_campaign=${this.form.name}`
+      return `${this.form.website}${gang}${wen}in_channel=${this.form.channel}&in_media=${this.form.media}&in_campaign=${this.form.name}`
     }
   },
   created() {

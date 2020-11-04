@@ -103,6 +103,12 @@ export const appRouter = [
         meta: { title: 'menu.channelAnalysis' }
       },
       {
+        path: 'media',
+        name: 'mediaAnalysis',
+        component: () => import('@/views/mediaAnalysis/Media.vue'),
+        meta: { title: 'menu.mediaAnalysis' }
+      },
+      {
         path: 'funnel',
         name: 'funnelAnalysis',
         component: () => import('@/views/funnelAnalysis/Funnel.vue'),

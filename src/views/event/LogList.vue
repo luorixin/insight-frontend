@@ -149,6 +149,25 @@
             width="120"
           >
           </el-table-column>
+
+          <el-table-column
+            prop="channel"
+            :label="$t('eventLog.channel')"
+            width="120"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="media"
+            :label="$t('eventLog.media')"
+            width="120"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="campaign"
+            :label="$t('eventLog.campaign')"
+            width="120"
+          >
+          </el-table-column>
         </el-table>
         <div class="pagination">
           <el-pagination

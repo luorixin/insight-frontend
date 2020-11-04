@@ -13,7 +13,7 @@ exportUtil.initDom = conId => {
     .getElementById(EXPORT_TITLE_ID)
     .getElementsByClassName(
       'headerWrapper'
-    )[0].style = `width: ${width}px!important;min-width:${width}px!important`
+    )[0].style = `position:relative;width: ${width}px!important;min-width:${width}px!important`
   let html =
     document.getElementById(EXPORT_TITLE_ID).innerHTML +
     '<div style="padding: 20px">' +

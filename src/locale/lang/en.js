@@ -103,6 +103,7 @@ export default {
     dashboard: 'Dashboard',
     propertySummary: 'Property Summary',
     channelAnalysis: 'Channel Analysis',
+    mediaAnalysis: 'Media Analysis',
     funnelAnalysis: 'Funnel Analysis',
     reports: 'Reports',
     eventReports: 'Event Log',
@@ -231,7 +232,10 @@ export default {
     from: 'From',
     to: 'To',
     url: 'URL',
-    visitorIp: 'Visitor IP'
+    visitorIp: 'Visitor IP',
+    channel: 'Channel',
+    media: 'Media',
+    campaign: 'Campaign'
   },
   property: {
     title: 'Property Summary',
@@ -300,6 +304,32 @@ export default {
     breakdownTip:
       'Detailed breakdown of each channel’s performance and traffic quality in various metrics',
     channel: 'Channel',
+    device: 'Device',
+    trafficSource: 'Top Traffic Source',
+    trafficSourceTip:
+      'Top 10 performing traffic sources which drive most traffic.',
+    trafficTrend: 'Trend of Traffic',
+    trafficTrendTip:
+      'Trend of specific metrics of different channel in selected period.',
+    assist: 'Assist Analysis',
+    assistTip: 'Demonstrate how channel assists others in conversion.',
+    assistNotice: 'Numbers in red: The best auxiliary media',
+    conversionPaths: 'Top Conversion Paths',
+    conversionPathsTip: 'Top 10 conversion campaigns.',
+    goal: 'Goal',
+    conversion: 'Conversion',
+    campaign: 'Campaign',
+    topAssist: 'Channel | Media',
+    totalAssist: 'Total Assisted',
+    total: 'Total'
+  },
+  media: {
+    title: 'Media Analysis',
+    breakdown: 'Traffic Breakdown',
+    breakdownTip:
+      'Detailed breakdown of each channel’s performance and traffic quality in various metrics',
+    channel: 'Channel',
+    media: 'Media',
     device: 'Device',
     trafficSource: 'Top Traffic Source',
     trafficSourceTip:
