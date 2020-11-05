@@ -101,7 +101,7 @@ export default {
     dashboard: '仪表盘',
     propertySummary: '摘要',
     channelAnalysis: '渠道分析',
-    mediaAnalysis: '媒体分析',
+    mediaAnalysis: '媒体分析（Beta）',
     funnelAnalysis: '转化漏斗分析',
     reports: '报表',
     eventReports: '活动日志',

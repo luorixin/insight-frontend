@@ -2,11 +2,11 @@ import $http from './index'
 
 const baseUrl = '/analysis/media'
 
-export const list = () =>
+export const list = params =>
   $http({
     url: $http.adornUrl(baseUrl + '/list'),
     method: 'get',
-    params: $http.adornParams({})
+    params: $http.adornParams(params)
   })
 
 export const trafficBreakdown = params =>

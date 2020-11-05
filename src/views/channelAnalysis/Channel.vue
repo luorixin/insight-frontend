@@ -1065,9 +1065,11 @@ export default {
     },
     changeTrafficChannel() {
       for (let trend in this.trafficTrend) {
-        this.trafficTrend[trend].data.forEach(item => {
-          item.value = item[this.trafficTrendForm.channelId] || 0
-        })
+        if (this.trafficTrend[trend].data) {
+          this.trafficTrend[trend].data.forEach(item => {
+            item.value = item[this.trafficTrendForm.channelId] || 0
+          })
+        }
       }
       this.trafficTrend = this.trafficTrend.concat()
     },

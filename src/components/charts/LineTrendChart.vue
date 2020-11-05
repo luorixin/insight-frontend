@@ -62,6 +62,7 @@ export default {
       for (let index = 0; index < datas.length; index++) {
         let data = datas[index]['data']
         let seriesName = datas[index]['name']
+        if (!data) continue
         if (index === 0) {
           for (let i = 0; i < data.length; i++) {
             if (data[i].date) {

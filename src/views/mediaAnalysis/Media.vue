@@ -39,7 +39,7 @@
                   v-model="formInline.channelId"
                   @change="getPageChannel"
                   :placeholder="$t('common.selOption')"
-                  style="width: 135px;"
+                  style="width: 120px;"
                 >
                   <el-option
                     v-for="item in channelIds"
@@ -60,7 +60,7 @@
                   collapse-tags
                   @change="getPageMedia"
                   :placeholder="$t('common.selOption')"
-                  style="width: 200px;"
+                  style="width: 180px;"
                 >
                   <el-option
                     v-for="item in mediaList"
@@ -489,6 +489,10 @@ export default {
       this.getData()
     },
     getData() {
+      if (this.pageMedia.length === 0) {
+        this.$message.error(this.$t('common.selOption'))
+        return
+      }
       this.getTrafficBreakDown()
       this.getTrafficSource()
       this.getTrafficTrend()
@@ -497,7 +501,7 @@ export default {
       return new Promise(resolve => {
         this.mediaLoading = true
         analysisMediaApi
-          .list()
+          .list(this.formInline)
           .then(data => {
             this.mediaList = data.map(item => {
               return { value: item, label: item }
@@ -523,9 +527,12 @@ export default {
           let leftAxis = trafficBreakdown[this.trafficBreakdownForm.type]
           let rightAxis = trafficBreakdown.goal
 
+          let mediasName = this.pageMedia.map(item => {
+            return { value: item, label: item }
+          })
           let yAxis =
             this.trafficBreakdownForm.type === 'channel'
-              ? this.channelNames
+              ? mediasName
               : this.deviceTypes
 
           this.trafficBreakdown.columns = yAxis.map(item => item.label)
@@ -537,7 +544,7 @@ export default {
             let channel = leftAxis.find(channel => {
               let y =
                 this.trafficBreakdownForm.type === 'channel'
-                  ? channel.channelName
+                  ? channel.mediaName
                   : channel.device
               return y === item.label
             })
@@ -569,14 +576,14 @@ export default {
             let channel = rightAxis.find(channel => {
               let y =
                 this.trafficBreakdownForm.type === 'channel'
-                  ? channel.channelName
+                  ? channel.mediaName
                   : channel.device
               return y === item.label
             })
             let channelLeft = leftAxis.find(channel => {
               let y =
                 this.trafficBreakdownForm.type === 'channel'
-                  ? channel.channelName
+                  ? channel.mediaName
                   : channel.device
               return y === item.label
             })
@@ -603,7 +610,7 @@ export default {
               channel
             )
           })
-          console.log(this.trafficBreakdown)
+          // console.log(this.trafficBreakdown)
           this.justifyBreakdown()
         })
         .finally(() => {
@@ -797,9 +804,11 @@ export default {
     },
     changeTrafficChannel() {
       for (let trend in this.trafficTrend) {
-        this.trafficTrend[trend].data.forEach(item => {
-          item.value = item[this.trafficTrendForm.channel] || 0
-        })
+        if (this.trafficTrend[trend].data) {
+          this.trafficTrend[trend].data.forEach(item => {
+            item.value = item[this.trafficTrendForm.channelId] || 0
+          })
+        }
       }
       this.trafficTrend = this.trafficTrend.concat()
     },
@@ -907,7 +916,7 @@ export default {
 .page-form {
   position: absolute;
   display: flex;
-  left: 150px;
+  left: 140px;
   top: -3px;
   .page-form__item {
     margin-left: 10px;

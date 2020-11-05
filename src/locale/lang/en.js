@@ -103,7 +103,7 @@ export default {
     dashboard: 'Dashboard',
     propertySummary: 'Property Summary',
     channelAnalysis: 'Channel Analysis',
-    mediaAnalysis: 'Media Analysis',
+    mediaAnalysis: 'Media Analysis（Beta）',
     funnelAnalysis: 'Funnel Analysis',
     reports: 'Reports',
     eventReports: 'Event Log',
