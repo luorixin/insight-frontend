@@ -176,6 +176,13 @@ export default {
           width: 150px;
           float: right;
           font-size: 12px;
+          .info-con__title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 140px;
+            float: left;
+          }
           .info-con__list {
             position: absolute;
             right: 20px;

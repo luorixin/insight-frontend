@@ -28,7 +28,7 @@
             <date-selector-for-report
               :needVs="false"
               reportTitle="MediaAnalysis"
-              reportType="channel"
+              reportType="media"
               @change="changeTrafficDate"
             ></date-selector-for-report>
             <hr class="reporthr" />
@@ -312,7 +312,7 @@
           <date-selector-for-report
             :needVs="false"
             @change="changeAudienceDate"
-            reportType="channel"
+            reportType="media"
             reportTitle="MediaAnalysis"
           ></date-selector-for-report>
           <hr class="reporthr" />
@@ -649,7 +649,7 @@ export default {
               data: this.getLineChartDate(
                 dateRange,
                 trafficTrend[trend],
-                form.channelId
+                form.channel
               )
             })
           }
@@ -806,7 +806,7 @@ export default {
       for (let trend in this.trafficTrend) {
         if (this.trafficTrend[trend].data) {
           this.trafficTrend[trend].data.forEach(item => {
-            item.value = item[this.trafficTrendForm.channelId] || 0
+            item.value = item[this.trafficTrendForm.channel] || 0
           })
         }
       }
