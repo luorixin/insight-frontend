@@ -503,11 +503,16 @@ export default {
         analysisMediaApi
           .list(this.formInline)
           .then(data => {
-            this.mediaList = data.map(item => {
-              return { value: item, label: item }
+            let media_channel = data.find(res => {
+              return res.channelid == this.formInline.channelId
             })
-            this.pageMedia = data.slice(0, 10)
-            this.formInline.medias = this.pageMedia.join(',')
+            if (media_channel && media_channel.mediaList.length > 0) {
+              this.mediaList = media_channel.mediaList.map(item => {
+                return { value: item, label: item }
+              })
+              this.pageMedia = media_channel.mediaList.slice(0, 10)
+              this.formInline.medias = this.pageMedia.join(',')
+            }
           })
           .finally(() => {
             this.mediaLoading = false
@@ -518,6 +523,7 @@ export default {
     getTrafficBreakDown() {
       this.trafficBreakdownLoading = false
       if (this.trafficBreakdownForm.goalId === -1) return
+      if (this.formInline.medias.length === 0) return
       this.trafficBreakdownLoading = true
       let form = Object.assign({}, this.formInline, this.trafficBreakdownForm)
       analysisMediaApi
@@ -635,6 +641,7 @@ export default {
         this.trafficTrendForm.channel === -1
       )
         return
+      if (this.formInline.medias.length === 0) return
       this.trafficTrendLoading = true
       let form = Object.assign({}, this.formInline, this.trafficTrendForm)
       analysisMediaApi
@@ -685,7 +692,7 @@ export default {
       })
     },
     getPageChannel() {
-      this.getData()
+      this.getDataList()
     },
     getPageMedia() {
       this.formInline.medias = this.pageMedia.join(',')

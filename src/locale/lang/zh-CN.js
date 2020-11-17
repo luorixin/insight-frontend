@@ -193,7 +193,7 @@ export default {
     selectConversion: '选择一个事件作为转化目标'
   },
   funnels: {
-    title: '转化漏斗漏斗设置',
+    title: '转化漏斗设置',
     create: '转化漏斗',
     batch: '批量处理',
     id: '转化漏斗ID',
