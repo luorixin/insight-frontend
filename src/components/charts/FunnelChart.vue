@@ -60,7 +60,7 @@
           <p>proceed to {{ item.eventName }}</p>
           <p>
             {{ item.totalEvents | toThousandFilter }} ({{
-              getPer(item.totalEvents)
+              getPer(item.totalEvents, datas[i - 1].totalEvents)
             }}%)
           </p>
         </div>
@@ -272,10 +272,8 @@ export default {
         ]
       }
     },
-    getPer(value) {
-      return this.total == 0
-        ? 0
-        : parseFloat(((value * 100) / this.total).toFixed(2))
+    getPer(value, total) {
+      return total == 0 ? 0 : parseFloat(((value * 100) / total).toFixed(2))
     },
     processLeft(index) {
       return (-(250 / (this.datas.length + 1)) / 2) * index + 10 + 'px'

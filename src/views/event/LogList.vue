@@ -69,6 +69,7 @@
           ></el-button>
         </el-input>
         <div class="main-opt">
+          <label style="color:#666;">{{ $t('eventLog.tip') }} </label>
           <el-button
             icon="fa fa-download"
             @click="handleDownload"
@@ -246,7 +247,7 @@ export default {
         endTime: moment(this.formInline.timeArr[1]).format('HH:mm:ss'),
         date: this.formInline.date,
         page: 1, //this.formInline.page,
-        size: 10000 //this.formInline.pageSize
+        size: 500 //this.formInline.pageSize
       }
       eventsApi
         .eventLogTable(params)

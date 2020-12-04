@@ -4,7 +4,7 @@ const baseUrl = '/reports'
 
 export const list = () =>
   $http({
-    url: $http.adornUrl(baseUrl + '/download'),
+    url: $http.adornUrl(baseUrl + '/list'),
     method: 'get',
     params: $http.adornParams({})
   })

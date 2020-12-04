@@ -522,7 +522,7 @@ export default {
     },
     getTrafficBreakDown() {
       this.trafficBreakdownLoading = false
-      if (this.trafficBreakdownForm.goalId === -1) return
+      // if (this.trafficBreakdownForm.goalId === -1) return
       if (this.formInline.medias.length === 0) return
       this.trafficBreakdownLoading = true
       let form = Object.assign({}, this.formInline, this.trafficBreakdownForm)

@@ -110,7 +110,10 @@ export default {
     eventLog: 'Event Log',
     downloadReports: 'Download Reports',
     tools: 'Tools',
-    generate: 'Campaign URL Builder'
+    generate: 'Campaign URL Builder',
+    settings: 'Settings',
+    users: 'Users',
+    roles: 'Roles'
   },
   footer: {
     power: 'Powered by iClick. All Rights Reserved. ',
@@ -235,7 +238,9 @@ export default {
     visitorIp: 'Visitor IP',
     channel: 'Channel',
     media: 'Media',
-    campaign: 'Campaign'
+    campaign: 'Campaign',
+    tip:
+      'Only show the latest 500 data. Please click "Download" to export all data.'
   },
   property: {
     title: 'Property Summary',
@@ -403,6 +408,45 @@ export default {
     urlTitle: 'Share the generated campaign URL',
     urlTip:
       'Use the URL in any promotional channels you want to be associated with this custom campaign'
+  },
+  users: {
+    title: 'Users',
+    create: 'User',
+    name: 'User Name',
+    agency: 'Agency',
+    advertiser: 'Advertiser',
+    status: 'Status',
+    action: 'Action'
+  },
+  roles: {
+    title: 'Roles',
+    create: 'Role',
+    name: 'Role Name',
+    namePlaceholder: 'Please Enter Role Name',
+    memo: 'Memo',
+    purview: 'Purview',
+    action: 'Action',
+    status: 'Status'
+  },
+  roleTable: {
+    view: 'View',
+    add: 'Add',
+    edit: 'Edit',
+    delete: 'Delete',
+    download: 'Download',
+    event: 'Event',
+    goal: 'Goal',
+    funnel: 'Funnel',
+    setup: 'SetUp',
+    dashboard: 'Dashboard',
+    analysissummary: 'Analysis Summary',
+    analysischannel: 'Analysis Channel',
+    analysismeida: 'Analysis Meida',
+    analysisfunnel: 'Analysis Funnel',
+    analysismedia: 'Analysis Media',
+    report: 'Report',
+    reports: 'Reports',
+    eventlog: 'EventLog'
   },
   errorInfo: {
     emptyInput: 'Please enter something!'

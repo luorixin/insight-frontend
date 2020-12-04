@@ -1,6 +1,6 @@
 import $http from './index'
 
-const baseUrl = '/analysis/media'
+const baseUrl = '/analysismedia'
 
 export const list = params =>
   $http({
@@ -11,21 +11,21 @@ export const list = params =>
 
 export const trafficBreakdown = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/traffic/breakdown'),
+    url: $http.adornUrl(baseUrl + '/breakdown'),
     method: 'post',
     data: $http.adornData(params)
   })
 
 export const trafficSource = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/traffic/source'),
+    url: $http.adornUrl(baseUrl + '/trafficsource'),
     method: 'post',
     data: $http.adornData(params)
   })
 
 export const trafficTrend = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/traffic/trend'),
+    url: $http.adornUrl(baseUrl + '/traffictrend'),
     method: 'post',
     data: $http.adornData(params)
   })

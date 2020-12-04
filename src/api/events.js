@@ -2,6 +2,8 @@ import $http from './index'
 
 const baseUrl = '/event'
 
+const baseLogUrl = '/eventlog'
+
 export const list = () =>
   $http({
     url: $http.adornUrl(baseUrl + '/list'),
@@ -11,14 +13,14 @@ export const list = () =>
 
 export const LogList = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/LogList'),
+    url: $http.adornUrl(baseLogUrl + '/LogList'),
     method: 'get',
     params: $http.adornParams(params)
   })
 
 export const eventLogTable = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/eventLogTable'),
+    url: $http.adornUrl(baseLogUrl + '/eventLogTable'),
     method: 'post',
     data: $http.adornData(params)
   })
@@ -61,7 +63,7 @@ export const download = params =>
 
 export const exportXls = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/export'),
+    url: $http.adornUrl(baseLogUrl + '/export'),
     method: 'post',
     responseType: 'blob',
     data: $http.adornData(params)

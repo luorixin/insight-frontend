@@ -342,6 +342,19 @@ export const CHANNEL_ID = [
   }
 ]
 
+export const ACCOUNT_STATUS = [
+  {
+    value: '0',
+    label: 'Active',
+    type: 'success'
+  },
+  {
+    value: '1',
+    label: 'Paused',
+    type: 'danger'
+  }
+]
+
 export const convertType = (value, typeArr, defaultNotFound) => {
   defaultNotFound = defaultNotFound ? defaultNotFound : { text: '无匹配类型' }
   let types = typeArr.filter(item => {

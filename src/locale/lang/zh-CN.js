@@ -108,7 +108,10 @@ export default {
     eventLog: '活动日志',
     downloadReports: '下载报表',
     tools: '辅助工具',
-    generate: '推广连结生成器'
+    generate: '推广连结生成器',
+    settings: '设置',
+    users: '用户',
+    roles: '角色'
   },
   footer: {
     power: '由爱点击提供技术支持。版权所有。',
@@ -229,7 +232,8 @@ export default {
     visitorIp: '访客IP',
     channel: '频道',
     media: '媒体',
-    campaign: '推广计划'
+    campaign: '推广计划',
+    tip: '页面只展示最近500条数据，如需查询所有数据请使用点击"下载"汇出。'
   },
   property: {
     title: '网站/应用程序摘要',
@@ -382,6 +386,45 @@ export default {
     nameTip: '媒体名称 (e.g. spring_sale)',
     urlTitle: '分享生成的广告计划连结',
     urlTip: '用于想要与此自定义推广计划相关联的任何促销渠道中使用该连结'
+  },
+  users: {
+    title: '用户',
+    create: '用户',
+    name: '用户名',
+    agency: '代理商',
+    advertiser: '广告主',
+    status: '状态',
+    action: '操作'
+  },
+  roles: {
+    title: '角色',
+    create: '角色',
+    name: '角色名',
+    namePlaceholder: '请输入角色名',
+    memo: '备注',
+    purview: '权限列表',
+    action: '操作',
+    status: '状态'
+  },
+  roleTable: {
+    view: '查看',
+    add: '新增',
+    edit: '编辑',
+    delete: '删除',
+    download: '下载',
+    event: '活动设置',
+    goal: '目标设置',
+    funnel: '漏斗设置',
+    setup: '设置',
+    dashboard: '仪表盘',
+    analysissummary: '摘要',
+    analysischannel: '渠道分析',
+    analysismeida: '媒体分析',
+    analysisfunnel: '转化漏斗分析',
+    analysismedia: '媒体分析',
+    report: '报表',
+    reports: '下载报表',
+    eventlog: '活动日志'
   },
   errorInfo: {
     emptyInput: '请输入一些东西'

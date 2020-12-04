@@ -617,7 +617,7 @@ export default {
     },
     getTrafficBreakDown() {
       this.trafficBreakdownLoading = false
-      if (this.trafficBreakdownForm.goalId === -1) return
+      // if (this.trafficBreakdownForm.goalId === -1) return
       this.trafficBreakdownLoading = true
       let form = Object.assign({}, this.formInline, this.trafficBreakdownForm)
       analysisChannelApi

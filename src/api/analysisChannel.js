@@ -1,10 +1,10 @@
 import $http from './index'
 
-const baseUrl = '/analysis/channel'
+const baseUrl = '/analysischannel'
 
 export const assist = () =>
   $http({
-    url: $http.adornUrl(baseUrl + '/assist'),
+    url: $http.adornUrl(baseUrl + '/getassist'),
     method: 'get',
     params: $http.adornParams({})
   })
@@ -18,35 +18,35 @@ export const list = () =>
 
 export const trafficBreakdown = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/traffic/breakdown'),
+    url: $http.adornUrl(baseUrl + '/breakdown'),
     method: 'post',
     data: $http.adornData(params)
   })
 
 export const trafficSource = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/traffic/source'),
+    url: $http.adornUrl(baseUrl + '/trafficsource'),
     method: 'post',
     data: $http.adornData(params)
   })
 
 export const trafficTrend = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/traffic/trend'),
+    url: $http.adornUrl(baseUrl + '/trend'),
     method: 'post',
     data: $http.adornData(params)
   })
 
 export const conversionPath = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/conversion/paths'),
+    url: $http.adornUrl(baseUrl + '/paths'),
     method: 'post',
     data: $http.adornData(params)
   })
 
 export const assistAnalysis = params =>
   $http({
-    url: $http.adornUrl(baseUrl + '/assist/analysis'),
+    url: $http.adornUrl(baseUrl + '/assist'),
     method: 'post',
     data: $http.adornData(params)
   })

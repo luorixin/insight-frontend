@@ -150,6 +150,26 @@ export const appRouter = [
       }
     ]
   },
+  {
+    path: '/settings',
+    component: Home,
+    icon: 'fa el-icon-setting',
+    meta: { title: 'menu.settings' },
+    children: [
+      {
+        path: 'users',
+        name: 'users',
+        component: () => import('@/views/settings/Users.vue'),
+        meta: { title: 'menu.users' }
+      },
+      {
+        path: 'roles',
+        name: 'roles',
+        component: () => import('@/views/settings/Roles.vue'),
+        meta: { title: 'menu.roles' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', meta: { title: '404', notInMenu: true } }
 ]
 
