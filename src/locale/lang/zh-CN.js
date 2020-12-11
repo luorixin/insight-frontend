@@ -62,7 +62,8 @@ export default {
     vs: 'vs.',
     prev: 'prev.',
     noResultDetail: '( 没有结果 )',
-    customise: '定制化'
+    customise: '定制化',
+    noPermisson: '您没有权限做此操作！'
   },
   login: {
     error: {
@@ -391,6 +392,7 @@ export default {
     title: '用户',
     create: '用户',
     name: '用户名',
+    role: '角色名',
     agency: '代理商',
     advertiser: '广告主',
     status: '状态',

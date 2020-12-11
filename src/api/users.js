@@ -8,3 +8,10 @@ export const list = params =>
     method: 'get',
     params: $http.adornParams(params)
   })
+
+export const perm = params =>
+  $http({
+    url: $http.adornUrl(baseUrl + '/perm'),
+    method: 'get',
+    params: $http.adornParams(params)
+  })

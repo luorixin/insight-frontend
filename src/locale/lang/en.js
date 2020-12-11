@@ -63,7 +63,8 @@ export default {
     vs: 'vs.',
     prev: 'prev.',
     noResultDetail: '(There is no result.)',
-    customise: 'Customise'
+    customise: 'Customise',
+    noPermisson: 'You dont have permisson for this operate!'
   },
   login: {
     error: {
@@ -413,6 +414,7 @@ export default {
     title: 'Users',
     create: 'User',
     name: 'User Name',
+    role: 'Role Name',
     agency: 'Agency',
     advertiser: 'Advertiser',
     status: 'Status',

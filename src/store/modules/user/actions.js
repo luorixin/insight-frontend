@@ -2,6 +2,8 @@ import { appRouter, constantRoutes } from '@/router/router.js'
 import { resetRouter } from '@/router'
 import Util from '@/utils'
 import * as authApi from '@/api/auth.js'
+import * as userApi from '@/api/users.js'
+import i18n from '@/locale'
 
 function hasPermission(permissons, route) {
   if (route.meta && route.meta.permission) {
@@ -59,6 +61,27 @@ export default {
         .then(response => {
           commit('setToken', response.token)
           commit('setUserDetail', username.trim())
+          if (response.perm && response.perm.module) {
+            let Route = response.perm.module
+            let permissons = []
+            for (let rou in Route) {
+              if (!Util.isEmpty(Route[rou])) {
+                let actions = Route[rou].split(',')
+                actions.forEach(action => permissons.push(`${rou}.${action}`))
+              }
+            }
+            if (response.perm.user_id === 3) {
+              permissons = permissons.concat('admin.users', 'admin.roles')
+            }
+            // permissons must be a non-empty array
+            if (!permissons || permissons.length <= 0) {
+              reject(i18n.t('common.noPermisson'))
+            }
+            commit('setPermission', permissons)
+          } else {
+            // reject(i18n.t('common.noPermisson'))
+            // commit('setPermission', [123])
+          }
           Util.setToken(response.token)
           resolve()
         })
@@ -87,38 +110,36 @@ export default {
   },
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      if (
-        state.userDetail &&
-        state.userDetail.authPages &&
-        state.userDetail.authPages.length > 0
-      ) {
-        commit('setPermission', state.userDetail.authPages)
-        resolve(state.userDetail.authPages)
+      if (state.permission && state.permission.length > 0) {
+        commit('setPermission', state.permission)
+        resolve(state.permission)
       } else {
-        // userApi.userRoute().then(response => {
-        //   if (response.data.code === '0000') {
-        //     let Route = response.data.data.roleRoute
-        //     let permissons = []
-        //     Route.forEach(route => {
-        //       permissons = permissons.concat(Util.treeToArray(route,'name'))
-        //     })
-
-        //     console.log(permissons)
-        //     // permissons must be a non-empty array
-        //     if (!permissons || permissons.length <= 0) {
-        //       reject('getInfo: permissons must be a non-null array!')
-        //     }
-        //     let data = permissons
-        //     commit('setPermission', data)
-        //     commit('setRoute', Route)
-        //     resolve(data)
-        //   }else {
-        //     reject('Verification failed, please Login again.')
-        //   }
-        // }).catch(error => {
-        //   reject(error)
-        // })
-        resolve([])
+        userApi
+          .perm()
+          .then(data => {
+            let Route = data.module
+            let permissons = []
+            for (let rou in Route) {
+              if (!Util.isEmpty(Route[rou])) {
+                let actions = Route[rou].split(',')
+                actions.forEach(action => permissons.push(`${rou}.${action}`))
+              }
+            }
+            if (data.user_id === 3) {
+              permissons = permissons.concat('admin.users', 'admin.roles')
+            }
+            console.log(permissons)
+            // permissons must be a non-empty array
+            if (!permissons || permissons.length <= 0) {
+              reject(i18n.t('common.noPermisson'))
+            }
+            commit('setPermission', permissons)
+            commit('setRoute', Route)
+            resolve(permissons)
+          })
+          .catch(error => {
+            reject(error)
+          })
       }
     })
   },

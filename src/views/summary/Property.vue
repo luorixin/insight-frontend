@@ -10,6 +10,7 @@
     <div class="report-opt">
       <el-button
         icon="fa fa-download"
+        v-hasPermission="'analysissummary.download'"
         @click="handleDownload"
         :disabled="isDownload || loading"
         >{{ $t('common.export') }}</el-button

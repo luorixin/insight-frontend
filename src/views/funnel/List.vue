@@ -9,10 +9,19 @@
     </div>
     <div class="container-wrapper">
       <div class="main-tool">
-        <el-button type="primary" icon="el-icon-plus" @click="handleCreate">{{
-          $t('funnels.create')
-        }}</el-button>
-        <el-dropdown class="more-menu" @command="handleBatch">
+        <el-button
+          type="primary"
+          icon="el-icon-plus"
+          class="add-menu"
+          @click="handleCreate"
+          v-hasPermission="'funnel.add'"
+          >{{ $t('funnels.create') }}</el-button
+        >
+        <el-dropdown
+          class="more-menu"
+          @command="handleBatch"
+          v-hasPermission="'funnel.edit'"
+        >
           <el-button type="primary">
             {{ $t('funnels.batch')
             }}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -100,6 +109,7 @@
             <template slot-scope="scope">
               <div
                 class="fa-icon-box"
+                v-hasPermission="'funnel.edit'"
                 @click="handleEdit(scope.$index, scope.row)"
               >
                 <i class="fa fa-edit"></i>
@@ -349,12 +359,15 @@ export default {
 <style lang="scss" scoped>
 .main-tool {
   display: flex;
+  .add-menu {
+    margin-right: 20px;
+  }
   .input-search {
-    margin-left: 20px;
+    margin-right: 20px;
     width: 250px;
   }
   .more-menu {
-    margin-left: 20px;
+    margin-right: 20px;
     button {
       background-color: #fff;
       border-color: #dfdfdf;

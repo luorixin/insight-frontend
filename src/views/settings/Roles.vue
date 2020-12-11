@@ -18,14 +18,14 @@
         >
         <el-input
           :placeholder="$t('common.search')"
-          v-model="formInline.search"
+          v-model="formInline.name"
           class="input-search"
           @input="handleSearch"
         >
           <el-button
             slot="append"
             icon="el-icon-search"
-            @click="handleSearch(formInline.search)"
+            @click="handleSearch(formInline.name)"
           ></el-button>
         </el-input>
       </div>
@@ -126,7 +126,7 @@ export default {
     return {
       loading: false,
       formInline: {
-        search: null,
+        name: null,
         pageNum: 1,
         pageSize: 10
       },
@@ -156,9 +156,13 @@ export default {
       rolesApi
         .list(this.formInline)
         .then(data => {
-          this.allList = data.list.concat()
+          if (data && data.list && data.list.length > 0) {
+            this.allList = data.list.concat()
+          } else {
+            this.allList = []
+          }
           this.currentList = this.allList.slice()
-          this.totalCount = this.allList.length
+          this.totalCount = data.total
         })
         .finally(() => {
           this.loading = false
@@ -166,7 +170,7 @@ export default {
     },
     makeDebounce() {
       this.debounceSearch = Util.debounce(search => {
-        this.formInline.search = search
+        this.formInline.name = search
         this.getDataList()
       }, 250)
     },
@@ -200,9 +204,10 @@ export default {
     handleSet(result) {
       this.modal = false
       if (result) {
-        this.formInline.pageNum = 1
-        this.formInline.pageSize = 10
-        this.getDataList()
+        // this.formInline.pageNum = 1
+        // this.formInline.pageSize = 10
+        // this.getDataList()
+        window.location.reload()
       }
     },
     addBodyClass() {
@@ -215,11 +220,11 @@ export default {
     handleCurrentChange(val) {
       this.formInline.pageNum = val
       // 数组处理
-      this.debounceSearch(this.formInline.search)
+      this.debounceSearch(this.formInline.name)
     },
     handleSizeChange(val) {
       this.formInline.pageSize = val
-      this.debounceSearch(this.formInline.search)
+      this.debounceSearch(this.formInline.name)
     }
   }
 }

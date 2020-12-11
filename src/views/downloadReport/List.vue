@@ -49,6 +49,7 @@
           ></el-table-column>
           <el-table-column
             :label="$t('downloadReport.action')"
+            v-if="$_hasPermission('reports.download')"
             width="100"
             align="center"
             fixed="right"

@@ -62,7 +62,7 @@ export const appRouter = [
         path: 'event',
         name: 'eventList',
         component: () => import('@/views/event/List.vue'),
-        meta: { title: 'menu.eventSetup' }
+        meta: { title: 'menu.eventSetup', permission: 'event.view' }
       },
       // {
       //   path: 'eventLog',
@@ -74,13 +74,13 @@ export const appRouter = [
         path: 'goal',
         name: 'goalList',
         component: () => import('@/views/goal/List.vue'),
-        meta: { title: 'menu.goalSetup' }
+        meta: { title: 'menu.goalSetup', permission: 'goal.view' }
       },
       {
         path: 'funnel',
         name: 'funnelList',
         component: () => import('@/views/funnel/List.vue'),
-        meta: { title: 'menu.funnelSetup' }
+        meta: { title: 'menu.funnelSetup', permission: 'funnel.view' }
       }
     ]
   },
@@ -94,25 +94,34 @@ export const appRouter = [
         path: 'summary',
         name: 'propertySummary',
         component: () => import('@/views/summary/Property.vue'),
-        meta: { title: 'menu.propertySummary' }
+        meta: {
+          title: 'menu.propertySummary',
+          permission: 'analysissummary.view'
+        }
       },
       {
         path: 'channel',
         name: 'channelAnalysis',
         component: () => import('@/views/channelAnalysis/Channel.vue'),
-        meta: { title: 'menu.channelAnalysis' }
+        meta: {
+          title: 'menu.channelAnalysis',
+          permission: 'analysischannel.view'
+        }
       },
       {
         path: 'media',
         name: 'mediaAnalysis',
         component: () => import('@/views/mediaAnalysis/Media.vue'),
-        meta: { title: 'menu.mediaAnalysis' }
+        meta: { title: 'menu.mediaAnalysis', permission: 'analysismedia.view' }
       },
       {
         path: 'funnel',
         name: 'funnelAnalysis',
         component: () => import('@/views/funnelAnalysis/Funnel.vue'),
-        meta: { title: 'menu.funnelAnalysis' }
+        meta: {
+          title: 'menu.funnelAnalysis',
+          permission: 'analysisfunnel.view'
+        }
       }
     ]
   },
@@ -126,13 +135,13 @@ export const appRouter = [
         path: 'event',
         name: 'eventReports',
         component: () => import('@/views/event/LogList.vue'),
-        meta: { title: 'menu.eventReports' }
+        meta: { title: 'menu.eventReports', permission: 'reports.view' }
       },
       {
         path: 'download',
         name: 'downloadReports',
         component: () => import('@/views/downloadReport/List.vue'),
-        meta: { title: 'menu.downloadReports' }
+        meta: { title: 'menu.downloadReports', permission: 'eventlog.view' }
       }
     ]
   },
@@ -160,13 +169,13 @@ export const appRouter = [
         path: 'users',
         name: 'users',
         component: () => import('@/views/settings/Users.vue'),
-        meta: { title: 'menu.users' }
+        meta: { title: 'menu.users', permission: 'admin.users' }
       },
       {
         path: 'roles',
         name: 'roles',
         component: () => import('@/views/settings/Roles.vue'),
-        meta: { title: 'menu.roles' }
+        meta: { title: 'menu.roles', permission: 'admin.roles' }
       }
     ]
   },

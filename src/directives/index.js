@@ -12,8 +12,8 @@ const hasPermission = userPermission => {
   return userPermissionList.some(e => permissionList.includes(e))
 }
 
-// v-hasPermisson: 按钮权限控制
-Vue.directive('hasPermisson', {
+// v-hasPermission: 按钮权限控制
+Vue.directive('hasPermission', {
   inserted(el, binding, vnode, oldVnode) {
     if (!hasPermission(binding.value)) {
       el.parentNode && el.parentNode.removeChild(el)
@@ -37,4 +37,4 @@ Vue.directive('loadmore', {
 })
 
 // 全局判断方法
-Vue.prototype.$_hasPermisson = hasPermission
+Vue.prototype.$_hasPermission = hasPermission

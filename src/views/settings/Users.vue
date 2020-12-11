@@ -18,14 +18,14 @@
         >
         <el-input
           :placeholder="$t('common.search')"
-          v-model="formInline.search"
+          v-model="formInline.name"
           class="input-search"
           @input="handleSearch"
         >
           <el-button
             slot="append"
             icon="el-icon-search"
-            @click="handleSearch(formInline.search)"
+            @click="handleSearch(formInline.name)"
           ></el-button>
         </el-input>
       </div>
@@ -43,17 +43,23 @@
             :label="$t('users.name')"
           ></el-table-column>
           <el-table-column
+            prop="roleId"
+            :label="$t('users.role')"
+            :formatter="getRoleName"
+            width="150"
+          ></el-table-column>
+          <el-table-column
             prop="agentList"
             :label="$t('users.agency')"
             :formatter="joinArray"
-            width="400"
+            width="350"
           >
           </el-table-column>
           <el-table-column
             prop="advertiserList"
             :label="$t('users.advertiser')"
             :formatter="joinArray"
-            width="400"
+            width="350"
           >
           </el-table-column>
           <el-table-column
@@ -121,6 +127,7 @@
 
 <script>
 import * as usersApi from '@/api/users'
+import * as rolesApi from '@/api/roles'
 import Util from '@/utils'
 import moment from 'moment'
 import UserModal from './UserModal'
@@ -134,10 +141,11 @@ export default {
     return {
       loading: false,
       formInline: {
-        search: null,
+        name: null,
         pageNum: 1,
         pageSize: 10
       },
+      roleList: [],
       totalCount: 0,
       pageSizes: PAGE_SIZES,
       firstWidth: 200,
@@ -149,7 +157,8 @@ export default {
       row: null
     }
   },
-  created() {
+  async created() {
+    await this.getRoleList()
     this.getDataList()
     this.makeDebounce()
     if (window.innerWidth > 1600) {
@@ -164,17 +173,44 @@ export default {
       usersApi
         .list(this.formInline)
         .then(data => {
-          this.allList = data.list.concat()
+          if (data && data.list && data.list.length > 0) {
+            this.allList = data.list.concat()
+          } else {
+            this.allList = []
+          }
           this.currentList = this.allList.slice()
-          this.totalCount = this.allList.length
+          this.totalCount = data.total
         })
         .finally(() => {
           this.loading = false
         })
     },
+    getRoleList() {
+      return new Promise(resolve => {
+        rolesApi
+          .list({ pageNum: 1, pageSize: 10000 })
+          .then(data => {
+            if (data && data.list && data.list.length > 0) {
+              this.roleList = data.list.concat()
+            } else {
+              this.roleList = []
+            }
+          })
+          .finally(() => {
+            resolve()
+          })
+      })
+    },
+    getRoleName(row, column, cellValue, index) {
+      if (!cellValue || this.roleList.length === 0) return null
+      let role = this.roleList.find(item => {
+        return item.id == cellValue
+      })
+      return role ? role.name : cellValue
+    },
     makeDebounce() {
       this.debounceSearch = Util.debounce(search => {
-        this.formInline.search = search
+        this.formInline.name = search
         this.getDataList()
       }, 250)
     },
@@ -189,7 +225,8 @@ export default {
       cellValue.forEach(item => {
         result.push(item.name)
       })
-      return result.slice(0, 10).join(',')
+      let moredot = result.length > 10 ? '...' : ''
+      return result.slice(0, 10).join(',') + moredot
     },
     handleSearch(val) {
       this.formInline.pageNum = 1
@@ -223,11 +260,11 @@ export default {
     handleCurrentChange(val) {
       this.formInline.pageNum = val
       // 数组处理
-      this.debounceSearch(this.formInline.search)
+      this.debounceSearch(this.formInline.name)
     },
     handleSizeChange(val) {
       this.formInline.pageSize = val
-      this.debounceSearch(this.formInline.search)
+      this.debounceSearch(this.formInline.name)
     }
   }
 }

@@ -11,6 +11,7 @@
       <el-button
         icon="fa fa-download"
         @click="handleDownload"
+        v-hasPermission="'analysismedia.download'"
         :disabled="isDownload || loading"
         >{{ $t('common.export') }}</el-button
       >

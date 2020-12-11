@@ -1,9 +1,13 @@
 <template>
   <div>
     <p>{{ $t('funnels.selectEventTip') }}</p>
-    <el-button type="primary" icon="el-icon-plus" @click="handleAdd">{{
-      $t('funnels.addEvents')
-    }}</el-button>
+    <el-button
+      type="primary"
+      icon="el-icon-plus"
+      v-hasPermission="'event.view'"
+      @click="handleAdd"
+      >{{ $t('funnels.addEvents') }}</el-button
+    >
     <div class="main-table">
       <el-table
         :data="currentList"

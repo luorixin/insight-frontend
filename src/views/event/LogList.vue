@@ -68,7 +68,7 @@
             @click="handleName(formInline.eventName)"
           ></el-button>
         </el-input>
-        <div class="main-opt">
+        <div class="main-opt" v-hasPermission="'eventlog.download'">
           <label style="color:#666;">{{ $t('eventLog.tip') }} </label>
           <el-button
             icon="fa fa-download"
