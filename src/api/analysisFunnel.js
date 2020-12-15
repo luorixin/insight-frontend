@@ -1,6 +1,6 @@
 import $http from './index'
 
-const baseUrl = '/analysissfunnel'
+const baseUrl = '/analysisfunnel'
 
 export const list = () =>
   $http({

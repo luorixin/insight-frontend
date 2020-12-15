@@ -448,7 +448,9 @@ export default {
     analysismedia: 'Analysis Media',
     report: 'Report',
     reports: 'Reports',
-    eventlog: 'EventLog'
+    eventlog: 'EventLog',
+    tools: 'Tools',
+    generate: 'Campaign URL Builder'
   },
   errorInfo: {
     emptyInput: 'Please enter something!'

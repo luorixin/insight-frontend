@@ -128,7 +128,7 @@ export default {
             if (data.user_id === 3) {
               permissons = permissons.concat('admin.users', 'admin.roles')
             }
-            console.log(permissons)
+            // console.log(permissons)
             // permissons must be a non-empty array
             if (!permissons || permissons.length <= 0) {
               reject(i18n.t('common.noPermisson'))

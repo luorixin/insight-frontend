@@ -426,7 +426,9 @@ export default {
     analysismedia: '媒体分析',
     report: '报表',
     reports: '下载报表',
-    eventlog: '活动日志'
+    eventlog: '活动日志',
+    tools: '辅助工具',
+    generate: '推广连结生成器'
   },
   errorInfo: {
     emptyInput: '请输入一些东西'

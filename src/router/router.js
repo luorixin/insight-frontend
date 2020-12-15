@@ -155,7 +155,7 @@ export const appRouter = [
         path: 'generate',
         name: 'generate',
         component: () => import('@/views/tools/Generate.vue'),
-        meta: { title: 'menu.generate' }
+        meta: { title: 'menu.generate', permission: 'generate.view' }
       }
     ]
   },

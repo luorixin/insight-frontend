@@ -93,6 +93,7 @@ export default {
     id: {
       handler(newName, oldName) {
         this.roleId = newName
+        newName && this.getDataList()
       },
       immediate: true
     },
@@ -151,15 +152,15 @@ export default {
             this.loading = false
           })
       } else {
-        rolesApi
-          .toCreate()
-          .then(data => {
-            this.ruleForm = Object.assign({}, this.baseData)
-          })
-          .finally(() => {
-            this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
-            this.loading = false
-          })
+        // rolesApi
+        //   .toCreate()
+        //   .then(data => {
+        //     this.ruleForm = Object.assign({}, this.baseData)
+        //   })
+        //   .finally(() => {
+        //     this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
+        //     this.loading = false
+        //   })
       }
     },
     closeModal() {
@@ -194,16 +195,17 @@ export default {
           if (this.roleId) {
             promise = rolesApi.doUpdate(subForm)
           } else {
-            promise = rolesApi.create(subForm)
+            // promise = rolesApi.create(subForm)
           }
-          promise
-            .then(data => {
-              this.$emit('getResult', true)
-              this.$message.success(this.$t('common.optSuccess'))
-            })
-            .finally(() => {
-              this.loading = false
-            })
+          promise &&
+            promise
+              .then(data => {
+                this.$emit('getResult', true)
+                this.$message.success(this.$t('common.optSuccess'))
+              })
+              .finally(() => {
+                this.loading = false
+              })
         }
       })
     }

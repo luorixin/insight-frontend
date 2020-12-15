@@ -128,33 +128,33 @@ export default {
   },
   methods: {
     getDataList() {
-      this.loading = true
-      if (this.funnelId) {
-        usersApi
-          .toUpdate(this.funnelId)
-          .then(data => {
-            this.ruleForm = Object.assign({}, data.funnel)
-            this.ruleForm.status += ''
-            this.ruleForm.stepsOrigin = this.ruleForm.steps.map(item => {
-              let newItem = Object.assign(item, { id: item.eventId })
-              return newItem
-            })
-          })
-          .finally(() => {
-            this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
-            this.loading = false
-          })
-      } else {
-        usersApi
-          .toCreate()
-          .then(data => {
-            this.ruleForm = Object.assign({}, this.baseData)
-          })
-          .finally(() => {
-            this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
-            this.loading = false
-          })
-      }
+      // this.loading = true
+      // if (this.funnelId) {
+      //   usersApi
+      //     .toUpdate(this.funnelId)
+      //     .then(data => {
+      //       this.ruleForm = Object.assign({}, data.funnel)
+      //       this.ruleForm.status += ''
+      //       this.ruleForm.stepsOrigin = this.ruleForm.steps.map(item => {
+      //         let newItem = Object.assign(item, { id: item.eventId })
+      //         return newItem
+      //       })
+      //     })
+      //     .finally(() => {
+      //       this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
+      //       this.loading = false
+      //     })
+      // } else {
+      //   usersApi
+      //     .toCreate()
+      //     .then(data => {
+      //       this.ruleForm = Object.assign({}, this.baseData)
+      //     })
+      //     .finally(() => {
+      //       this.$refs.ruleForm && this.$refs.ruleForm.clearValidate()
+      //       this.loading = false
+      //     })
+      // }
     },
     closeModal() {
       this.$emit('getResult', false)
@@ -166,21 +166,21 @@ export default {
       }
       this.$refs['ruleForm'].validate((valid, model) => {
         if (valid) {
-          this.loading = true
-          let promise = null
-          if (this.funnelId) {
-            promise = usersApi.update(this.ruleForm)
-          } else {
-            promise = usersApi.create(this.ruleForm)
-          }
-          promise
-            .then(data => {
-              this.$emit('getResult', true)
-              this.$message.success(this.$t('common.optSuccess'))
-            })
-            .finally(() => {
-              this.loading = false
-            })
+          // this.loading = true
+          // let promise = null
+          // if (this.funnelId) {
+          //   promise = usersApi.update(this.ruleForm)
+          // } else {
+          //   promise = usersApi.create(this.ruleForm)
+          // }
+          // promise
+          //   .then(data => {
+          //     this.$emit('getResult', true)
+          //     this.$message.success(this.$t('common.optSuccess'))
+          //   })
+          //   .finally(() => {
+          //     this.loading = false
+          //   })
         }
       })
     }
