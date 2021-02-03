@@ -160,6 +160,10 @@ export default {
           })
           this.currentAdvertiser = userHeader.currentClient
           this.currentAgent = userHeader.currentAgent
+          this.$store.commit(
+            'user/setCurrentClientId',
+            this.currentAdvertiser.clientId
+          )
           this.agents.forEach(item => {
             this.$set(item, 'showChild', false)
           })
@@ -244,6 +248,7 @@ export default {
             // Cookies.set('INSIGHTS_USER', data.insights_user)
             Util.setCookie('INSIGHTS_USER', data.insights_user)
             // this.$router.replace({name: this.$store.state.common.currentMenu})
+            this.$store.commit('user/setCurrentClientId', adv.clientId)
             this.$router.replace({ path: '/refresh' })
           }
         })

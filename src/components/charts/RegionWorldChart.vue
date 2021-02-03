@@ -72,9 +72,14 @@ export default {
   watch: {
     datas: {
       handler(newName, oldName) {
+        this.page = 1
         this.initData(newName.concat())
       },
       immediate: true
+    },
+    '$i18n.locale'() {
+      // this.options.geo.nameMap = WORLD_MAP[this.$i18n.locale]
+      this.initData(this.datas)
     }
   },
   components: {
@@ -131,9 +136,11 @@ export default {
         max = 0,
         _min = 1
       //转化名字
+      let currentLang = this.$store.state.common.currentLang
+
       let newRegion = data.map(function(item) {
         return {
-          name: WORLD_MAP[item.name] ? WORLD_MAP[item.name] : item.name,
+          name: currentLang === 'en' ? item.name : item.cnName,
           value: item.value
         }
       })
@@ -161,6 +168,7 @@ export default {
         min = 0
       }
       max = max + 10
+      let _this = this
       this.options = {
         tooltip: {
           backgroundColor: '#f2f2f2',
@@ -176,9 +184,13 @@ export default {
             let value = params.value
             if (isNaN(params.value)) return
             return (
-              '<p><b style="font-weight:bold">Country: ' +
+              '<p><b style="font-weight:bold">' +
+              _this.$t('common.country') +
+              ': ' +
               params.name +
-              '</b></p><p>Audience: ' +
+              '</b></p><p>' +
+              _this.$t('common.audience') +
+              ': ' +
               Util.formatNum(value, 0) +
               '</p>'
             )
@@ -190,7 +202,7 @@ export default {
           type: 'piecewise',
           left: 'left',
           top: 'bottom',
-          text: ['High', 'Low'],
+          text: [this.$t('common.high'), this.$t('common.low')],
           orient: 'horizontal',
           selectedMode: false,
           hoverLink: true,
@@ -234,7 +246,7 @@ export default {
               shadowColor: 'rgba(0, 0, 0, 0.5)'
             }
           },
-          nameMap: WORLD_MAP
+          nameMap: WORLD_MAP[currentLang]
         },
         series: [
           {

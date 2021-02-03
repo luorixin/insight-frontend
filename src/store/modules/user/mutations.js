@@ -54,5 +54,14 @@ export default {
       // localStorage.accessRoutes = null;
       state.accessRoutes = null
     }
+  },
+  setCurrentClientId(state, data) {
+    if (data) {
+      localStorage.currentClientId = data
+      state.currentClientId = data
+    } else {
+      localStorage.currentClientId = null
+      state.currentClientId = null
+    }
   }
 }

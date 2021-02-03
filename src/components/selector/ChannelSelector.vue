@@ -67,19 +67,15 @@ export default {
       channelApi
         .list()
         .then(data => {
-          this.dataList = data
-            .map(item => {
-              let name = item.name ? item.name : ''
-              return {
-                id: item.id,
-                name: name
-                  .toLowerCase()
-                  .replace(/( |^)[a-z]/g, L => L.toUpperCase())
-              }
-            })
-            .filter(item => {
-              return item.status === 1
-            })
+          this.dataList = data.map(item => {
+            let name = item.name ? item.name : ''
+            return {
+              id: item.id,
+              name: name
+                .toLowerCase()
+                .replace(/( |^)[a-z]/g, L => L.toUpperCase())
+            }
+          })
           this.totalCount = this.dataList.length
           if (this.dataList.length === 0) {
             this.result = this.$t('common.noResult')

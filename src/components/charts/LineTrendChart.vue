@@ -31,6 +31,10 @@ export default {
     datas: {
       type: Array,
       default: () => []
+    },
+    tipTitle: {
+      type: String,
+      default: 'Audience Scale'
     }
   },
   components: {
@@ -115,6 +119,7 @@ export default {
       } else if (xAxis.length < 31) {
         axisinterval = 3
       }
+      let _this = this
       this.options = {
         title: {
           show: false
@@ -146,7 +151,9 @@ export default {
               params[0].name +
               '</p>' +
               '</p>' +
-              '<p style="color:#333;font-weight:bold;">Audience Scale</p>'
+              '<p style="color:#333;font-weight:bold;">' +
+              _this.tipTitle +
+              '</p>'
             params.forEach(function(item) {
               result +=
                 '<p><span style="display:inline-block;margin-right:5px;border-radius:10px!important;width:9px;height:9px;background-color:' +

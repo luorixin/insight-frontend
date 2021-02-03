@@ -115,6 +115,12 @@ export const appRouter = [
         meta: { title: 'menu.mediaAnalysis', permission: 'analysismedia.view' }
       },
       {
+        path: 'goal',
+        name: 'goalAnalysis',
+        component: () => import('@/views/goalAnalysis/Goal.vue'),
+        meta: { title: 'menu.goalAnalysis', permission: 'analysisgoal.view' }
+      },
+      {
         path: 'funnel',
         name: 'funnelAnalysis',
         component: () => import('@/views/funnelAnalysis/Funnel.vue'),

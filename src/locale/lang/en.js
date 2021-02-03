@@ -64,7 +64,11 @@ export default {
     prev: 'prev.',
     noResultDetail: '(There is no result.)',
     customise: 'Customise',
-    noPermisson: 'You dont have permisson for this operate!'
+    noPermisson: 'You dont have permisson for this operate!',
+    high: 'High',
+    low: 'Low',
+    country: 'Country',
+    audience: 'Audience'
   },
   login: {
     error: {
@@ -106,6 +110,7 @@ export default {
     channelAnalysis: 'Channel Analysis',
     mediaAnalysis: 'Media Analysis（Beta）',
     funnelAnalysis: 'Funnel Analysis',
+    goalAnalysis: 'Goal Analysis',
     reports: 'Reports',
     eventReports: 'Event Log',
     eventLog: 'Event Log',
@@ -280,8 +285,8 @@ export default {
       'Users who have at least one conversion during the date range.',
     lastMileRatio: 'Last Mile Ratio',
     lastMileRatioTip: 'Ratio of paid or non-paid channels.',
-    search: 'Search',
-    nonSearch: 'Non-Search',
+    search: 'Paid',
+    nonSearch: 'Non-Paid',
     timeToConvert: 'Time To Convert',
     timeToConvertTip: 'Time between customers entrance and convent.',
     fullPath: 'Full-path',
@@ -446,11 +451,23 @@ export default {
     analysismeida: 'Analysis Meida',
     analysisfunnel: 'Analysis Funnel',
     analysismedia: 'Analysis Media',
+    analysisgoal: 'Analysis Goal',
     report: 'Report',
     reports: 'Reports',
     eventlog: 'EventLog',
     tools: 'Tools',
     generate: 'Campaign URL Builder'
+  },
+  goalAnalysis: {
+    title: 'Goal Analysis',
+    goal: 'Goal',
+    source: 'Source Analysis',
+    sourceTip: 'Source Analysis',
+    trend: 'Trend of Goal',
+    trendTip: 'Trend of Goal',
+    channel: 'Channel',
+    media: 'Media',
+    campaign: 'Campaign'
   },
   errorInfo: {
     emptyInput: 'Please enter something!'

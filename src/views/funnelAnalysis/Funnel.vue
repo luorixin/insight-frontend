@@ -399,6 +399,7 @@ export default {
           this.regionsData = regions.map(item => {
             return {
               name: item.enname,
+              cnName: item.cnname,
               value: item.uniqueVisits
             }
           })

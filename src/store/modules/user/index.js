@@ -7,7 +7,8 @@ const state = {
   userDetail: null,
   permission: null,
   routes: null, //数据库树形json格式
-  accessRoutes: null
+  accessRoutes: null,
+  currentClientId: null
 }
 
 export default {

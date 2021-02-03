@@ -196,6 +196,7 @@
 <script>
 import * as eventsApi from '@/api/events'
 import InsightTagTable from './InsightTagTable.vue'
+import { mapState } from 'vuex'
 import Util from '@/utils'
 import {
   STATUS,
@@ -240,6 +241,9 @@ export default {
       },
       immediate: true
     }
+  },
+  computed: {
+    ...mapState('user', ['currentClientId'])
   },
   data() {
     return {
@@ -368,6 +372,7 @@ export default {
           params.status = params.status === '1' ? true : false
           params.isFunnel = params.isFunnel === 1 ? true : false
           params.isGoal = params.isGoal === 1 ? true : false
+          params.oldClientId = this.currentClientId
           if (this.eventId) {
             promise = eventsApi.update(params)
           } else {

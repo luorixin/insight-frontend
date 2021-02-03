@@ -63,7 +63,11 @@ export default {
     prev: 'prev.',
     noResultDetail: '( 没有结果 )',
     customise: '定制化',
-    noPermisson: '您没有权限做此操作！'
+    noPermisson: '您没有权限做此操作！',
+    high: '高',
+    low: '低',
+    country: '国家',
+    audience: '人数'
   },
   login: {
     error: {
@@ -104,6 +108,7 @@ export default {
     channelAnalysis: '渠道分析',
     mediaAnalysis: '媒体分析（Beta）',
     funnelAnalysis: '转化漏斗分析',
+    goalAnalysis: '目标分析',
     reports: '报表',
     eventReports: '活动日志',
     eventLog: '活动日志',
@@ -383,8 +388,8 @@ export default {
     channelTip: '渠道: (e.g. search, display)',
     media: '推广计划媒体',
     mediaTip: '媒体: (e.g. iAccess, Tencent, Red)',
-    name: '媒体名称',
-    nameTip: '媒体名称 (e.g. spring_sale)',
+    name: '推广计划名称',
+    nameTip: '推广计划名称 (e.g. spring_sale)',
     urlTitle: '分享生成的广告计划连结',
     urlTip: '用于想要与此自定义推广计划相关联的任何促销渠道中使用该连结'
   },
@@ -424,11 +429,23 @@ export default {
     analysismeida: '媒体分析',
     analysisfunnel: '转化漏斗分析',
     analysismedia: '媒体分析',
+    analysisgoal: '目标分析',
     report: '报表',
     reports: '下载报表',
     eventlog: '活动日志',
     tools: '辅助工具',
     generate: '推广连结生成器'
+  },
+  goalAnalysis: {
+    title: '目标分析',
+    goal: '目标',
+    source: '来源分析',
+    sourceTip: '来源分析',
+    trend: '目标趋势',
+    trendTip: '目标趋势',
+    channel: '渠道',
+    media: '媒体',
+    campaign: '推广'
   },
   errorInfo: {
     emptyInput: '请输入一些东西'
